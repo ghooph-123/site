@@ -32,12 +32,11 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .btn-sm{padding:10px 14px;font-size:13px;width:auto;margin-bottom:0}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
-.field input{background:var(--bg3);border-radius:10px;padding:12px 14px;font-size:15px;border:1.5px solid transparent}
-.field input:focus{border-color:var(--accent)}
+.field input,.field textarea{background:var(--bg3);border-radius:10px;padding:12px 14px;font-size:15px;border:1.5px solid transparent;color:var(--text);font-family:inherit}
+.field textarea{min-height:160px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
 .empty{text-align:center;color:var(--text2);padding:40px 20px;font-size:14px;line-height:1.6}
 .center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px;overflow-y:auto}
-
-/* Меню */
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .menu-tile{background:var(--bg2);border-radius:16px;padding:20px 14px;border:1px solid var(--border);cursor:pointer;transition:transform .1s,background .15s;display:flex;flex-direction:column;gap:12px;min-height:140px}
 .menu-tile:active{transform:scale(.98);background:var(--bg3)}
@@ -45,61 +44,79 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .menu-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .menu-name{font-weight:700;font-size:15px}
 .menu-desc{font-size:12px;color:var(--text2);line-height:1.4}
-
-/* Общие карточки */
 .card-box{background:var(--bg2);border-radius:16px;padding:18px;border:1px solid var(--border);margin-bottom:12px}
 .card-box h3{font-size:13px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:10px}
-
-/* Игровое поле */
 .game-card{background:var(--bg2);border-radius:18px;padding:26px 20px;text-align:center;border:1px solid var(--border);margin-bottom:14px;min-height:140px;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .game-card-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px}
 .game-card-value{font-size:24px;font-weight:700;line-height:1.3;word-break:break-word}
 .game-card-sub{font-size:14px;color:var(--text2);margin-top:8px;line-height:1.4}
 .timer-big{font-size:56px;font-weight:800;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:8px}
 .timer-big.warning{color:var(--red)}
-
 .row{display:flex;gap:8px;margin-bottom:10px}
 .row>*{flex:1}
-.stepper{display:flex;align-items:center;gap:14px;background:var(--bg3);border-radius:12px;padding:12px 16px;justify-content:space-between}
+.stepper{display:flex;align-items:center;gap:14px;background:var(--bg3);border-radius:12px;padding:12px 16px;justify-content:space-between;margin-bottom:8px}
+.stepper:last-child{margin-bottom:0}
 .stepper-label{font-size:14px;font-weight:500}
 .stepper-controls{display:flex;align-items:center;gap:12px}
 .stepper-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;line-height:1;color:var(--text)}
 .stepper-btn:active{background:var(--accent);color:#fff}
-.stepper-value{font-size:18px;font-weight:700;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
-
-/* Список игроков */
+.stepper-value{font-size:18px;font-weight:700;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
 .player-row{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);margin-bottom:6px}
 .player-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
 .player-name{flex:1;font-weight:500;font-size:14px}
 .player-score{font-size:16px;font-weight:700;color:var(--green)}
-
-/* Характеристики (бункер) */
-.stat-row{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start}
-.stat-row:last-child{border-bottom:none}
-.stat-icon{width:32px;height:32px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text2);flex-shrink:0}
-.stat-body{flex:1;min-width:0}
-.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:2px}
-.stat-value{font-size:15px;font-weight:500;line-height:1.4;word-break:break-word}
-
-/* Локации шпиона */
 .location-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .location-item{background:var(--bg3);border-radius:10px;padding:10px;font-size:13px;text-align:center;font-weight:500}
-
-/* История */
 .story-preview{background:var(--bg2);border-radius:14px;padding:16px;font-size:15px;line-height:1.6;border:1px solid var(--border);margin-bottom:10px}
-.story-line{padding:6px 0;border-bottom:1px dashed var(--border)}
+.story-line{padding:6px 0;border-bottom:1px dashed var(--border);display:flex;gap:6px;align-items:flex-start}
 .story-line:last-child{border-bottom:none}
-.story-num{color:var(--text3);font-size:11px;font-weight:700;margin-right:6px}
+.story-num{color:var(--text3);font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.story-text{flex:1;word-break:break-word}
+.story-edit-btn{width:26px;height:26px;border-radius:50%;background:var(--bg3);color:var(--text2);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .story-input{background:var(--bg3);border-radius:12px;padding:14px;font-size:16px;border:1.5px solid transparent;width:100%;min-height:100px;resize:vertical;line-height:1.5;font-family:inherit;color:var(--text)}
 .story-input:focus{border-color:var(--accent)}
-
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg4);color:var(--text);padding:11px 18px;border-radius:20px;font-size:13px;font-weight:500;z-index:200;opacity:0;pointer-events:none;transition:all .25s;border:1px solid var(--border);box-shadow:var(--shadow)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .modal.active{display:flex}
-.modal-inner{background:var(--bg2);border-radius:18px;padding:20px;max-width:400px;width:100%;border:1px solid var(--border);max-height:80vh;overflow-y:auto}
+.modal-inner{background:var(--bg2);border-radius:18px;padding:20px;max-width:440px;width:100%;border:1px solid var(--border);max-height:88vh;overflow-y:auto;margin:auto}
 .modal h3{font-size:16px;margin-bottom:12px;font-weight:700}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.confirm-btns{display:flex;gap:8px}
+.confirm-btns .btn{flex:1;margin-bottom:0}
+
+/* Переключатели (toggle-row) */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;cursor:pointer;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-row-title{font-size:14px;font-weight:600;line-height:1.3}
+.toggle-row-sub{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.4}
+.switch{width:44px;height:26px;border-radius:13px;background:var(--bg4);position:relative;flex-shrink:0;transition:background .2s}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--accent)}
+.switch.on::after{transform:translateX(18px)}
+
+/* Стат-строки (показ своей руки в бункере) */
+.stat-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.stat-row:last-child{border-bottom:none}
+.stat-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:2px}
+.stat-value{font-size:15px;line-height:1.4;word-break:break-word}
+
+/* Бункер — раскрываемые карточки */
+.bunker-cards{display:flex;flex-direction:column;gap:10px}
+.bunker-player{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.bunker-player-head{padding:10px 14px;background:var(--bg3);font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.bunker-player-head .counter{font-size:11px;color:var(--text2);font-weight:600}
+.bunker-attrs{padding:8px}
+.bunker-attr{padding:10px 12px;background:var(--bg3);border-radius:8px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer;transition:background .15s;border:1px solid transparent;user-select:none}
+.bunker-attr:last-child{margin-bottom:0}
+.bunker-attr:active{background:var(--bg4)}
+.bunker-attr.revealed{background:rgba(124,92,255,.12);border-color:rgba(124,92,255,.35);cursor:default}
+.bunker-attr-key{font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;padding-top:2px}
+.bunker-attr-val{font-size:13px;text-align:right;flex:1;word-break:break-word}
+.bunker-attr.revealed .bunker-attr-val{color:var(--text);font-weight:500}
+.bunker-attr:not(.revealed) .bunker-attr-val{color:var(--text3);font-style:italic}
 
 @media (min-width:640px){
   .content{max-width:600px;margin:0 auto;width:100%}
@@ -134,7 +151,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
         <div class="menu-icon" style="background:#f59e0b"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div>
           <div class="menu-name">Кто быстрее</div>
-          <div class="menu-desc">Задания на скорость. Успей за 30 секунд или теряй очко</div>
+          <div class="menu-desc">Задания на скорость. Успей вовремя или теряй очко</div>
         </div>
       </div>
       <div class="menu-tile" onclick="storyOpen()">
@@ -153,7 +170,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="header">
     <button class="icon-btn" onclick="spyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1>Шпион</h1>
-    <button class="icon-btn" id="spyMenuBtn" onclick="spyShowMenu()" style="display:none"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
+    <button class="icon-btn" onclick="spyOpenSettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content" id="spyContent"></div>
 </div>
@@ -163,6 +180,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="header">
     <button class="icon-btn" onclick="bunkerBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1>Бункер</h1>
+    <button class="icon-btn" onclick="bunkerOpenSettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content" id="bunkerContent"></div>
 </div>
@@ -172,6 +190,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="header">
     <button class="icon-btn" onclick="fasterBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1>Кто быстрее</h1>
+    <button class="icon-btn" onclick="fasterOpenSettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content" id="fasterContent"></div>
 </div>
@@ -181,18 +200,57 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="header">
     <button class="icon-btn" onclick="storyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1>Истории по кругу</h1>
+    <button class="icon-btn" onclick="storyOpenSettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content" id="storyContent"></div>
 </div>
 
-<!-- Модалка подтверждения -->
 <div class="modal" id="confirmModal">
   <div class="modal-inner">
     <h3 id="confirmTitle">Подтверждение</h3>
     <p id="confirmText" style="color:var(--text2);font-size:14px;line-height:1.5;margin-bottom:16px"></p>
-    <div style="display:flex;gap:8px">
+    <div class="confirm-btns">
       <button class="btn btn-sec" onclick="closeModal('confirmModal')">Отмена</button>
       <button class="btn btn-red" id="confirmOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="spyGuessModal">
+  <div class="modal-inner">
+    <h3>Какую локацию называет шпион?</h3>
+    <div class="modal-sub">Если угадал — шпион победил. Если нет — продолжайте игру.</div>
+    <div id="spyGuessList" style="max-height:50vh;overflow-y:auto;margin-bottom:12px"></div>
+    <div class="confirm-btns">
+      <button class="btn btn-sec" onclick="closeModal('spyGuessModal')">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="listEditorModal">
+  <div class="modal-inner">
+    <h3 id="listEditorTitle">Редактирование</h3>
+    <div class="modal-sub" id="listEditorSub">Каждый пункт — с новой строки</div>
+    <div class="field">
+      <textarea id="listEditorText"></textarea>
+    </div>
+    <div class="confirm-btns" style="margin-bottom:8px">
+      <button class="btn btn-sec" onclick="listEditorResetDefault()">Сбросить</button>
+      <button class="btn" onclick="listEditorSave()">Сохранить</button>
+    </div>
+    <button class="btn btn-sec" onclick="closeModal('listEditorModal')">Закрыть</button>
+  </div>
+</div>
+
+<div class="modal" id="storyEditModal">
+  <div class="modal-inner">
+    <h3>Редактировать фразу</h3>
+    <div class="field">
+      <textarea id="storyEditText" class="story-input" style="min-height:120px"></textarea>
+    </div>
+    <div class="confirm-btns">
+      <button class="btn btn-sec" onclick="closeModal('storyEditModal')">Отмена</button>
+      <button class="btn" onclick="storySaveEdit()">Сохранить</button>
     </div>
   </div>
 </div>
@@ -213,6 +271,75 @@ function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
+/* ===== ВИБРАЦИЯ + ЗВУК ===== */
+function vib(ms){ if(navigator.vibrate){try{navigator.vibrate(ms||15)}catch(e){}} }
+let _audioCtx = null;
+function beep(freq, dur, vol){
+  try{
+    if(!_audioCtx) _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const now = _audioCtx.currentTime;
+    const o = _audioCtx.createOscillator();
+    const g = _audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.value = freq || 800;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(vol||0.15, now + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + (dur||0.2));
+    o.connect(g).connect(_audioCtx.destination);
+    o.start(now); o.stop(now + (dur||0.2) + 0.05);
+  }catch(e){}
+}
+function beepStart(){ beep(660, 0.08, 0.12); setTimeout(()=>beep(880, 0.12, 0.15), 100); }
+function beepEnd(){ beep(440, 0.15, 0.15); setTimeout(()=>beep(220, 0.3, 0.15), 180); }
+function beepWarn(){ beep(880, 0.1, 0.12); }
+function beepTick(){ beep(1200, 0.04, 0.08); }
+
+/* ===== СОСТОЯНИЕ ===== */
+const gamesState = {
+  spy:    { timeSeconds: 480, twoSpies: false, customLocations: [] },
+  bunker: { spots: 3, customCatastrophes: [] },
+  faster: { timeSeconds: 30, customTasks: [] },
+  story:  { twoRounds: false, useStarter: false, customStarters: [] }
+};
+function loadGamesState(){
+  try{
+    const raw = localStorage.getItem('games_v1');
+    if(raw){
+      const p = JSON.parse(raw);
+      if(p.spy)    Object.assign(gamesState.spy, p.spy);
+      if(p.bunker) Object.assign(gamesState.bunker, p.bunker);
+      if(p.faster) Object.assign(gamesState.faster, p.faster);
+      if(p.story)  Object.assign(gamesState.story, p.story);
+    }
+  }catch(e){}
+}
+function saveGamesState(){
+  try{localStorage.setItem('games_v1', JSON.stringify(gamesState))}catch(e){}
+}
+loadGamesState();
+
+/* ===== РЕДАКТОР СПИСКА ===== */
+let _listEditorOnSave = null;
+let _listEditorDefault = null;
+function editList(title, sub, currentArray, defaultArray, onSave){
+  $('listEditorTitle').textContent = title;
+  $('listEditorSub').textContent = sub || 'Каждый пункт — с новой строки';
+  $('listEditorText').value = (currentArray && currentArray.length ? currentArray : []).join('\n');
+  _listEditorOnSave = onSave;
+  _listEditorDefault = defaultArray || [];
+  openModal('listEditorModal');
+}
+function listEditorSave(){
+  const lines = $('listEditorText').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(_listEditorOnSave) _listEditorOnSave(lines);
+  saveGamesState();
+  closeModal('listEditorModal');
+  toast('Сохранено');
+}
+function listEditorResetDefault(){
+  $('listEditorText').value = _listEditorDefault.join('\n');
+}
+
 /* ===== ДАННЫЕ ===== */
 const LOCATIONS = [
   'Пляж','Аэропорт','Больница','Школа','Ресторан','Кинотеатр','Стадион','Музей',
@@ -226,13 +353,11 @@ const SPY_QUESTIONS = [
   'Кто здесь главный?','Что здесь можно купить?','Как одеты люди?',
   'В какое время суток здесь людно?','Есть ли тут еда?','Что тут самое дорогое?'
 ];
-
 const BUNKER_CATASTROPHES = [
   'Ядерная война','Пандемия смертельного вируса','Падение метеорита','Всемирное наводнение',
   'Нашествие зомби','Глобальное похолодание','Восстание машин','Извержение супервулкана',
   'Химическое заражение','Солнечная вспышка (все электронные приборы сгорели)'
 ];
-
 const BUNKER = {
   profession: {
     label:'Профессия', icon:'П',
@@ -257,11 +382,9 @@ const BUNKER = {
   },
   phobia: {
     label:'Фобия', icon:'Ф',
-    items:['Клаустрофобия (боязнь замкнутых пространств)','Агорафобия (боязнь толпы)',
-      'Гемофобия (боязнь крови)','Акрофобия (боязнь высоты)','Мизофобия (боязнь грязи)',
-      'Арахнофобия (боязнь пауков)','Социофобия (боязнь общения)','Никтофобия (боязнь темноты)',
-      'Аэрофобия (боязнь полётов)','Аквафобия (боязнь воды)','Пирофобия (боязнь огня)',
-      'Ксенофобия (боязнь незнакомцев)','Нет фобий','Боязнь насекомых','Боязнь громких звуков']
+    items:['Клаустрофобия','Агорафобия','Гемофобия','Акрофобия','Мизофобия',
+      'Арахнофобия','Социофобия','Никтофобия','Аэрофобия','Аквафобия',
+      'Пирофобия','Ксенофобия','Нет фобий','Боязнь насекомых','Боязнь громких звуков']
   },
   luggage: {
     label:'Багаж', icon:'Б',
@@ -276,11 +399,11 @@ const BUNKER = {
       'Умеет готовить из ничего','Выиграл в лотерею','Умеет чинить часы','Бывший циркач',
       'Может развести огонь трением','Не разговаривал 5 лет','Скрывается от мафии',
       'Брат-близнец известного учёного','Носит с собой пистолет','Знает ядерную физику',
-      'Умеет управлять вертолётом','Скрывает страшную тайну','Бывший инопланетянин (шутка)',
-      'Прошёл курс выживания в тайге','Умеет шить одежду','Работал сапёром']
+      'Умеет управлять вертолётом','Скрывает страшную тайну','Прошёл курс выживания в тайге',
+      'Умеет шить одежду','Работал сапёром']
   }
 };
-
+const BUNKER_KEYS = ['profession','health','hobby','phobia','luggage','fact'];
 const FASTER_TASKS = [
   'Назови 5 столиц','Найди в комнате 3 синих предмета','Назови 5 фильмов с ДиКаприо',
   'Спой припев любой песни','Сделай 10 приседаний','Назови 5 животных на букву К',
@@ -293,37 +416,67 @@ const FASTER_TASKS = [
   'Назови 5 мультфильмов','Назови 5 имён мальчиков','Назови 3 цвета кроме базовых',
   'Придумай 3 несуществующих слова','Назови 5 песен на английском'
 ];
+const STORY_STARTERS = [
+  'В тёмном переулке ночного города...',
+  'Когда солнце скрылось за горизонтом...',
+  'Никто не ожидал, что этим утром...',
+  'В далёкой галактике, на планете из желе...',
+  'Три кота собрались на крыше и...',
+  'Однажды в понедельник, ровно в полдень...',
+  'Шёл дождь, и в этот момент...',
+  'В маленькой деревне на краю света...',
+  'Старый пират открыл сундук и увидел...',
+  'Дверь скрипнула, и на пороге появился...'
+];
 
-/* ===== УПРАВЛЕНИЕ ПЕРЕДАЧЕЙ ТЕЛЕФОНА ===== */
-function passScreen(title, subtitle, buttonText, onReady) {
-  return `
-    <div class="center-wrap">
-      <div style="font-size:60px;opacity:.15">→</div>
-      <div style="font-size:20px;font-weight:700;margin-top:14px">${esc(title)}</div>
-      <div style="color:var(--text2);font-size:14px;max-width:300px;line-height:1.5">${esc(subtitle)}</div>
-      <button class="btn" onclick="(${onReady})()" style="margin-top:20px;max-width:300px">${esc(buttonText)}</button>
-    </div>
-  `;
-}
+/* ===== ПОЛУЧЕНИЕ СПИСКОВ ===== */
+function getLocations(){ return gamesState.spy.customLocations.length >= 3 ? gamesState.spy.customLocations : LOCATIONS; }
+function getCatastrophes(){ return gamesState.bunker.customCatastrophes.length >= 3 ? gamesState.bunker.customCatastrophes : BUNKER_CATASTROPHES; }
+function getTasks(){ return gamesState.faster.customTasks.length >= 5 ? gamesState.faster.customTasks : FASTER_TASKS; }
+function getStarters(){ return gamesState.story.customStarters.length >= 3 ? gamesState.story.customStarters : STORY_STARTERS; }
 
 /* =========================================================
    ШПИОН
 ========================================================= */
-const spyState = { players: 4, spyIndex: 0, location: '', roles: [], phase: 'setup', timerId: null, timerStart: 0, revealIndex: 0, timerSeconds: 480 };
+const spyState = {
+  players: 4, spyIndexes: [], location: '', roles: [],
+  phase: 'setup', timerId: null, timerStart: 0, revealIndex: 0,
+  timeSeconds: 480, twoSpies: false, _guessList: []
+};
 
-function spyOpen(){ show('spyScreen'); spyState.phase='setup'; renderSpy() }
+function spyOpen(){
+  spyState.timeSeconds = gamesState.spy.timeSeconds;
+  spyState.twoSpies = gamesState.spy.twoSpies;
+  show('spyScreen');
+  spyState.phase = 'setup';
+  renderSpy();
+}
 function spyBack(){
-  if(spyState.phase==='setup'){ show('menuScreen'); return; }
-  confirmAction('Выйти из игры?','Текущий раунд будет потерян.',()=>{ spyStopTimer(); spyState.phase='setup'; show('menuScreen') });
+  if(spyState.phase === 'setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущий раунд будет потерян.',()=>{
+    spyStopTimer();
+    spyState.phase = 'setup';
+    show('menuScreen');
+  });
+}
+function spyOpenSettings(){
+  editList(
+    'Свои локации',
+    'Каждая локация — с новой строки. Минимум 3, иначе используются стандартные.',
+    gamesState.spy.customLocations,
+    LOCATIONS,
+    (lines)=>{ gamesState.spy.customLocations = lines; }
+  );
 }
 function renderSpy(){
   const c = $('spyContent');
-  const menuBtn = $('spyMenuBtn');
-  if(spyState.phase==='setup'){
-    menuBtn.style.display='none';
+
+  if(spyState.phase === 'setup'){
+    const totalSpies = spyState.twoSpies ? 2 : 1;
+    const maxSpies = Math.min(2, spyState.players - 2);
     c.innerHTML = `
       <div class="card-box">
-        <div class="stepper" style="background:transparent;padding:0">
+        <div class="stepper">
           <div class="stepper-label">Игроков</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="spyChangePlayers(-1)">−</button>
@@ -331,20 +484,33 @@ function renderSpy(){
             <button class="stepper-btn" onclick="spyChangePlayers(1)">+</button>
           </div>
         </div>
+        <div class="stepper">
+          <div class="stepper-label">Время раунда</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="spyChangeTime(-60)">−</button>
+            <div class="stepper-value">${Math.round(spyState.timeSeconds/60)}м</div>
+            <button class="stepper-btn" onclick="spyChangeTime(60)">+</button>
+          </div>
+        </div>
+        <div class="stepper" style="opacity:${maxSpies>=2?1:.4}">
+          <div class="stepper-label">Шпионов: ${totalSpies}</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="spyToggleTwoSpies()" ${maxSpies>=2?'':'disabled style="opacity:.3"'}>${spyState.twoSpies ? '2' : '1'}</button>
+          </div>
+        </div>
       </div>
       <div class="card-box">
         <h3>Как играть</h3>
         <div style="font-size:14px;line-height:1.6;color:var(--text2)">
-          Все получают одну и ту же локацию, кроме одного — он шпион.<br><br>
+          Все получают одну и ту же локацию, кроме шпионов.<br><br>
           По кругу задают друг другу вопросы об этом месте. Шпион должен понять, где он, а остальные — вычислить шпиона.<br><br>
-          В любой момент можно устроить голосование. Если угадали шпиона — победили. Если шпион назовёт локацию — победил он.
+          Голосуйте вслух. Если угадали всех шпионов — победили. Если шпион назовёт локацию — победил он.
         </div>
       </div>
       <button class="btn" onclick="spyStart()">Начать игру</button>
     `;
   }
-  else if(spyState.phase==='pass'){
-    menuBtn.style.display='flex';
+  else if(spyState.phase === 'pass'){
     const i = spyState.revealIndex;
     c.innerHTML = `
       <div class="center-wrap">
@@ -355,26 +521,38 @@ function renderSpy(){
       </div>
     `;
   }
-  else if(spyState.phase==='reveal'){
-    menuBtn.style.display='none';
+  else if(spyState.phase === 'reveal'){
     const isSpy = spyState.roles[spyState.revealIndex] === 'spy';
     c.innerHTML = `
       <div class="center-wrap">
         <div class="game-card-label">${isSpy?'Твоя роль':'Локация'}</div>
         ${isSpy
           ? `<div class="game-card-value" style="color:var(--red)">ШПИОН</div>
-             <div class="game-card-sub">Ты не знаешь где находишься. Слушай вопросы, задавай свои, попробуй понять локацию. Не выдай себя.</div>`
+             <div class="game-card-sub">Ты не знаешь где находишься. Слушай вопросы, задавай свои, попробуй понять локацию. Не выдай себя.${spyState.twoSpies?'<br><br>Шпионов двое, но они не знают друг друга.':''}</div>`
           : `<div class="game-card-value" style="color:var(--accent)">${esc(spyState.location)}</div>
              <div class="game-card-sub">Задавай вопросы так, чтобы шпион не понял место. Но и не слишком явно, чтобы он не догадался сразу.</div>`
         }
-        <button class="btn" onclick="spyNextReveal()" style="margin-top:24px;max-width:280px">${spyState.revealIndex === spyState.players-1 ? 'Начать раунд' : 'Понятно, следующий'}</button>
+        <button class="btn" onclick="spyNextReveal()" style="margin-top:24px;max-width:280px">${spyState.revealIndex === spyState.players-1 ? 'К порядку хода' : 'Понятно, следующий'}</button>
       </div>
     `;
   }
-  else if(spyState.phase==='game'){
-    menuBtn.style.display='flex';
-    const elapsed = Math.floor((Date.now()-spyState.timerStart)/1000);
-    const remaining = Math.max(0, spyState.timerSeconds - elapsed);
+  else if(spyState.phase === 'order'){
+    const playersHtml = Array.from({length: spyState.players}, (_,i)=>`
+      <div class="player-row">
+        <div class="player-num">${i+1}</div>
+        <div class="player-name">Игрок ${i+1}${i===0?' — начинает':''}</div>
+      </div>
+    `).join('');
+    c.innerHTML = `
+      <div style="font-size:15px;font-weight:600;margin-bottom:12px;text-align:center">Порядок вопросов</div>
+      <div style="font-size:12px;color:var(--text2);text-align:center;margin-bottom:16px">Задавайте вопросы по кругу</div>
+      ${playersHtml}
+      <button class="btn" onclick="spyStartGame()" style="margin-top:14px">Поехали</button>
+    `;
+  }
+  else if(spyState.phase === 'game'){
+    const elapsed = Math.floor((Date.now() - spyState.timerStart) / 1000);
+    const remaining = Math.max(0, spyState.timeSeconds - elapsed);
     const mm = Math.floor(remaining/60), ss = remaining%60;
     const warn = remaining < 60;
     c.innerHTML = `
@@ -387,9 +565,8 @@ function renderSpy(){
         <h3>Вопросы-помощники</h3>
         <div style="font-size:13px;color:var(--text2);line-height:1.5;font-style:italic">${esc(pick(SPY_QUESTIONS))}</div>
       </div>
-      <button class="btn btn-green" onclick="spyEndRound('town')">Угадали шпиона</button>
-      <button class="btn btn-red" onclick="spyEndRound('spy')">Шпион угадал локацию</button>
-      <button class="btn btn-sec" onclick="spyShowMenu()">Показать меню</button>
+      <button class="btn btn-green" onclick="spyEndRound('town')">Угадали всех шпионов</button>
+      <button class="btn btn-red" onclick="spySpyGuess()">Шпион называет локацию</button>
     `;
   }
 }
@@ -397,89 +574,160 @@ function spyChangePlayers(d){
   const n = spyState.players + d;
   if(n < 3 || n > 12) return;
   spyState.players = n;
+  if(n - 2 < 2) spyState.twoSpies = false;
+  renderSpy();
+}
+function spyChangeTime(d){
+  const n = spyState.timeSeconds + d;
+  if(n < 180 || n > 900) return;
+  spyState.timeSeconds = n;
+  gamesState.spy.timeSeconds = n;
+  saveGamesState();
+  renderSpy();
+}
+function spyToggleTwoSpies(){
+  if(spyState.players - 2 < 2) return;
+  spyState.twoSpies = !spyState.twoSpies;
+  gamesState.spy.twoSpies = spyState.twoSpies;
+  saveGamesState();
   renderSpy();
 }
 function spyStart(){
-  spyState.location = pick(LOCATIONS);
-  const spyIdx = Math.floor(Math.random()*spyState.players);
-  spyState.spyIndex = spyIdx;
+  const locs = getLocations();
+  spyState.location = pick(locs);
+  const nSpies = spyState.twoSpies ? 2 : 1;
+  const allIdx = shuffle(Array.from({length: spyState.players}, (_,i)=>i));
+  spyState.spyIndexes = allIdx.slice(0, nSpies);
   spyState.roles = [];
-  for(let i=0;i<spyState.players;i++) spyState.roles.push(i===spyIdx?'spy':'town');
+  for(let i = 0; i < spyState.players; i++){
+    spyState.roles.push(spyState.spyIndexes.includes(i) ? 'spy' : 'town');
+  }
   spyState.revealIndex = 0;
   spyState.phase = 'pass';
+  vib(20);
   renderSpy();
 }
-function spyReveal(){ spyState.phase='reveal'; renderSpy() }
+function spyReveal(){ spyState.phase = 'reveal'; renderSpy(); }
 function spyNextReveal(){
   spyState.revealIndex++;
   if(spyState.revealIndex >= spyState.players){
-    spyState.phase = 'game';
-    spyState.timerStart = Date.now();
-    spyStartTimer();
+    spyState.phase = 'order';
+    vib(15);
   } else {
     spyState.phase = 'pass';
   }
   renderSpy();
 }
+function spyStartGame(){
+  spyState.phase = 'game';
+  spyState.timerStart = Date.now();
+  spyStartTimer();
+  beepStart();
+  vib(30);
+  renderSpy();
+}
 function spyStartTimer(){
   spyStopTimer();
+  let warned = false;
   spyState.timerId = setInterval(()=>{
     if(spyState.phase !== 'game'){ spyStopTimer(); return; }
-    const elapsed = Math.floor((Date.now()-spyState.timerStart)/1000);
-    const remaining = Math.max(0, spyState.timerSeconds - elapsed);
+    const elapsed = Math.floor((Date.now() - spyState.timerStart) / 1000);
+    const remaining = Math.max(0, spyState.timeSeconds - elapsed);
     const el = $('spyTimer');
     if(el){
       const mm = Math.floor(remaining/60), ss = remaining%60;
-      el.textContent = mm+':'+String(ss).padStart(2,'0');
+      el.textContent = mm + ':' + String(ss).padStart(2,'0');
       el.classList.toggle('warning', remaining < 60);
     }
-    if(remaining <= 0){ spyStopTimer(); toast('Время вышло'); }
+    if(remaining === 60 && !warned){ warned = true; beepWarn(); vib(50); }
+    if(remaining <= 0){
+      spyStopTimer();
+      beepEnd();
+      vib([100, 50, 100]);
+      toast('Время вышло');
+    }
   }, 250);
 }
 function spyStopTimer(){
-  if(spyState.timerId){ clearInterval(spyState.timerId); spyState.timerId=null; }
+  if(spyState.timerId){ clearInterval(spyState.timerId); spyState.timerId = null; }
+}
+function spySpyGuess(){
+  // Сохраняем список локально, передаём индексом — без апострофов в onclick
+  spyState._guessList = shuffle(getLocations());
+  $('spyGuessList').innerHTML = spyState._guessList.map((l, i) =>
+    `<div class="location-item" style="cursor:pointer;margin-bottom:6px" onclick="spyCheckGuessIndex(${i})">${esc(l)}</div>`
+  ).join('');
+  openModal('spyGuessModal');
+}
+function spyCheckGuessIndex(i){
+  const guess = spyState._guessList[i];
+  closeModal('spyGuessModal');
+  if(guess === spyState.location){
+    spyStopTimer();
+    beepEnd();
+    vib([100, 50, 100]);
+    const spyList = spyState.spyIndexes.map(idx => 'игрок ' + (idx + 1)).join(', ');
+    confirmAction('Шпион угадал!', 'Локация: ' + spyState.location + '. Шпион(ы): ' + spyList, ()=>{
+      spyState.phase = 'setup';
+      renderSpy();
+    });
+  } else {
+    beep(300, 0.2, 0.12);
+    vib(60);
+    toast('Не угадал. Продолжайте.');
+  }
 }
 function spyEndRound(winner){
   spyStopTimer();
-  const spyWon = winner === 'spy';
-  let text = spyWon
-    ? `Шпион победил! Локация была: ${spyState.location}`
-    : `Город победил! Шпион был: игрок ${spyState.spyIndex+1}. Локация: ${spyState.location}`;
-  confirmAction(spyWon?'Шпион победил':'Город победил', text, ()=>{
-    spyState.phase='setup';
+  beepEnd();
+  vib([100, 50, 100]);
+  const spyList = spyState.spyIndexes.map(i => 'игрок ' + (i+1)).join(', ');
+  const text = 'Город победил! Шпион(ы): ' + spyList + '. Локация: ' + spyState.location;
+  confirmAction('Город победил', text, ()=>{
+    spyState.phase = 'setup';
     renderSpy();
   });
-}
-function spyShowMenu(){
-  const s = shuffle(LOCATIONS).slice(0,12);
-  $('spyContent').innerHTML = `
-    <div class="center-wrap" style="justify-content:flex-start;padding-top:20px">
-      <div style="font-size:15px;font-weight:600;margin-bottom:6px;align-self:flex-start">Возможные локации</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;align-self:flex-start">Одна из них — реальная, остальные — для отвода глаз</div>
-      <div class="location-grid" style="width:100%">
-        ${s.map(l=>`<div class="location-item">${esc(l)}</div>`).join('')}
-      </div>
-      <button class="btn" onclick="renderSpy()" style="margin-top:20px;max-width:300px">Вернуться к игре</button>
-    </div>
-  `;
 }
 
 /* =========================================================
    БУНКЕР
 ========================================================= */
-const bunkerState = { players: 5, catastrophe: '', hands: [], revealIndex: 0, phase: 'setup' };
+const bunkerState = {
+  players: 5, catastrophe: '', hands: [], revealed: [],
+  revealIndex: 0, phase: 'setup', spots: 3
+};
 
-function bunkerOpen(){ show('bunkerScreen'); bunkerState.phase='setup'; renderBunker() }
+function bunkerOpen(){
+  bunkerState.spots = gamesState.bunker.spots;
+  show('bunkerScreen');
+  bunkerState.phase = 'setup';
+  renderBunker();
+}
 function bunkerBack(){
-  if(bunkerState.phase==='setup'){ show('menuScreen'); return; }
-  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{ bunkerState.phase='setup'; show('menuScreen') });
+  if(bunkerState.phase === 'setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{
+    bunkerState.phase = 'setup';
+    show('menuScreen');
+  });
+}
+function bunkerOpenSettings(){
+  editList(
+    'Свои катастрофы',
+    'Каждая катастрофа — с новой строки. Минимум 3, иначе используются стандартные.',
+    gamesState.bunker.customCatastrophes,
+    BUNKER_CATASTROPHES,
+    (lines)=>{ gamesState.bunker.customCatastrophes = lines; }
+  );
 }
 function renderBunker(){
   const c = $('bunkerContent');
-  if(bunkerState.phase==='setup'){
+
+  if(bunkerState.phase === 'setup'){
+    const maxSpots = bunkerState.players - 1;
+    if(bunkerState.spots > maxSpots) bunkerState.spots = maxSpots;
     c.innerHTML = `
       <div class="card-box">
-        <div class="stepper" style="background:transparent;padding:0">
+        <div class="stepper">
           <div class="stepper-label">Игроков</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="bunkerChangePlayers(-1)">−</button>
@@ -487,41 +735,48 @@ function renderBunker(){
             <button class="stepper-btn" onclick="bunkerChangePlayers(1)">+</button>
           </div>
         </div>
+        <div class="stepper">
+          <div class="stepper-label">Мест в бункере</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="bunkerChangeSpots(-1)">−</button>
+            <div class="stepper-value">${bunkerState.spots}</div>
+            <button class="stepper-btn" onclick="bunkerChangeSpots(1)">+</button>
+          </div>
+        </div>
       </div>
       <div class="card-box">
         <h3>Правила</h3>
         <div style="font-size:14px;line-height:1.6;color:var(--text2)">
-          Случилась катастрофа. Есть бункер, но мест в нём меньше, чем людей.<br><br>
-          У каждого — набор характеристик: профессия, здоровье, хобби, фобия, багаж и особый факт.<br><br>
-          По очереди раскрывайте свои характеристики и доказывайте, что именно вы нужны бункеру. В конце голосуйте — кто попадёт внутрь.
+          Катастрофа. Есть бункер на ${bunkerState.spots} мест, а игроков — ${bunkerState.players}.<br><br>
+          У каждого набор характеристик. После раздачи вы по очереди раскрываете свои характеристики и доказываете, что нужны бункеру.<br><br>
+          В конце — голосование. Кто не пройдёт — остаётся снаружи.
         </div>
       </div>
       <button class="btn" onclick="bunkerStart()">Начать игру</button>
     `;
   }
-  else if(bunkerState.phase==='pass'){
+  else if(bunkerState.phase === 'pass'){
     const i = bunkerState.revealIndex;
     c.innerHTML = `
       <div class="center-wrap">
         <div style="width:70px;height:70px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff">${i+1}</div>
         <div style="font-size:19px;font-weight:700;margin-top:16px">Игрок ${i+1} из ${bunkerState.players}</div>
-        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Возьми телефон. Посмотри свои характеристики и запомни их (или запиши).</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Возьми телефон. Посмотри свои характеристики и запомни их.</div>
         <button class="btn" onclick="bunkerShowHand()" style="margin-top:24px;max-width:280px">Показать характеристики</button>
       </div>
     `;
   }
-  else if(bunkerState.phase==='hand'){
+  else if(bunkerState.phase === 'hand'){
     const i = bunkerState.revealIndex;
     const hand = bunkerState.hands[i];
-    const cat = bunkerState.catastrophe;
     c.innerHTML = `
       <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
         <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
-        <div style="font-size:15px;font-weight:600">${esc(cat)}</div>
+        <div style="font-size:15px;font-weight:600">${esc(bunkerState.catastrophe)}</div>
       </div>
       <div class="card-box">
         <h3>Игрок ${i+1}</h3>
-        ${['profession','health','hobby','phobia','luggage','fact'].map(k=>{
+        ${BUNKER_KEYS.map(k=>{
           const def = BUNKER[k];
           return `<div class="stat-row">
             <div class="stat-icon">${def.icon}</div>
@@ -532,23 +787,63 @@ function renderBunker(){
           </div>`;
         }).join('')}
       </div>
-      <button class="btn" onclick="bunkerNextHand()">${bunkerState.revealIndex===bunkerState.players-1?'Начать обсуждение':'Запомнил, следующий'}</button>
+      <button class="btn" onclick="bunkerNextHand()">${bunkerState.revealIndex === bunkerState.players-1 ? 'Начать обсуждение' : 'Запомнил, следующий'}</button>
     `;
   }
-  else if(bunkerState.phase==='discuss'){
+  else if(bunkerState.phase === 'discuss'){
+    // Сохраняем scrollTop перед перерисовкой
+    const prevScroll = c.scrollTop;
+    const totalRevealed = bunkerState.revealed.flat().filter(Boolean).length;
+    const totalAttrs = bunkerState.players * BUNKER_KEYS.length;
+    const spotsLeft = bunkerState.spots;
+    const playersHtml = bunkerState.hands.map((hand, pi) => {
+      const revealedCount = bunkerState.revealed[pi].filter(Boolean).length;
+      const attrs = BUNKER_KEYS.map((k, ki) => {
+        const isRev = bunkerState.revealed[pi][ki];
+        return `<div class="bunker-attr ${isRev?'revealed':''}" onclick="bunkerRevealAttr(${pi},${ki})">
+          <div class="bunker-attr-key">${BUNKER[k].label}</div>
+          <div class="bunker-attr-val">${isRev ? esc(hand[k]) : 'нажми чтобы открыть'}</div>
+        </div>`;
+      }).join('');
+      return `<div class="bunker-player">
+        <div class="bunker-player-head">
+          <div>Игрок ${pi+1}</div>
+          <div class="counter">${revealedCount}/${BUNKER_KEYS.length}</div>
+        </div>
+        <div class="bunker-attrs">${attrs}</div>
+      </div>`;
+    }).join('');
+
     c.innerHTML = `
       <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
         <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
-        <div style="font-size:15px;font-weight:600">${esc(bunkerState.catastrophe)}</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px">${esc(bunkerState.catastrophe)}</div>
+        <div style="font-size:13px;color:var(--text2)">Мест в бункере: ${spotsLeft} • Игроков: ${bunkerState.players}</div>
       </div>
       <div class="card-box">
         <h3>Обсуждение</h3>
-        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
-          По очереди раскрывайте характеристики. Аргументируйте, почему именно вы нужны в бункере. Можно врать, умалчивать, хитрить.<br><br>
-          Когда закончите — голосуйте. Кто не попадёт — останется снаружи.
+        <div style="font-size:13px;color:var(--text2);line-height:1.5">
+          Игрок вслух объявляет какую характеристику открывает, потом нажимает на неё здесь.<br><br>
+          Раскрыто характеристик: <b style="color:var(--text)">${totalRevealed} / ${totalAttrs}</b>
         </div>
       </div>
-      <button class="btn btn-sec" onclick="bunkerRestart()">Новая партия</button>
+      <div class="bunker-cards">
+        ${playersHtml}
+      </div>
+      <button class="btn" onclick="bunkerFinish()" style="margin-top:14px">Закончить и голосовать</button>
+    `;
+    // Восстанавливаем scrollTop
+    requestAnimationFrame(()=>{ c.scrollTop = prevScroll; });
+  }
+  else if(bunkerState.phase === 'done'){
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="font-size:60px;opacity:.25">✓</div>
+        <div style="font-size:20px;font-weight:700;margin-top:14px">Партия завершена</div>
+        <div style="color:var(--text2);font-size:14px;max-width:300px;line-height:1.5">Голосуйте вслух и решите, кто попадёт в бункер</div>
+        <button class="btn" onclick="bunkerRestart()" style="margin-top:20px;max-width:280px">Новая партия</button>
+        <button class="btn btn-sec" onclick="show('menuScreen')" style="max-width:280px">В меню</button>
+      </div>
     `;
   }
 }
@@ -556,12 +851,27 @@ function bunkerChangePlayers(d){
   const n = bunkerState.players + d;
   if(n < 3 || n > 12) return;
   bunkerState.players = n;
+  if(bunkerState.spots > n - 1){
+    bunkerState.spots = n - 1;
+    gamesState.bunker.spots = bunkerState.spots;
+    saveGamesState();
+  }
+  renderBunker();
+}
+function bunkerChangeSpots(d){
+  const n = bunkerState.spots + d;
+  if(n < 1 || n > bunkerState.players - 1) return;
+  bunkerState.spots = n;
+  gamesState.bunker.spots = n;
+  saveGamesState();
   renderBunker();
 }
 function bunkerStart(){
-  bunkerState.catastrophe = pick(BUNKER_CATASTROPHES);
+  const cats = getCatastrophes();
+  bunkerState.catastrophe = pick(cats);
   bunkerState.hands = [];
-  for(let i=0;i<bunkerState.players;i++){
+  bunkerState.revealed = [];
+  for(let i = 0; i < bunkerState.players; i++){
     bunkerState.hands.push({
       profession: pick(BUNKER.profession.items),
       health: pick(BUNKER.health.items),
@@ -570,19 +880,34 @@ function bunkerStart(){
       luggage: pick(BUNKER.luggage.items),
       fact: pick(BUNKER.fact.items)
     });
+    bunkerState.revealed.push(BUNKER_KEYS.map(()=>false));
   }
   bunkerState.revealIndex = 0;
   bunkerState.phase = 'pass';
+  vib(20);
   renderBunker();
 }
-function bunkerShowHand(){ bunkerState.phase='hand'; renderBunker() }
+function bunkerShowHand(){ bunkerState.phase = 'hand'; renderBunker(); }
 function bunkerNextHand(){
   bunkerState.revealIndex++;
   if(bunkerState.revealIndex >= bunkerState.players){
     bunkerState.phase = 'discuss';
+    vib(15);
   } else {
     bunkerState.phase = 'pass';
   }
+  renderBunker();
+}
+function bunkerRevealAttr(pi, ki){
+  if(bunkerState.revealed[pi][ki]) return;
+  bunkerState.revealed[pi][ki] = true;
+  vib(15);
+  beepTick();
+  renderBunker();
+}
+function bunkerFinish(){
+  bunkerState.phase = 'done';
+  beepEnd();
   renderBunker();
 }
 function bunkerRestart(){
@@ -593,19 +918,42 @@ function bunkerRestart(){
 /* =========================================================
    КТО БЫСТРЕЕ
 ========================================================= */
-const fasterState = { players: 3, names: [], scores: [], current: 0, taskIndex: 0, phase: 'setup', tasks: [], timerId: null, timerStart: 0, timerSeconds: 30, tasksPerPlayer: 3, completed: 0 };
+const fasterState = {
+  players: 3, scores: [], current: 0, taskIndex: 0,
+  phase: 'setup', tasks: [], timerId: null, timerStart: 0,
+  timeSeconds: 30, tasksPerPlayer: 3, completed: 0, lastResult: ''
+};
 
-function fasterOpen(){ show('fasterScreen'); fasterState.phase='setup'; renderFaster() }
+function fasterOpen(){
+  fasterState.timeSeconds = gamesState.faster.timeSeconds;
+  show('fasterScreen');
+  fasterState.phase = 'setup';
+  renderFaster();
+}
 function fasterBack(){
-  if(fasterState.phase==='setup'){ show('menuScreen'); return; }
-  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{ fasterStopTimer(); fasterState.phase='setup'; show('menuScreen') });
+  if(fasterState.phase === 'setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{
+    fasterStopTimer();
+    fasterState.phase = 'setup';
+    show('menuScreen');
+  });
+}
+function fasterOpenSettings(){
+  editList(
+    'Свои задания',
+    'Каждое задание — с новой строки. Минимум 5, иначе используются стандартные.',
+    gamesState.faster.customTasks,
+    FASTER_TASKS,
+    (lines)=>{ gamesState.faster.customTasks = lines; }
+  );
 }
 function renderFaster(){
   const c = $('fasterContent');
-  if(fasterState.phase==='setup'){
+
+  if(fasterState.phase === 'setup'){
     c.innerHTML = `
       <div class="card-box">
-        <div class="stepper" style="background:transparent;padding:0;margin-bottom:8px">
+        <div class="stepper">
           <div class="stepper-label">Игроков</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="fasterChangePlayers(-1)">−</button>
@@ -613,7 +961,7 @@ function renderFaster(){
             <button class="stepper-btn" onclick="fasterChangePlayers(1)">+</button>
           </div>
         </div>
-        <div class="stepper" style="background:transparent;padding:0">
+        <div class="stepper">
           <div class="stepper-label">Заданий на игрока</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="fasterChangeTasks(-1)">−</button>
@@ -621,18 +969,26 @@ function renderFaster(){
             <button class="stepper-btn" onclick="fasterChangeTasks(1)">+</button>
           </div>
         </div>
+        <div class="stepper">
+          <div class="stepper-label">Секунд на задание</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="fasterChangeTime(-5)">−</button>
+            <div class="stepper-value">${fasterState.timeSeconds}с</div>
+            <button class="stepper-btn" onclick="fasterChangeTime(5)">+</button>
+          </div>
+        </div>
       </div>
       <div class="card-box">
         <h3>Как играть</h3>
         <div style="font-size:14px;line-height:1.6;color:var(--text2)">
-          Игроки ходят по кругу. Каждый получает задание и 30 секунд на его выполнение.<br><br>
-          Успел — очко. Не успел — минус очко. Побеждает тот, кто наберёт больше всех.
+          Игроки ходят по кругу. Каждый получает задание и ${fasterState.timeSeconds} секунд на его выполнение.<br><br>
+          Успел — очко. Не успел — минус очко. Можно сказать «Пас» — тоже минус, но не тратишь время.
         </div>
       </div>
       <button class="btn" onclick="fasterStart()">Начать игру</button>
     `;
   }
-  else if(fasterState.phase==='pass'){
+  else if(fasterState.phase === 'pass'){
     const i = fasterState.current;
     c.innerHTML = `
       <div class="center-wrap">
@@ -643,10 +999,10 @@ function renderFaster(){
       </div>
     `;
   }
-  else if(fasterState.phase==='task'){
+  else if(fasterState.phase === 'task'){
     const task = fasterState.tasks[fasterState.taskIndex];
-    const elapsed = Math.floor((Date.now()-fasterState.timerStart)/1000);
-    const remaining = Math.max(0, fasterState.timerSeconds - elapsed);
+    const elapsed = Math.floor((Date.now() - fasterState.timerStart) / 1000);
+    const remaining = Math.max(0, fasterState.timeSeconds - elapsed);
     const warn = remaining < 10;
     c.innerHTML = `
       <div class="game-card">
@@ -661,22 +1017,25 @@ function renderFaster(){
         <button class="btn btn-green" onclick="fasterFinish(true)" style="margin-bottom:0">Успел</button>
         <button class="btn btn-red" onclick="fasterFinish(false)" style="margin-bottom:0">Не успел</button>
       </div>
+      <button class="btn btn-sec" onclick="fasterPass()" style="margin-top:8px">Пас (−1 очко, без выполнения)</button>
     `;
   }
-  else if(fasterState.phase==='between'){
+  else if(fasterState.phase === 'between'){
     const i = fasterState.current;
+    const r = fasterState.lastResult;
+    const color = r === 'success' ? 'var(--green)' : 'var(--red)';
+    const icon = r === 'success' ? '+1' : r === 'pass' ? 'Пас' : '−1';
     c.innerHTML = `
       <div class="center-wrap">
-        <div style="font-size:56px;font-weight:800;color:${fasterState.scores[i]>=0?'var(--green)':'var(--red)'}">${fasterState.scores[i] >= 0 ? '+' : ''}${fasterState.scores[i]}</div>
+        <div style="font-size:56px;font-weight:800;color:${color}">${icon}</div>
         <div style="font-size:17px;font-weight:700;margin-top:8px">Игрок ${i+1}</div>
-        <div style="color:var(--text2);font-size:14px;margin-top:6px">Текущий счёт</div>
+        <div style="color:var(--text2);font-size:14px;margin-top:6px">Текущий счёт: ${fasterState.scores[i]}</div>
         <button class="btn" onclick="fasterAdvance()" style="margin-top:20px;max-width:280px">Дальше</button>
       </div>
     `;
   }
-  else if(fasterState.phase==='done'){
-    const sorted = fasterState.scores.map((s,i)=>({i, s})).sort((a,b)=>b.s-a.s);
-    const medal = ['1', '2', '3'];
+  else if(fasterState.phase === 'done'){
+    const sorted = fasterState.scores.map((s, i)=>({i, s})).sort((a, b)=>b.s - a.s);
     c.innerHTML = `
       <div style="font-size:17px;font-weight:700;margin-bottom:14px;text-align:center">Итоги</div>
       ${sorted.map((x, idx)=>`
@@ -703,59 +1062,96 @@ function fasterChangeTasks(d){
   fasterState.tasksPerPlayer = n;
   renderFaster();
 }
+function fasterChangeTime(d){
+  const n = fasterState.timeSeconds + d;
+  if(n < 10 || n > 120) return;
+  fasterState.timeSeconds = n;
+  gamesState.faster.timeSeconds = n;
+  saveGamesState();
+  renderFaster();
+}
 function fasterStart(){
   fasterState.scores = new Array(fasterState.players).fill(0);
   fasterState.current = 0;
   fasterState.completed = 0;
-  fasterState.tasks = shuffle(FASTER_TASKS);
+  fasterState.tasks = shuffle(getTasks());
   fasterState.taskIndex = 0;
   fasterState.phase = 'pass';
+  vib(20);
   renderFaster();
 }
 function fasterShowTask(){
-  if(fasterState.taskIndex >= fasterState.tasks.length) fasterState.tasks = shuffle(FASTER_TASKS);
+  // Фикс: сбрасываем taskIndex при перезагрузке колоды
+  if(fasterState.taskIndex >= fasterState.tasks.length){
+    fasterState.tasks = shuffle(getTasks());
+    fasterState.taskIndex = 0;
+  }
   fasterState.timerStart = Date.now();
   fasterState.phase = 'task';
   renderFaster();
+  beepStart();
   fasterStartTimer();
 }
 function fasterStartTimer(){
   fasterStopTimer();
+  let warnDone = false;
   fasterState.timerId = setInterval(()=>{
     if(fasterState.phase !== 'task'){ fasterStopTimer(); return; }
-    const elapsed = Math.floor((Date.now()-fasterState.timerStart)/1000);
-    const remaining = Math.max(0, fasterState.timerSeconds - elapsed);
+    const elapsed = Math.floor((Date.now() - fasterState.timerStart) / 1000);
+    const remaining = Math.max(0, fasterState.timeSeconds - elapsed);
     const el = $('fasterTimer');
     if(el){
       el.textContent = remaining;
       el.classList.toggle('warning', remaining < 10);
     }
+    if(remaining <= 10 && remaining > 0 && !warnDone){ warnDone = true; beepWarn(); vib(40); }
     if(remaining <= 0){
       fasterStopTimer();
+      beepEnd();
+      vib([100, 50, 100]);
       fasterFinish(false);
     }
   }, 200);
 }
 function fasterStopTimer(){
-  if(fasterState.timerId){ clearInterval(fasterState.timerId); fasterState.timerId=null; }
+  if(fasterState.timerId){ clearInterval(fasterState.timerId); fasterState.timerId = null; }
 }
 function fasterFinish(success){
   fasterStopTimer();
   const i = fasterState.current;
-  if(success) fasterState.scores[i]++; else fasterState.scores[i]--;
+  if(success){
+    fasterState.scores[i]++;
+    fasterState.lastResult = 'success';
+    beep(900, 0.12, 0.12);
+    vib(20);
+  } else {
+    fasterState.scores[i]--;
+    fasterState.lastResult = 'fail';
+    vib(60);
+  }
   fasterState.completed++;
   fasterState.taskIndex++;
   fasterState.phase = 'between';
   renderFaster();
 }
-function fasterAdvance(){
+function fasterPass(){
+  fasterStopTimer();
   const i = fasterState.current;
+  fasterState.scores[i]--;
+  fasterState.lastResult = 'pass';
+  fasterState.completed++;
+  fasterState.taskIndex++;
+  vib(40);
+  fasterState.phase = 'between';
+  renderFaster();
+}
+function fasterAdvance(){
   if(fasterState.completed >= fasterState.tasksPerPlayer){
-    // Ход переходит следующему
     fasterState.completed = 0;
     fasterState.current++;
     if(fasterState.current >= fasterState.players){
       fasterState.phase = 'done';
+      beepEnd();
       renderFaster();
       return;
     }
@@ -771,19 +1167,40 @@ function fasterRestart(){
 /* =========================================================
    ИСТОРИИ ПО КРУГУ
 ========================================================= */
-const storyState = { players: 4, sentencesPerPlayer: 1, lines: [], current: 0, phase: 'setup', mode: 'random' };
+const storyState = {
+  players: 4, sentencesPerPlayer: 1, lines: [], current: 0,
+  phase: 'setup', mode: 'random', editingIdx: -1
+};
 
-function storyOpen(){ show('storyScreen'); storyState.phase='setup'; renderStory() }
+function storyOpen(){
+  show('storyScreen');
+  storyState.phase = 'setup';
+  renderStory();
+}
 function storyBack(){
-  if(storyState.phase==='setup'){ show('menuScreen'); return; }
-  confirmAction('Выйти из игры?','История будет потеряна.',()=>{ storyState.phase='setup'; show('menuScreen') });
+  if(storyState.phase === 'setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','История будет потеряна.',()=>{
+    storyState.phase = 'setup';
+    show('menuScreen');
+  });
+}
+function storyOpenSettings(){
+  editList(
+    'Свои затравки',
+    'Каждая затравка — с новой строки. Минимум 3, иначе используются стандартные.',
+    gamesState.story.customStarters,
+    STORY_STARTERS,
+    (lines)=>{ gamesState.story.customStarters = lines; }
+  );
 }
 function renderStory(){
   const c = $('storyContent');
-  if(storyState.phase==='setup'){
+
+  if(storyState.phase === 'setup'){
+    const twoRounds = gamesState.story.twoRounds;
     c.innerHTML = `
       <div class="card-box">
-        <div class="stepper" style="background:transparent;padding:0;margin-bottom:8px">
+        <div class="stepper">
           <div class="stepper-label">Игроков</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="storyChangePlayers(-1)">−</button>
@@ -791,7 +1208,7 @@ function renderStory(){
             <button class="stepper-btn" onclick="storyChangePlayers(1)">+</button>
           </div>
         </div>
-        <div class="stepper" style="background:transparent;padding:0">
+        <div class="stepper">
           <div class="stepper-label">Фраз на игрока</div>
           <div class="stepper-controls">
             <button class="stepper-btn" onclick="storyChangeSentences(-1)">−</button>
@@ -802,48 +1219,82 @@ function renderStory(){
       </div>
       <div class="card-box">
         <h3>Режим</h3>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;margin-bottom:8px">
           <button class="btn ${storyState.mode==='random'?'':'btn-sec'}" style="margin-bottom:0" onclick="storySetMode('random')">Вслепую</button>
           <button class="btn ${storyState.mode==='continue'?'':'btn-sec'}" style="margin-bottom:0" onclick="storySetMode('continue')">Продолжение</button>
         </div>
-        <div style="font-size:12px;color:var(--text2);margin-top:10px;line-height:1.5">
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">
           ${storyState.mode==='random'
-            ? 'Каждый пишет фразу, не видя предыдущих. В конце получится абсурдная история.'
-            : 'Каждый видит последнюю фразу и продолжает её. История будет связной, но неожиданной.'}
+            ? 'Каждый пишет фразу, не видя предыдущих.'
+            : 'Каждый видит последнюю фразу и продолжает её.'}
+        </div>
+      </div>
+      <div class="card-box">
+        <div class="toggle-row" onclick="storyToggleUseStarter()">
+          <div>
+            <div class="toggle-row-title">Первая фраза от приложения</div>
+            <div class="toggle-row-sub">Приложение даёт затравку, дальше продолжаете</div>
+          </div>
+          <div class="switch ${gamesState.story.useStarter?'on':''}"></div>
+        </div>
+        <div class="toggle-row" onclick="storyToggleTwoRounds()">
+          <div>
+            <div class="toggle-row-title">Два круга</div>
+            <div class="toggle-row-sub">После первого круга — правки любой фразы</div>
+          </div>
+          <div class="switch ${twoRounds?'on':''}"></div>
         </div>
       </div>
       <button class="btn" onclick="storyStart()">Начать</button>
     `;
   }
-  else if(storyState.phase==='pass'){
-    const total = storyState.players * storyState.sentencesPerPlayer;
+  else if(storyState.phase === 'pass'){
+    const totalContent = storyState.players * storyState.sentencesPerPlayer;
     const done = storyState.current;
     c.innerHTML = `
       <div class="center-wrap">
         <div style="width:70px;height:70px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff">${done+1}</div>
-        <div style="font-size:19px;font-weight:700;margin-top:16px">Ход ${done+1} из ${total}</div>
-        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Передай телефон следующему. Он не должен видеть того, что было раньше.</div>
+        <div style="font-size:19px;font-weight:700;margin-top:16px">Ход ${done+1} из ${totalContent}</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Передай телефон следующему. Он не должен видеть, что было раньше.</div>
         <button class="btn" onclick="storyWriteStart()" style="margin-top:24px;max-width:280px">Я готов</button>
       </div>
     `;
   }
-  else if(storyState.phase==='write'){
+  else if(storyState.phase === 'write'){
     const lastLine = storyState.lines.length > 0 ? storyState.lines[storyState.lines.length-1] : null;
-    const showLast = storyState.mode === 'continue' && lastLine;
+    // Фикс: показываем затравку первому пишущему в режиме "продолжение"
+    const showLast = storyState.mode === 'continue' && !!lastLine;
     c.innerHTML = `
-      <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Ход ${storyState.current+1}</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Ход ${storyState.current+1} из ${storyState.players * storyState.sentencesPerPlayer}</div>
       ${showLast ? `<div class="card-box"><h3>Предыдущая фраза</h3><div style="font-size:15px;line-height:1.5">${esc(lastLine)}</div></div>` : ''}
       <textarea class="story-input" id="storyInput" placeholder="${storyState.mode==='continue'?'Продолжи историю одним предложением...':'Напиши одно предложение...'}" autocomplete="off"></textarea>
       <button class="btn" onclick="storySaveLine()" style="margin-top:14px">Готово</button>
     `;
     setTimeout(()=>{ const el = $('storyInput'); if(el) el.focus(); }, 100);
   }
-  else if(storyState.phase==='result'){
+  else if(storyState.phase === 'edit'){
+    c.innerHTML = `
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px;text-align:center">Второй круг — правки</div>
+      <div style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:14px">Тапни любую фразу, чтобы изменить. Можно править чужое.</div>
+      <div class="story-preview">
+        ${storyState.lines.map((l, i)=>`
+          <div class="story-line">
+            <span class="story-num">${i+1}.</span>
+            <span class="story-text">${esc(l)}</span>
+            <button class="story-edit-btn" onclick="storyEditLine(${i})">✎</button>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn" onclick="storyEndEdit()">Готово — показать историю</button>
+    `;
+  }
+  else if(storyState.phase === 'result'){
     c.innerHTML = `
       <div style="font-size:17px;font-weight:700;margin-bottom:14px;text-align:center">История</div>
       <div class="story-preview">
-        ${storyState.lines.map((l, i)=>`<div class="story-line"><span class="story-num">${i+1}.</span>${esc(l)}</div>`).join('')}
+        ${storyState.lines.map((l, i)=>`<div class="story-line"><span class="story-num">${i+1}.</span><span class="story-text">${esc(l)}</span></div>`).join('')}
       </div>
+      <button class="btn btn-sec" onclick="storyCopy()">Скопировать текст</button>
       <button class="btn" onclick="storyRestart()">Новая история</button>
       <button class="btn btn-sec" onclick="show('menuScreen')">В меню</button>
     `;
@@ -861,11 +1312,25 @@ function storyChangeSentences(d){
   storyState.sentencesPerPlayer = n;
   renderStory();
 }
-function storySetMode(m){ storyState.mode = m; renderStory() }
+function storySetMode(m){ storyState.mode = m; renderStory(); }
+function storyToggleUseStarter(){
+  gamesState.story.useStarter = !gamesState.story.useStarter;
+  saveGamesState();
+  renderStory();
+}
+function storyToggleTwoRounds(){
+  gamesState.story.twoRounds = !gamesState.story.twoRounds;
+  saveGamesState();
+  renderStory();
+}
 function storyStart(){
   storyState.lines = [];
   storyState.current = 0;
+  if(gamesState.story.useStarter){
+    storyState.lines.push(pick(getStarters()));
+  }
   storyState.phase = 'pass';
+  vib(20);
   renderStory();
 }
 function storyWriteStart(){
@@ -880,11 +1345,44 @@ function storySaveLine(){
   storyState.current++;
   const total = storyState.players * storyState.sentencesPerPlayer;
   if(storyState.current >= total){
-    storyState.phase = 'result';
+    if(gamesState.story.twoRounds){
+      storyState.phase = 'edit';
+    } else {
+      storyState.phase = 'result';
+      beepEnd();
+    }
   } else {
     storyState.phase = 'pass';
   }
   renderStory();
+}
+function storyEditLine(idx){
+  storyState.editingIdx = idx;
+  $('storyEditText').value = storyState.lines[idx];
+  openModal('storyEditModal');
+  setTimeout(()=>{ $('storyEditText').focus(); }, 100);
+}
+function storySaveEdit(){
+  const idx = storyState.editingIdx;
+  if(idx < 0) return;
+  const val = $('storyEditText').value.trim();
+  if(val){ storyState.lines[idx] = val; }
+  storyState.editingIdx = -1;
+  closeModal('storyEditModal');
+  renderStory();
+}
+function storyEndEdit(){
+  storyState.phase = 'result';
+  beepEnd();
+  renderStory();
+}
+function storyCopy(){
+  const text = storyState.lines.map((l, i)=>(i+1)+'. '+l).join('\n');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>toast('Скопировано')).catch(()=>toast('Не удалось'));
+  } else {
+    toast('Не поддерживается');
+  }
 }
 function storyRestart(){
   storyState.phase = 'setup';
@@ -892,17 +1390,41 @@ function storyRestart(){
 }
 
 /* =========================================================
-   ИНИЦИАЛИЗАЦИЯ
+   ЗАКРЫТИЕ МОДАЛОК ПО ФОНУ
+========================================================= */
+// Все модалки закрываются по тапу на фон, кроме confirm (там явный выбор)
+['listEditorModal', 'storyEditModal', 'spyGuessModal'].forEach(id => {
+  const m = $(id);
+  if(m) m.addEventListener('click', (e) => {
+    if(e.target === m) closeModal(id);
+  });
+});
+
+/* =========================================================
+   СИСТЕМНАЯ КНОПКА НАЗАД + ОСТАНОВКА ТАЙМЕРОВ
 ========================================================= */
 history.pushState(null, '');
 window.addEventListener('popstate', ()=>{
   const active = document.querySelector('.screen.active');
   if(active && active.id !== 'menuScreen'){
+    // Гасим все таймеры и сбрасываем фазы, чтобы не тикали в фоне
+    spyStopTimer();
+    fasterStopTimer();
+    spyState.phase = 'setup';
+    fasterState.phase = 'setup';
+    bunkerState.phase = 'setup';
+    storyState.phase = 'setup';
+    // Закрываем открытые модалки
+    document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
     active.classList.remove('active');
     $('menuScreen').classList.add('active');
     history.pushState(null, '');
   }
 });
+
+// Дополнительная страховка: гасим таймеры при уходе со страницы
+window.addEventListener('pagehide', ()=>{ spyStopTimer(); fasterStopTimer(); });
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ spyStopTimer(); fasterStopTimer(); } });
 </script>
 </body>
 </html>
