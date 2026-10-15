@@ -6,8 +6,6 @@
 <meta name="theme-color" content="#0f0f12">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c5cff'/><circle cx='35' cy='35' r='9' fill='white'/><circle cx='65' cy='35' r='9' fill='white'/><circle cx='35' cy='65' r='9' fill='white'/><circle cx='65' cy='65' r='9' fill='white'/></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c5cff'/><circle cx='35' cy='35' r='9' fill='white'/><circle cx='65' cy='35' r='9' fill='white'/><circle cx='35' cy='65' r='9' fill='white'/><circle cx='65' cy='65' r='9' fill='white'/></svg>">
-<link rel="manifest" href="manifest.json">
 <title>Игры</title>
 <style>
 :root{--bg:#0f0f12;--bg2:#18181d;--bg3:#22222a;--bg4:#2c2c36;--text:#f0f0f5;--text2:#8a8a95;--text3:#5a5a65;--accent:#7c5cff;--green:#22c55e;--blue:#3b82f6;--orange:#f59e0b;--red:#ef4444;--border:#2a2a35;--shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -32,13 +30,11 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .btn-sec{background:var(--bg3);color:var(--text)}
 .btn-green{background:var(--green);color:#fff}
 .btn-red{background:var(--red);color:#fff}
-.btn-sm{padding:10px 14px;font-size:13px;width:auto;margin-bottom:0}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
 .field input,.field textarea{background:var(--bg3);border-radius:10px;padding:12px 14px;font-size:15px;border:1.5px solid transparent;color:var(--text);font-family:inherit}
 .field textarea{min-height:160px;resize:vertical;line-height:1.5}
 .field input:focus,.field textarea:focus{border-color:var(--accent)}
-.empty{text-align:center;color:var(--text2);padding:40px 20px;font-size:14px;line-height:1.6}
 .center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px;overflow-y:auto}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .menu-tile{background:var(--bg2);border-radius:16px;padding:20px 14px;border:1px solid var(--border);cursor:pointer;transition:transform .1s,background .15s;display:flex;flex-direction:column;gap:12px;min-height:140px}
@@ -78,6 +74,8 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .story-edit-btn{width:26px;height:26px;border-radius:50%;background:var(--bg3);color:var(--text2);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .story-input{background:var(--bg3);border-radius:12px;padding:14px;font-size:16px;border:1.5px solid transparent;width:100%;min-height:100px;resize:vertical;line-height:1.5;font-family:inherit;color:var(--text)}
 .story-input:focus{border-color:var(--accent)}
+.story-timer{font-size:12px;color:var(--text2);margin-bottom:8px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.story-timer.warn{color:var(--red)}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg4);color:var(--text);padding:11px 18px;border-radius:20px;font-size:13px;font-weight:500;z-index:200;opacity:0;pointer-events:none;transition:all .25s;border:1px solid var(--border);box-shadow:var(--shadow)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
@@ -87,8 +85,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .modal-sub{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5}
 .confirm-btns{display:flex;gap:8px}
 .confirm-btns .btn{flex:1;margin-bottom:0}
-
-/* Переключатели (toggle-row) */
 .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;cursor:pointer;border-bottom:1px solid var(--border)}
 .toggle-row:last-child{border-bottom:none}
 .toggle-row-title{font-size:14px;font-weight:600;line-height:1.3}
@@ -97,16 +93,17 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .switch.on{background:var(--accent)}
 .switch.on::after{transform:translateX(18px)}
-
-/* Стат-строки (показ своей руки в бункере) */
+.seg{display:flex;background:var(--bg3);border-radius:10px;padding:3px;gap:2px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:1;padding:9px 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;white-space:nowrap;min-width:56px}
+.seg button.active{background:var(--bg2);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.35;pointer-events:none;cursor:not-allowed}
 .stat-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
 .stat-row:last-child{border-bottom:none}
 .stat-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
 .stat-body{flex:1;min-width:0}
 .stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:2px}
 .stat-value{font-size:15px;line-height:1.4;word-break:break-word}
-
-/* Бункер — раскрываемые карточки */
 .bunker-cards{display:flex;flex-direction:column;gap:10px}
 .bunker-player{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden}
 .bunker-player-head{padding:10px 14px;background:var(--bg3);font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
@@ -120,7 +117,19 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 .bunker-attr-val{font-size:13px;text-align:right;flex:1;word-break:break-word}
 .bunker-attr.revealed .bunker-attr-val{color:var(--text);font-weight:500}
 .bunker-attr:not(.revealed) .bunker-attr-val{color:var(--text3);font-style:italic}
-
+.survivor-row{background:var(--bg2);border-radius:12px;border:2px solid var(--border);padding:14px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.survivor-row.in{background:rgba(34,197,94,.1);border-color:var(--green)}
+.survivor-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.survivor-name{font-weight:700;font-size:15px}
+.survivor-tag{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:var(--bg3);color:var(--text2)}
+.survivor-row.in .survivor-tag{background:var(--green);color:#fff}
+.survivor-attrs{font-size:12px;color:var(--text2);line-height:1.6}
+.survivor-attrs b{color:var(--text);font-weight:600}
+.attr-editor-btn{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg3);border-radius:12px;margin-bottom:6px;cursor:pointer}
+.attr-editor-btn:active{background:var(--bg4)}
+.attr-editor-name{font-size:14px;font-weight:600}
+.attr-editor-count{font-size:12px;color:var(--text2);margin-top:2px}
+.attr-editor-arrow{color:var(--text3);font-size:16px}
 @media (min-width:640px){
   .content{max-width:600px;margin:0 auto;width:100%}
   .center-wrap{max-width:600px;margin:0 auto;width:100%}
@@ -129,7 +138,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 </head>
 <body>
 
-<!-- ============ МЕНЮ ============ -->
 <div class="screen active" id="menuScreen">
   <div class="header">
     <h1>Игры</h1>
@@ -168,7 +176,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   </div>
 </div>
 
-<!-- ============ ШПИОН ============ -->
 <div class="screen" id="spyScreen">
   <div class="header">
     <button class="icon-btn" onclick="spyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -178,7 +185,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="content" id="spyContent"></div>
 </div>
 
-<!-- ============ БУНКЕР ============ -->
 <div class="screen" id="bunkerScreen">
   <div class="header">
     <button class="icon-btn" onclick="bunkerBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -188,7 +194,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="content" id="bunkerContent"></div>
 </div>
 
-<!-- ============ КТО БЫСТРЕЕ ============ -->
 <div class="screen" id="fasterScreen">
   <div class="header">
     <button class="icon-btn" onclick="fasterBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -198,7 +203,6 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   <div class="content" id="fasterContent"></div>
 </div>
 
-<!-- ============ ИСТОРИИ ============ -->
 <div class="screen" id="storyScreen">
   <div class="header">
     <button class="icon-btn" onclick="storyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -245,6 +249,15 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   </div>
 </div>
 
+<div class="modal" id="bunkerCatPickerModal">
+  <div class="modal-inner">
+    <h3>Редактор контента</h3>
+    <div class="modal-sub">Настрой свои характеристики и катастрофы</div>
+    <div id="bunkerCatPickerList"></div>
+    <button class="btn btn-sec" onclick="closeModal('bunkerCatPickerModal')" style="margin-top:12px">Закрыть</button>
+  </div>
+</div>
+
 <div class="modal" id="storyEditModal">
   <div class="modal-inner">
     <h3>Редактировать фразу</h3>
@@ -259,11 +272,9 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script>
 'use strict';
 
-/* ===== УТИЛИТЫ ===== */
 function $(id){return document.getElementById(id)}
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1800)}
@@ -274,7 +285,6 @@ function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 function esc(s){ return s == null ? '' : String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) }
 
-/* ===== ВИБРАЦИЯ + ЗВУК ===== */
 function vib(ms){ if(navigator.vibrate){try{navigator.vibrate(ms||15)}catch(e){}} }
 let _audioCtx = null;
 function beep(freq, dur, vol){
@@ -300,13 +310,13 @@ function beepTick(){ beep(1200, 0.04, 0.08); }
 /* ===== СОСТОЯНИЕ ===== */
 const gamesState = {
   spy:    { timeSeconds: 480, twoSpies: false, customLocations: [] },
-  bunker: { spots: 3, customCatastrophes: [] },
-  faster: { timeSeconds: 30, customTasks: [] },
-  story:  { twoRounds: false, useStarter: false, customStarters: [], mode: 'random' }
+  bunker: { spots: 3, customCatastrophes: [], customAttributes: {} },
+  faster: { timeSeconds: 30, customTasks: [], difficulty: 'medium' },
+  story:  { twoRounds: false, useStarter: false, customStarters: [], mode: 'random', genre: 'any', timerSeconds: 0 }
 };
 function loadGamesState(){
   try{
-    const raw = localStorage.getItem('games_v1');
+    const raw = localStorage.getItem('games_v3');
     if(raw){
       const p = JSON.parse(raw);
       if(p.spy)    Object.assign(gamesState.spy, p.spy);
@@ -317,7 +327,7 @@ function loadGamesState(){
   }catch(e){}
 }
 function saveGamesState(){
-  try{localStorage.setItem('games_v1', JSON.stringify(gamesState))}catch(e){}
+  try{localStorage.setItem('games_v3', JSON.stringify(gamesState))}catch(e){}
 }
 loadGamesState();
 
@@ -330,6 +340,12 @@ function editList(title, sub, currentArray, defaultArray, onSave){
   $('listEditorText').value = (currentArray && currentArray.length ? currentArray : []).join('\n');
   _listEditorOnSave = onSave;
   _listEditorDefault = defaultArray || [];
+  // Страховка: сброс если раньше что-то скрывалось
+  $('listEditorText').style.display = '';
+  const btns = document.querySelector('#listEditorModal .confirm-btns');
+  if(btns) btns.style.display = 'flex';
+  const closeBtn = document.querySelector('#listEditorModal > .modal-inner > .btn.btn-sec');
+  if(closeBtn) closeBtn.style.display = '';
   openModal('listEditorModal');
 }
 function listEditorSave(){
@@ -348,95 +364,295 @@ const LOCATIONS = [
   'Пляж','Аэропорт','Больница','Школа','Ресторан','Кинотеатр','Стадион','Музей',
   'Зоопарк','Цирк','Банк','Полицейский участок','Тюрьма','Казино','Отель','Метро',
   'Космическая станция','Корабль','Подводная лодка','Полярная станция','Пиратский корабль',
-  'Военная база','Университет','Библиотека','Театр','Спа-салон','Вокзал','Рынок'
+  'Военная база','Университет','Библиотека','Театр','Спа-салон','Вокзал','Рынок',
+  'Бар','Ночной клуб','Кафе','Пиццерия','Супермаркет','Парикмахерская','Автозаправка',
+  'Автосервис','Автомойка','Прачечная','Почта','Аптека','Стоматология','Ветеринарка',
+  'Парк','Лес','Горы','Пустыня','Джунгли','Пещера','Водопад','Озеро','Река','Море',
+  'Курорт','Санаторий','Бассейн','Аквапарк','Лунапарк','Боулинг','Бильярд','Лазертаг',
+  'Пейнтбол','Квест-комната','Тир','Скалодром','Каток','Лыжный курорт','Дайвинг-центр',
+  'Ферма','Теплица','Пасека','Винодельня','Пивоварня','Сыроварня','Пекарня','Кондитерская',
+  'Ювелирный магазин','Магазин одежды','Обувной магазин','Магазин электроники',
+  'Спортивный магазин','Книжный магазин','Магазин игрушек','Зоомагазин','Цветочный магазин',
+  'Мебельный магазин','Строительный магазин','Автосалон','Шиномонтаж','Обсерватория',
+  'Планетарий','Океанариум','Дельфинарий','Сафари-парк','Национальный парк','Археологические раскопки',
+  'Храм','Монастырь','Кладбище','Морг','Психиатрическая больница','Роддом','Операционная',
+  'Скорая помощь','Пожарная станция','Суд','Налоговая','Паспортный стол','ГИБДД','Военкомат',
+  'ЗАГС','Колония','Казарма','Аэродром','Вертолётная площадка','Морской порт','Речной порт',
+  'Автовокзал','Депо','Гараж','Склад','Фабрика','Завод','Шахта','Нефтяная вышка',
+  'ГЭС','АЭС','Ветряки','Солнечная электростанция','Лаборатория','НИИ'
 ];
 const SPY_QUESTIONS = [
   'Что здесь делают люди?','Какой здесь запах?','Что тут за мебель?',
   'Как сюда попадают?','Сколько здесь обычно людей?','Что делают вечером?',
   'Кто здесь главный?','Что здесь можно купить?','Как одеты люди?',
-  'В какое время суток здесь людно?','Есть ли тут еда?','Что тут самое дорогое?'
+  'В какое время суток здесь людно?','Есть ли тут еда?','Что тут самое дорогое?',
+  'Что здесь запрещено?','Какой здесь звук?','Что тут на стенах?',
+  'Как долго тут обычно находятся?','Кто тут работает?','Что сюда приносят с собой?',
+  'Куда отсюда уходят?','Что тут происходит по выходным?'
 ];
 const BUNKER_CATASTROPHES = [
   'Ядерная война','Пандемия смертельного вируса','Падение метеорита','Всемирное наводнение',
   'Нашествие зомби','Глобальное похолодание','Восстание машин','Извержение супервулкана',
-  'Химическое заражение','Солнечная вспышка (все электронные приборы сгорели)'
+  'Химическое заражение','Солнечная вспышка (все электронные приборы сгорели)',
+  'Инопланетное вторжение','Атака гигантских насекомых','Потеря гравитации на месяц',
+  'Нашествие мутировавших крыс','Настоящий Судный день','Пробуждение Ктулху',
+  'Мир захватили клоны-двойники','Все растения стали хищными','Наступила вечная ночь',
+  'Радиоактивный туман','Серия цунами','Всемирный потоп',
+  'Коллапс интернета и всех спутников','Пандемия смеха (все не могут перестать смеяться)',
+  'Бунт искусственного интеллекта','Отключение электричества на 5 лет',
+  'Нашествие динозавров из прошлого','Глобальное потепление +40°C',
+  'Второй ледниковый период','Все люди стали бесплодными'
 ];
-const BUNKER = {
+
+const BUNKER_DEFAULT = {
   profession: {
     label:'Профессия', icon:'П',
-    items:['Врач','Инженер','Военный','Повар','Учитель','Программист','Электрик','Биолог',
-      'Психолог','Строитель','Пилот','Медсестра','Химик','Фермер','Полицейский','Охотник',
-      'Пожарный','Механик','Учёный','Дипломат','Журналист','Актёр','Спортсмен','Официант',
-      'Стоматолог','Ветеринар','Архитектор','Агроном']
+    items:['Врач','Хирург','Терапевт','Стоматолог','Медсестра','Фельдшер','Психолог','Психиатр',
+      'Инженер','Электрик','Сантехник','Строитель','Каменщик','Плотник','Сварщик','Токарь',
+      'Слесарь','Механик','Водитель','Пилот','Капитан','Матрос','Штурман','Военный','Офицер',
+      'Генерал','Снайпер','Сапёр','Разведчик','Полицейский','Пожарный','Спасатель','Охотник',
+      'Рыбак','Фермер','Агроном','Ветеринар','Биолог','Химик','Физик','Учёный','Программист',
+      'Хакер','Учитель','Профессор','Воспитатель','Библиотекарь','Журналист','Дипломат','Юрист',
+      'Судья','Бухгалтер','Экономист','Банкир','Повар','Пекарь','Кондитер','Официант','Бармен',
+      'Парикмахер','Портной','Ювелир','Художник','Музыкант','Актёр','Режиссёр','Писатель',
+      'Фотограф','Дизайнер','Архитектор','Скульптор','Кузнец','Шахтёр','Геолог','Археолог',
+      'Историк','Астроном','Астронавт','Скалолаз','Дайвер','Инструктор по выживанию']
   },
   health: {
     label:'Здоровье', icon:'З',
-    items:['Абсолютно здоров','Астма','Диабет','Аллергия на пыль','Дальтонизм',
-      'Хроническая бессонница','Мигрени','Плохое зрение','Слабый иммунитет','Депрессия',
-      'Гипертония','Гастрит','Артрит','Сколиоз','Храп','Заикание','Клаустрофобия лёгкая',
-      'Постоянная усталость','Панические атаки','Плохая память']
+    items:['Абсолютно здоров','Отличная форма','Спортивная подготовка','Астма','Диабет 1 типа',
+      'Диабет 2 типа','Аллергия на пыль','Аллергия на пыльцу','Аллергия на животных',
+      'Аллергия на молоко','Аллергия на орехи','Дальтонизм','Плохое зрение (-8)',
+      'Слепота на один глаз','Глухота на одно ухо','Хроническая бессонница','Мигрени',
+      'Гипертония','Гипотония','Гастрит','Язва','Артрит','Ревматизм','Сколиоз',
+      'Плоскостопие','Храп','Заикание','Клаустрофобия','Агорафобия','Арахнофобия',
+      'Акрофобия','Депрессия','Тревожное расстройство','Панические атаки','ПТСР',
+      'Биполярное расстройство','СДВГ','Дислексия','Плохая память','Хроническая усталость',
+      'Слабый иммунитет','Частые простуды','Онкология (ремиссия)','Перелом ноги',
+      'Инвалид-колясочник','Протез руки','Протез ноги','Кардиостимулятор','Ожирение',
+      'Анорексия','Лунатизм','Аллергия на антибиотики']
   },
   hobby: {
     label:'Хобби', icon:'Х',
-    items:['Рыбалка','Охота','Шахматы','Рисование','Садоводство','Чтение','Кроссворды',
-      'Медитация','Йога','Бег','Скалолазание','Музыка','Пение','Танцы','Готовка',
-      'Коллекционирование','Астрономия','Программирование','Изучение языков','Сплав по рекам',
-      'Резьба по дереву','Фотография']
+    items:['Рыбалка','Охота','Шахматы','Шашки','Нарды','Покер','Домино','Кроссворды',
+      'Судоку','Головоломки','Рисование','Живопись','Скульптура','Гончарство','Фотография',
+      'Видеосъёмка','Программирование','Робототехника','Электроника','Радиолюбительство',
+      'Астрономия','Нумизматика','Коллекционирование','Садоводство','Огородничество',
+      'Пчеловодство','Виноделие','Пивоварение','Готовка','Выпечка','Сыроварение',
+      'Копчение','Консервирование','Йога','Медитация','Пилатес','Фитнес','Бодибилдинг',
+      'Бег','Плавание','Велоспорт','Скалолазание','Альпинизм','Спелеология','Дайвинг',
+      'Сёрфинг','Сноуборд','Лыжи','Коньки','Скейтборд','Паркур','Единоборства','Бокс',
+      'ММА','Фехтование','Стрельба','Страйкбол','Пейнтбол','Лазертаг','Туризм','Походы',
+      'Сплавы по рекам','Ориентирование','Картография','Изучение языков','Чтение',
+      'Писательство','Поэзия','Музыка','Гитара','Пианино','Барабаны','Вокал','Танцы',
+      'Хореография','Театр','КВН','Юмор']
   },
   phobia: {
     label:'Фобия', icon:'Ф',
-    items:['Клаустрофобия','Агорафобия','Гемофобия','Акрофобия','Мизофобия',
-      'Арахнофобия','Социофобия','Никтофобия','Аэрофобия','Аквафобия',
-      'Пирофобия','Ксенофобия','Нет фобий','Боязнь насекомых','Боязнь громких звуков']
+    items:['Клаустрофобия','Агорафобия','Социофобия','Арахнофобия','Акрофобия',
+      'Гемофобия','Мизофобия','Никтофобия','Аэрофобия','Аквафобия','Пирофобия',
+      'Ксенофобия','Офидиофобия (змеи)','Кинофобия (собаки)','Айлурофобия (кошки)',
+      'Энтомофобия (насекомые)','Мусофобия (мыши)','Трипофобия (дырки)','Трихофобия (волосы)',
+      'Токсикофобия (яд)','Танатофобия (смерть)','Фонофобия (звуки)','Астрафобия (гроза)',
+      'Некрофобия (трупы)','Аблютофобия (мыться)','Дентофобия (стоматолог)',
+      'Гелиофобия (солнце)','Сомнифобия (сон)','Фагофобия (глотать)','Бронтофобия (гром)',
+      'Апейрофобия (бесконечность)','Атихифобия (ошибки)','Аутофобия (одиночество)',
+      'Гераскофобия (старение)','Гиппофобия (лошади)','Дорофобия (подарки)',
+      'Иатрофобия (врачи)','Копрофобия (фекалии)','Лигирофобия (громкий звук)',
+      'Матеофобия (школа)','Омброфобия (дождь)','Педиофобия (куклы)','Радиофобия (радиация)',
+      'Технофобия (технологии)','Трипанофобия (иглы)','Фобофобия (боязнь страха)',
+      'Хронофобия (время)','Айхмофобия (острые предметы)','Алгофобия (боль)','Нет фобий']
   },
   luggage: {
     label:'Багаж', icon:'Б',
-    items:['Аптечка','Нож','Спички','Верёвка','Фонарик','Запас еды на неделю','Одеяло',
-      'Топор','Радио','Гитара','Книга выживания','Компас','Фляга','Семена растений',
-      'Набор инструментов','Фотоаппарат','Генератор','Противогаз','Удочка','Охотничья собака',
-      'Ноутбук с батареей','Швейцарский нож']
+    items:['Аптечка','Бинты','Жгут','Шприц','Обезболивающее','Антибиотики','Витамины',
+      'Противогаз','Респиратор','Нож','Мультитул','Топор','Мачете','Пила','Молоток',
+      'Отвёртка','Гаечный ключ','Набор инструментов','Спички','Зажигалка','Огниво',
+      'Верёвка','Трос','Скотч','Изолента','Проволока','Фонарик','Свечи','Батарейки',
+      'Аккумулятор','Радио','Рация','Телефон','Павербанк','Солнечная панель','Генератор',
+      'Компас','Карта','GPS-навигатор','Бинокль','Лупа','Часы','Спальник','Палатка',
+      'Одеяло','Термобельё','Дождевик','Ботинки','Кроссовки','Каска','Бронежилет',
+      'Оружие','Пистолет','Патроны','Лук','Арбалет','Удочка','Сеть','Капкан',
+      'Запас еды на месяц','Консервы','Крупа','Макароны','Сахар','Соль','Специи',
+      'Чай','Кофе','Вода','Фильтр для воды','Таблетки для очистки воды','Фляга','Термос',
+      'Посуда','Котелок','Ножницы','Иголка','Нитки','Швейный набор','Книга выживания',
+      'Медицинский справочник','Энциклопедия','Семена растений','Саженцы','Удобрения',
+      'Гитара','Настольные игры','Карты','Ноутбук','Планшет','Флешка','Фотоаппарат',
+      'Собака','Кошка','Попугай','Хомяк']
   },
   fact: {
     label:'Особый факт', icon:'!',
-    items:['Был в тюрьме','Знает 5 языков','Служил в спецназе','Бывший врач-самоучка',
-      'Умеет готовить из ничего','Выиграл в лотерею','Умеет чинить часы','Бывший циркач',
-      'Может развести огонь трением','Не разговаривал 5 лет','Скрывается от мафии',
-      'Брат-близнец известного учёного','Носит с собой пистолет','Знает ядерную физику',
-      'Умеет управлять вертолётом','Скрывает страшную тайну','Прошёл курс выживания в тайге',
-      'Умеет шить одежду','Работал сапёром']
+    items:['Был в тюрьме','Отсидел за убийство','Знает 5 языков','Служил в спецназе',
+      'Служил в разведке','Снайпер','Сапёр','Бывший врач','Бывший военный хирург',
+      'Умеет готовить из ничего','Выиграл в лотерею','Миллионер','Банкрот',
+      'Умеет чинить часы','Бывший циркач','Акробат','Жонглёр','Фокусник','Канатоходец',
+      'Может развести огонь трением','Не разговаривал 5 лет','Молчаливый',
+      'Скрывается от мафии','В розыске','Свидетель по делу','Бывший полицейский',
+      'Бывший киллер','Скрывает страшную тайну','Знает ядерную физику',
+      'Умеет управлять вертолётом','Умеет управлять самолётом','Умеет управлять подводной лодкой',
+      'Астронавт','Космонавт','Прошёл курс выживания','Был в Антарктиде','Покорил Эверест',
+      'Переплыл океан','Умеет шить одежду','Умеет вязать','Работал сапёром','Работал в морге',
+      'Патологоанатом','Брат-близнец знаменитости','Сын олигарха','Приёмный ребёнок',
+      'Сирота','Вырос в детдоме','Усыновил 5 детей','Многодетный отец','Вдовец',
+      'Разведён','Никогда не был женат','Знает 3 языка программирования','Бывший хакер',
+      'Работал в ЦРУ','Работал в КГБ','Двойной агент','Шпион','Беглец']
   }
 };
+function getBunkerData(){
+  const custom = gamesState.bunker.customAttributes || {};
+  const out = {};
+  Object.keys(BUNKER_DEFAULT).forEach(k => {
+    out[k] = Object.assign({}, BUNKER_DEFAULT[k]);
+    if(Array.isArray(custom[k]) && custom[k].length >= 5){
+      out[k].items = custom[k];
+    }
+  });
+  return out;
+}
 const BUNKER_KEYS = ['profession','health','hobby','phobia','luggage','fact'];
-const FASTER_TASKS = [
-  'Назови 5 столиц','Найди в комнате 3 синих предмета','Назови 5 фильмов с ДиКаприо',
-  'Спой припев любой песни','Сделай 10 приседаний','Назови 5 животных на букву К',
-  'Назови 3 страны на букву А','Найди предмет круглой формы','Назови 5 брендов машин',
-  'Назови 5 имён девочек','Назови 5 городов России','Назови 3 цвета радуги',
-  'Найди что-то мягкое','Назови 5 актёров Голливуда','Скажи любую скороговорку',
-  'Назови 5 планет','Придумай рифму к слову «кот»','Назови 3 вида спорта',
-  'Найди что-то стеклянное','Назови 5 овощей','Покажи 3 эмоции','Назови 5 месяцев',
-  'Назови 3 марки телефонов','Сделай комплимент соседу','Назови 5 блюд',
-  'Назови 5 мультфильмов','Назови 5 имён мальчиков','Назови 3 цвета кроме базовых',
-  'Придумай 3 несуществующих слова','Назови 5 песен на английском'
-];
-const STORY_STARTERS = [
-  'В тёмном переулке ночного города...',
-  'Когда солнце скрылось за горизонтом...',
-  'Никто не ожидал, что этим утром...',
-  'В далёкой галактике, на планете из желе...',
-  'Три кота собрались на крыше и...',
-  'Однажды в понедельник, ровно в полдень...',
-  'Шёл дождь, и в этот момент...',
-  'В маленькой деревне на краю света...',
-  'Старый пират открыл сундук и увидел...',
-  'Дверь скрипнула, и на пороге появился...'
-];
+
+const FASTER_TASKS = {
+  easy: [
+    'Назови 3 цвета радуги','Назови 3 дня недели','Назови 3 времени года',
+    'Хлопни в ладоши 5 раз','Скажи своё имя по буквам','Назови 3 домашних животных',
+    'Назови 3 части тела','Назови 3 фрукта','Назови 3 овоща','Покажи язык',
+    'Улыбнись всем','Назови 3 месяца','Посчитай от 1 до 10 наоборот',
+    'Назови 3 предмета на букву С','Назови 3 марки машин','Скажи «привет» на 3 языках',
+    'Назови 3 столицы','Дотронься до носа','Помаши рукой всем','Назови 3 профессии',
+    'Назови 3 вида обуви','Придумай рифму к слову «кот»','Назови 3 блюда',
+    'Сделай 3 приседания','Назови 3 фильма','Назови 3 имени мальчиков',
+    'Назови 3 имени девочек','Покажи 3 эмоции','Назови 3 времени суток',
+    'Назови 3 школьных предмета'
+  ],
+  medium: [
+    'Назови 5 столиц','Назови 5 городов России','Назови 5 животных на букву К',
+    'Назови 5 стран на букву А','Назови 5 брендов машин','Назови 5 актёров Голливуда',
+    'Спой припев любой песни','Сделай 10 приседаний','Скажи любую скороговорку',
+    'Назови 5 планет','Назови 5 брендов телефонов','Назови 5 мультфильмов',
+    'Назови 5 песен на английском','Назови 5 изобретений','Назови 5 учёных',
+    'Назови 5 блюд итальянской кухни','Назови 5 химических элементов',
+    'Назови 5 рек России','Назови 5 гор на карте мира','Назови 5 профессий на А',
+    'Назови 5 слов на букву Ж','Назови 5 овощей зелёного цвета',
+    'Назови 5 инструментов','Назови 5 марок часов','Назови 5 пород собак',
+    'Назови 5 пород кошек','Назови 5 книг','Назови 5 сериалов',
+    'Назови 5 столиц Европы','Назови 5 русских поэтов'
+  ],
+  hard: [
+    'Назови 7 столиц Азии','Назови 7 планет Солнечной системы по порядку',
+    'Назови 7 президентов США','Назови 7 футбольных клубов',
+    'Перечисли 7 океанов','Назови 7 морей','Назови 7 чудес света',
+    'Назови 7 греческих богов','Назови 7 химических элементов на букву К',
+    'Назови 7 марок одежды','Назови 7 сортов кофе','Назови 7 видов спорта с мячом',
+    'Назови 7 фильмов Marvel','Назови 7 фильмов с ДиКаприо',
+    'Назови 7 произведений Пушкина','Назови 7 рек мира',
+    'Назови 7 столиц Латинской Америки','Назови 7 городов на букву В',
+    'Назови 7 профессий, где нужна математика','Назови 7 животных Австралии',
+    'Назови 7 рыб','Назови 7 музыкальных инструментов','Назови 7 сортов хлеба',
+    'Назови 7 способов использования воды','Назови 7 причин опоздать на работу',
+    'Назови 7 несуществующих слов','Назови 7 слов-синонимов к «красивый»',
+    'Назови 7 имён русских царей','Назови 7 созвездий','Назови 7 стран Африки',
+    'Назови 7 игр на улице','Назови 7 блюд из картофеля','Назови 7 видов чая'
+  ]
+};
+
+const STORY_STARTERS = {
+  horror: [
+    'В тёмном подвале что-то заскребло...',
+    'В три часа ночи я услышал шёпот из шкафа...',
+    'Зеркало в ванной отражало не меня...',
+    'Все часы в доме замерли на 3:33...',
+    'На чердаке нашли старую куклу, и она открыла глаза...',
+    'Телефон зазвонил с моего же номера...',
+    'В лесу мы нашли дом, которого не было на карте...',
+    'Мой пёс вдруг зарычал на пустой угол...',
+    'На фотографии из отпуска появилась чужая фигура...',
+    'После похорон бабушки её кресло начало качаться само...'
+  ],
+  comedy: [
+    'В понедельник я проснулся в теле хомяка...',
+    'Мой кот открыл ноутбук и заказал 40 кг корма...',
+    'На собеседовании я случайно назвал себя другим именем...',
+    'В лифте с нами застрял клоун с шариком...',
+    'Бабушка случайно отправила в семейный чат стикер с пистолетом...',
+    'Я пришёл на свидание не в тот ресторан и остался там жить...',
+    'В школьной столовой повар подал что-то живое...',
+    'Мой дед записался в тикток и стал звездой...',
+    'Я чихнул в тишине на экзамене, и это спасло меня от провала...',
+    'Наш сосед сверху решил разводить пчёл...'
+  ],
+  scifi: [
+    'В 2147 году я проснулся от того, что мой робот-пёс сказал первое слово...',
+    'Марсианская колония объявила независимость по ошибке...',
+    'Учёные нашли планету, где время идёт назад...',
+    'Мой имплант перевода сломался в самый важный момент...',
+    'На Луне нашли дверь. Она была открыта...',
+    'Первый контакт произошёл в очереди за шаурмой...',
+    'Искусственный интеллект написал роман и объявил себя автором...',
+    'Все люди перестали стареть в один день...',
+    'В космосе нашли капсулу с надписью «Верните нас»...',
+    'Телепорт сломался, и я попал в себя из 1998-го...'
+  ],
+  detective: [
+    'Первое, что я заметил — часы на стене шли назад...',
+    'Пропала кошка миссис Хадсон, и это было только началом...',
+    'В гостинице мы были единственными, кто не спал...',
+    'На конверте был мой почерк, хотя я его не писал...',
+    'Все гости были в одинаковых галстуках...',
+    'Убийство произошло в запертой комнате с открытым окном...',
+    'Официант подал счёт раньше, чем мы сделали заказ...',
+    'Она исчезла в тот момент, когда поезд вошёл в тоннель...',
+    'На фотографии с места преступления был я...',
+    'Дневник пропавшего обрывался на середине фразы...'
+  ],
+  fantasy: [
+    'Дракон приземлился прямо в центре деревни...',
+    'Я нашёл меч, который разговаривал только матом...',
+    'Эльфы объявили войну гномам из-за рецепта пирога...',
+    'Прорицательница предсказала мне смерть от ложки...',
+    'В моём саду выросло дерево, которое исполняет только плохие желания...',
+    'Магический посох требовал ежедневно 100 грамм сыра...',
+    'Единорог согласился помочь только за подписку на стрим...',
+    'Принцесса сбежала от дракона, потому что он храпел...',
+    'Ведьма открыла кофейню и варила зелья вместо эспрессо...',
+    'Королевство погрузилось в сон из-за слишком скучного указа...'
+  ],
+  absurd: [
+    'Всё началось с того, что мой нос захотел отдельной жизни...',
+    'Вторник отменили, потому что он всем надоел...',
+    'Я проглотил свою тень и стал прозрачным...',
+    'В городе запретили использовать букву Ы...',
+    'Луна упала в море, но никто не заметил...',
+    'Мои носки начали собираться в профсоюз...',
+    'Все зеркала решили показывать только понедельник...',
+    'Дождь пошёл вверх, и мы все превратились в грибы...',
+    'Мой холодильник влюбился в микроволновку...',
+    'Пятница решила стать понедельником, и мир не выдержал...'
+  ]
+};
 
 /* ===== ПОЛУЧЕНИЕ СПИСКОВ ===== */
 function getLocations(){ return gamesState.spy.customLocations.length >= 3 ? gamesState.spy.customLocations : LOCATIONS; }
 function getCatastrophes(){ return gamesState.bunker.customCatastrophes.length >= 3 ? gamesState.bunker.customCatastrophes : BUNKER_CATASTROPHES; }
-function getTasks(){ return gamesState.faster.customTasks.length >= 5 ? gamesState.faster.customTasks : FASTER_TASKS; }
-function getStarters(){ return gamesState.story.customStarters.length >= 3 ? gamesState.story.customStarters : STORY_STARTERS; }
+function getTasks(){
+  const diff = gamesState.faster.difficulty || 'medium';
+  const custom = gamesState.faster.customTasks;
+  if(custom && custom.length >= 5) return custom;
+  if(diff === 'mixed'){
+    return [...FASTER_TASKS.easy, ...FASTER_TASKS.medium, ...FASTER_TASKS.hard];
+  }
+  return FASTER_TASKS[diff] || FASTER_TASKS.medium;
+}
+function getStarters(){
+  const custom = gamesState.story.customStarters;
+  if(custom && custom.length >= 3) return custom;
+  const genre = gamesState.story.genre || 'any';
+  if(genre === 'any'){
+    let all = [];
+    Object.keys(STORY_STARTERS).forEach(k => all = all.concat(STORY_STARTERS[k]));
+    return all;
+  }
+  return STORY_STARTERS[genre] || [];
+}
 
 /* =========================================================
    ШПИОН
@@ -465,7 +681,7 @@ function spyBack(){
 function spyOpenSettings(){
   editList(
     'Свои локации',
-    'Каждая локация — с новой строки. Минимум 3, иначе используются стандартные.',
+    'Каждая локация — с новой строки. Минимум 3, иначе используются стандартные (в базе ' + LOCATIONS.length + ').',
     gamesState.spy.customLocations,
     LOCATIONS,
     (lines)=>{ gamesState.spy.customLocations = lines; }
@@ -473,10 +689,10 @@ function spyOpenSettings(){
 }
 function renderSpy(){
   const c = $('spyContent');
-
   if(spyState.phase === 'setup'){
     const totalSpies = spyState.twoSpies ? 2 : 1;
     const maxSpies = Math.min(2, spyState.players - 2);
+    const locCount = getLocations().length;
     c.innerHTML = `
       <div class="card-box">
         <div class="stepper">
@@ -507,7 +723,8 @@ function renderSpy(){
         <div style="font-size:14px;line-height:1.6;color:var(--text2)">
           Все получают одну и ту же локацию, кроме шпионов.<br><br>
           По кругу задают друг другу вопросы об этом месте. Шпион должен понять, где он, а остальные — вычислить шпиона.<br><br>
-          Голосуйте вслух. Если угадали всех шпионов — победили. Если шпион назовёт локацию — победил он.
+          Голосуйте вслух. Если угадали всех шпионов — победили. Если шпион назовёт локацию — победил он.<br><br>
+          <span style="color:var(--text)">В базе: ${locCount} локаций. Меняй в ⚙</span>
         </div>
       </div>
       <button class="btn" onclick="spyStart()">Начать игру</button>
@@ -582,7 +799,7 @@ function spyChangePlayers(d){
 }
 function spyChangeTime(d){
   const n = spyState.timeSeconds + d;
-  if(n < 180 || n > 900) return;
+  if(n < 180 || n > 1200) return;
   spyState.timeSeconds = n;
   gamesState.spy.timeSeconds = n;
   saveGamesState();
@@ -655,7 +872,6 @@ function spyStopTimer(){
   if(spyState.timerId){ clearInterval(spyState.timerId); spyState.timerId = null; }
 }
 function spySpyGuess(){
-  // Сохраняем список локально, передаём индексом — без апострофов в onclick
   spyState._guessList = shuffle(getLocations());
   $('spyGuessList').innerHTML = spyState._guessList.map((l, i) =>
     `<div class="location-item" style="cursor:pointer;margin-bottom:6px" onclick="spyCheckGuessIndex(${i})">${esc(l)}</div>`
@@ -697,7 +913,8 @@ function spyEndRound(){
 ========================================================= */
 const bunkerState = {
   players: 5, catastrophe: '', hands: [], revealed: [],
-  revealIndex: 0, phase: 'setup', spots: 3
+  revealIndex: 0, phase: 'setup', spots: 3,
+  finalIn: []
 };
 
 function bunkerOpen(){
@@ -714,9 +931,50 @@ function bunkerBack(){
   });
 }
 function bunkerOpenSettings(){
+  const data = getBunkerData();
+  const rows = BUNKER_KEYS.map(k => {
+    const count = data[k].items.length;
+    const custom = gamesState.bunker.customAttributes && gamesState.bunker.customAttributes[k];
+    const isCustom = Array.isArray(custom) && custom.length >= 5;
+    return `<div class="attr-editor-btn" onclick="bunkerEditCategory('${k}')">
+      <div>
+        <div class="attr-editor-name">${esc(data[k].label)}</div>
+        <div class="attr-editor-count">${count} шт.${isCustom?' · свои':''}</div>
+      </div>
+      <div class="attr-editor-arrow">›</div>
+    </div>`;
+  }).join('');
+  const html = rows + `<div class="attr-editor-btn" onclick="bunkerEditCatastrophes()">
+      <div>
+        <div class="attr-editor-name">Катастрофы</div>
+        <div class="attr-editor-count">${getCatastrophes().length} шт.</div>
+      </div>
+      <div class="attr-editor-arrow">›</div>
+    </div>`;
+  $('bunkerCatPickerList').innerHTML = html;
+  openModal('bunkerCatPickerModal');
+}
+function bunkerEditCategory(key){
+  closeModal('bunkerCatPickerModal');
+  const data = getBunkerData();
+  const custom = (gamesState.bunker.customAttributes && gamesState.bunker.customAttributes[key]) || [];
+  const def = BUNKER_DEFAULT[key].items;
+  editList(
+    'Редактор: ' + data[key].label,
+    'Каждый пункт — с новой строки. Минимум 5, иначе используется стандарт (по умолчанию ' + def.length + ').',
+    custom,
+    def,
+    (lines)=>{
+      if(!gamesState.bunker.customAttributes) gamesState.bunker.customAttributes = {};
+      gamesState.bunker.customAttributes[key] = lines;
+    }
+  );
+}
+function bunkerEditCatastrophes(){
+  closeModal('bunkerCatPickerModal');
   editList(
     'Свои катастрофы',
-    'Каждая катастрофа — с новой строки. Минимум 3, иначе используются стандартные.',
+    'Каждая катастрофа — с новой строки. Минимум 3. По умолчанию ' + BUNKER_CATASTROPHES.length + '.',
     gamesState.bunker.customCatastrophes,
     BUNKER_CATASTROPHES,
     (lines)=>{ gamesState.bunker.customCatastrophes = lines; }
@@ -724,10 +982,13 @@ function bunkerOpenSettings(){
 }
 function renderBunker(){
   const c = $('bunkerContent');
-
   if(bunkerState.phase === 'setup'){
     const maxSpots = bunkerState.players - 1;
-    if(bunkerState.spots > maxSpots) bunkerState.spots = maxSpots;
+    if(bunkerState.spots > maxSpots){
+      bunkerState.spots = maxSpots;
+      gamesState.bunker.spots = maxSpots;
+      saveGamesState();
+    }
     c.innerHTML = `
       <div class="card-box">
         <div class="stepper">
@@ -772,6 +1033,7 @@ function renderBunker(){
   else if(bunkerState.phase === 'hand'){
     const i = bunkerState.revealIndex;
     const hand = bunkerState.hands[i];
+    const data = getBunkerData();
     c.innerHTML = `
       <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
         <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
@@ -780,7 +1042,7 @@ function renderBunker(){
       <div class="card-box">
         <h3>Игрок ${i+1}</h3>
         ${BUNKER_KEYS.map(k=>{
-          const def = BUNKER[k];
+          const def = data[k];
           return `<div class="stat-row">
             <div class="stat-icon">${def.icon}</div>
             <div class="stat-body">
@@ -794,17 +1056,17 @@ function renderBunker(){
     `;
   }
   else if(bunkerState.phase === 'discuss'){
-    // Сохраняем scrollTop перед перерисовкой
     const prevScroll = c.scrollTop;
     const totalRevealed = bunkerState.revealed.flat().filter(Boolean).length;
     const totalAttrs = bunkerState.players * BUNKER_KEYS.length;
     const spotsLeft = bunkerState.spots;
+    const data = getBunkerData();
     const playersHtml = bunkerState.hands.map((hand, pi) => {
       const revealedCount = bunkerState.revealed[pi].filter(Boolean).length;
       const attrs = BUNKER_KEYS.map((k, ki) => {
         const isRev = bunkerState.revealed[pi][ki];
         return `<div class="bunker-attr ${isRev?'revealed':''}" onclick="bunkerRevealAttr(${pi},${ki})">
-          <div class="bunker-attr-key">${BUNKER[k].label}</div>
+          <div class="bunker-attr-key">${data[k].label}</div>
           <div class="bunker-attr-val">${isRev ? esc(hand[k]) : 'нажми чтобы открыть'}</div>
         </div>`;
       }).join('');
@@ -816,7 +1078,6 @@ function renderBunker(){
         <div class="bunker-attrs">${attrs}</div>
       </div>`;
     }).join('');
-
     c.innerHTML = `
       <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
         <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
@@ -835,18 +1096,38 @@ function renderBunker(){
       </div>
       <button class="btn" onclick="bunkerFinish()" style="margin-top:14px">Закончить и голосовать</button>
     `;
-    // Восстанавливаем scrollTop
     requestAnimationFrame(()=>{ c.scrollTop = prevScroll; });
   }
   else if(bunkerState.phase === 'done'){
+    const inCount = bunkerState.finalIn.filter(Boolean).length;
+    const spots = bunkerState.spots;
+    const data = getBunkerData();
+    const playersHtml = bunkerState.hands.map((hand, pi) => {
+      const isIn = bunkerState.finalIn[pi];
+      const attrs = BUNKER_KEYS.map(k => `<div><b>${data[k].label}:</b> ${esc(hand[k])}</div>`).join('');
+      return `<div class="survivor-row ${isIn?'in':''}" onclick="bunkerToggleFinal(${pi})">
+        <div class="survivor-head">
+          <div class="survivor-name">Игрок ${pi+1}</div>
+          <div class="survivor-tag">${isIn?'В бункере':'Снаружи'}</div>
+        </div>
+        <div class="survivor-attrs">${attrs}</div>
+      </div>`;
+    }).join('');
     c.innerHTML = `
-      <div class="center-wrap">
-        <div style="font-size:60px;opacity:.25">✓</div>
-        <div style="font-size:20px;font-weight:700;margin-top:14px">Партия завершена</div>
-        <div style="color:var(--text2);font-size:14px;max-width:300px;line-height:1.5">Голосуйте вслух и решите, кто попадёт в бункер</div>
-        <button class="btn" onclick="bunkerRestart()" style="margin-top:20px;max-width:280px">Новая партия</button>
-        <button class="btn btn-sec" onclick="show('menuScreen')" style="max-width:280px">В меню</button>
+      <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
+        <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
+        <div style="font-size:15px;font-weight:600">${esc(bunkerState.catastrophe)}</div>
       </div>
+      <div class="card-box">
+        <h3>Итог голосования</h3>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5">
+          Тапни по игроку, чтобы отметить — попал он в бункер или остался снаружи.<br><br>
+          В бункере: <b style="color:var(--text)">${inCount} / ${spots}</b>
+        </div>
+      </div>
+      ${playersHtml}
+      <button class="btn" onclick="bunkerRestart()" style="margin-top:14px">Новая партия</button>
+      <button class="btn btn-sec" onclick="show('menuScreen')">В меню</button>
     `;
   }
 }
@@ -871,20 +1152,17 @@ function bunkerChangeSpots(d){
 }
 function bunkerStart(){
   const cats = getCatastrophes();
+  const data = getBunkerData();
   bunkerState.catastrophe = pick(cats);
   bunkerState.hands = [];
   bunkerState.revealed = [];
   for(let i = 0; i < bunkerState.players; i++){
-    bunkerState.hands.push({
-      profession: pick(BUNKER.profession.items),
-      health: pick(BUNKER.health.items),
-      hobby: pick(BUNKER.hobby.items),
-      phobia: pick(BUNKER.phobia.items),
-      luggage: pick(BUNKER.luggage.items),
-      fact: pick(BUNKER.fact.items)
-    });
+    const hand = {};
+    BUNKER_KEYS.forEach(k => { hand[k] = pick(data[k].items); });
+    bunkerState.hands.push(hand);
     bunkerState.revealed.push(BUNKER_KEYS.map(()=>false));
   }
+  bunkerState.finalIn = new Array(bunkerState.players).fill(false);
   bunkerState.revealIndex = 0;
   bunkerState.phase = 'pass';
   vib(20);
@@ -913,9 +1191,22 @@ function bunkerFinish(){
   beepEnd();
   renderBunker();
 }
-function bunkerRestart(){
-  bunkerState.phase = 'setup';
+function bunkerToggleFinal(pi){
+  const currentlyIn = bunkerState.finalIn[pi];
+  if(!currentlyIn){
+    const inCount = bunkerState.finalIn.filter(Boolean).length;
+    if(inCount >= bunkerState.spots){
+      toast('Все места заняты');
+      return;
+    }
+  }
+  const c = $('bunkerContent');
+  const prevScroll = c.scrollTop;
+  bunkerState.finalIn[pi] = !currentlyIn;
+  vib(20);
+  beepTick();
   renderBunker();
+  requestAnimationFrame(()=>{ c.scrollTop = prevScroll; });
 }
 
 /* =========================================================
@@ -944,14 +1235,22 @@ function fasterBack(){
 function fasterOpenSettings(){
   editList(
     'Свои задания',
-    'Каждое задание — с новой строки. Минимум 5, иначе используются стандартные.',
+    'Каждое задание — с новой строки. Минимум 5. Если заполнено — используется вместо стандартных. По умолчанию: ' + (FASTER_TASKS.easy.length + FASTER_TASKS.medium.length + FASTER_TASKS.hard.length) + ' заданий.',
     gamesState.faster.customTasks,
-    FASTER_TASKS,
+    [...FASTER_TASKS.easy, ...FASTER_TASKS.medium, ...FASTER_TASKS.hard],
     (lines)=>{ gamesState.faster.customTasks = lines; }
   );
 }
+function fasterSelectDifficulty(d){
+  gamesState.faster.difficulty = d;
+  saveGamesState();
+  renderFaster();
+}
 function renderFaster(){
   const c = $('fasterContent');
+  const diff = gamesState.faster.difficulty || 'medium';
+  const custom = gamesState.faster.customTasks && gamesState.faster.customTasks.length >= 5;
+  const taskCount = custom ? gamesState.faster.customTasks.length : (diff === 'mixed' ? FASTER_TASKS.easy.length + FASTER_TASKS.medium.length + FASTER_TASKS.hard.length : (FASTER_TASKS[diff]||[]).length);
 
   if(fasterState.phase === 'setup'){
     c.innerHTML = `
@@ -982,11 +1281,14 @@ function renderFaster(){
         </div>
       </div>
       <div class="card-box">
-        <h3>Как играть</h3>
-        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
-          Игроки ходят по кругу. Каждый получает задание и ${fasterState.timeSeconds} секунд на его выполнение.<br><br>
-          Успел — очко. Не успел — минус очко. Можно сказать «Пас» — тоже минус, но не тратишь время.
+        <h3>Сложность ${custom ? '(используются свои задания)' : ''}</h3>
+        <div class="seg" style="margin-bottom:8px">
+          <button class="${diff==='easy'&&!custom?'active':''}" onclick="fasterSelectDifficulty('easy')" ${custom?'disabled':''}>Лёгкие</button>
+          <button class="${diff==='medium'&&!custom?'active':''}" onclick="fasterSelectDifficulty('medium')" ${custom?'disabled':''}>Средние</button>
+          <button class="${diff==='hard'&&!custom?'active':''}" onclick="fasterSelectDifficulty('hard')" ${custom?'disabled':''}>Сложные</button>
+          <button class="${diff==='mixed'&&!custom?'active':''}" onclick="fasterSelectDifficulty('mixed')" ${custom?'disabled':''}>Все</button>
         </div>
+        <div style="font-size:12px;color:var(--text2);text-align:center">В наборе ${taskCount} заданий</div>
       </div>
       <button class="btn" onclick="fasterStart()">Начать игру</button>
     `;
@@ -1084,7 +1386,6 @@ function fasterStart(){
   renderFaster();
 }
 function fasterShowTask(){
-  // Фикс: сбрасываем taskIndex при перезагрузке колоды
   if(fasterState.taskIndex >= fasterState.tasks.length){
     fasterState.tasks = shuffle(getTasks());
     fasterState.taskIndex = 0;
@@ -1172,7 +1473,8 @@ function fasterRestart(){
 ========================================================= */
 const storyState = {
   players: 4, sentencesPerPlayer: 1, lines: [], current: 0,
-  phase: 'setup', mode: 'random', editingIdx: -1
+  phase: 'setup', mode: 'random', editingIdx: -1,
+  timerId: null, timerStart: 0
 };
 
 function storyOpen(){
@@ -1184,6 +1486,7 @@ function storyOpen(){
 function storyBack(){
   if(storyState.phase === 'setup'){ show('menuScreen'); return; }
   confirmAction('Выйти из игры?','История будет потеряна.',()=>{
+    storyStopTimer();
     storyState.phase = 'setup';
     show('menuScreen');
   });
@@ -1191,17 +1494,37 @@ function storyBack(){
 function storyOpenSettings(){
   editList(
     'Свои затравки',
-    'Каждая затравка — с новой строки. Минимум 3, иначе используются стандартные.',
+    'Каждая затравка — с новой строки. Минимум 3. Если заполнено — используется вместо стандартных по жанру. По умолчанию: ' + Object.values(STORY_STARTERS).reduce((a,b)=>a+b.length,0) + ' затравок.',
     gamesState.story.customStarters,
-    STORY_STARTERS,
+    Object.values(STORY_STARTERS).flat(),
     (lines)=>{ gamesState.story.customStarters = lines; }
   );
 }
+function storySelectGenre(g){
+  gamesState.story.genre = g;
+  saveGamesState();
+  renderStory();
+}
+function storyChangeTimer(d){
+  const n = (gamesState.story.timerSeconds || 0) + d;
+  if(n < 0) return;
+  if(n > 180) return;
+  if(n > 0 && n < 30) return;
+  gamesState.story.timerSeconds = n;
+  saveGamesState();
+  renderStory();
+}
 function renderStory(){
   const c = $('storyContent');
+  const genre = gamesState.story.genre || 'any';
+  const custom = gamesState.story.customStarters && gamesState.story.customStarters.length >= 3;
+  const timerSec = gamesState.story.timerSeconds || 0;
 
   if(storyState.phase === 'setup'){
     const twoRounds = gamesState.story.twoRounds;
+    const genreCount = genre === 'any'
+      ? Object.values(STORY_STARTERS).reduce((a,b)=>a+b.length,0)
+      : (STORY_STARTERS[genre]||[]).length;
     c.innerHTML = `
       <div class="card-box">
         <div class="stepper">
@@ -1220,6 +1543,14 @@ function renderStory(){
             <button class="stepper-btn" onclick="storyChangeSentences(1)">+</button>
           </div>
         </div>
+        <div class="stepper">
+          <div class="stepper-label">Таймер на ход</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="storyChangeTimer(-30)">−</button>
+            <div class="stepper-value">${timerSec === 0 ? 'выкл' : timerSec + 'с'}</div>
+            <button class="stepper-btn" onclick="storyChangeTimer(30)">+</button>
+          </div>
+        </div>
       </div>
       <div class="card-box">
         <h3>Режим</h3>
@@ -1232,6 +1563,19 @@ function renderStory(){
             ? 'Каждый пишет фразу, не видя предыдущих.'
             : 'Каждый видит последнюю фразу и продолжает её.'}
         </div>
+      </div>
+      <div class="card-box">
+        <h3>Жанр затравок ${custom ? '(используются свои)' : ''}</h3>
+        <div class="seg" style="margin-bottom:8px">
+          <button class="${genre==='any'&&!custom?'active':''}" onclick="storySelectGenre('any')" ${custom?'disabled':''}>Все</button>
+          <button class="${genre==='horror'&&!custom?'active':''}" onclick="storySelectGenre('horror')" ${custom?'disabled':''}>Хоррор</button>
+          <button class="${genre==='comedy'&&!custom?'active':''}" onclick="storySelectGenre('comedy')" ${custom?'disabled':''}>Комедия</button>
+          <button class="${genre==='scifi'&&!custom?'active':''}" onclick="storySelectGenre('scifi')" ${custom?'disabled':''}>Фантастика</button>
+          <button class="${genre==='detective'&&!custom?'active':''}" onclick="storySelectGenre('detective')" ${custom?'disabled':''}>Детектив</button>
+          <button class="${genre==='fantasy'&&!custom?'active':''}" onclick="storySelectGenre('fantasy')" ${custom?'disabled':''}>Фэнтези</button>
+          <button class="${genre==='absurd'&&!custom?'active':''}" onclick="storySelectGenre('absurd')" ${custom?'disabled':''}>Абсурд</button>
+        </div>
+        <div style="font-size:12px;color:var(--text2);text-align:center">В наборе ${genreCount} затравок</div>
       </div>
       <div class="card-box">
         <div class="toggle-row" onclick="storyToggleUseStarter()">
@@ -1266,15 +1610,16 @@ function renderStory(){
   }
   else if(storyState.phase === 'write'){
     const lastLine = storyState.lines.length > 0 ? storyState.lines[storyState.lines.length-1] : null;
-    // Фикс: показываем затравку первому пишущему в режиме "продолжение"
     const showLast = storyState.mode === 'continue' && !!lastLine;
     c.innerHTML = `
       <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Ход ${storyState.current+1} из ${storyState.players * storyState.sentencesPerPlayer}</div>
       ${showLast ? `<div class="card-box"><h3>Предыдущая фраза</h3><div style="font-size:15px;line-height:1.5">${esc(lastLine)}</div></div>` : ''}
+      ${timerSec > 0 ? `<div class="story-timer" id="storyTimer">${timerSec}с</div>` : ''}
       <textarea class="story-input" id="storyInput" placeholder="${storyState.mode==='continue'?'Продолжи историю одним предложением...':'Напиши одно предложение...'}" autocomplete="off"></textarea>
       <button class="btn" onclick="storySaveLine()" style="margin-top:14px">Готово</button>
     `;
     setTimeout(()=>{ const el = $('storyInput'); if(el) el.focus(); }, 100);
+    if(timerSec > 0) storyStartTimer(timerSec);
   }
   else if(storyState.phase === 'edit'){
     c.innerHTML = `
@@ -1316,11 +1661,11 @@ function storyChangeSentences(d){
   storyState.sentencesPerPlayer = n;
   renderStory();
 }
-function storySetMode(m){ 
-  storyState.mode = m; 
+function storySetMode(m){
+  storyState.mode = m;
   gamesState.story.mode = m;
   saveGamesState();
-  renderStory(); 
+  renderStory();
 }
 function storyToggleUseStarter(){
   gamesState.story.useStarter = !gamesState.story.useStarter;
@@ -1336,7 +1681,8 @@ function storyStart(){
   storyState.lines = [];
   storyState.current = 0;
   if(gamesState.story.useStarter){
-    storyState.lines.push(pick(getStarters()));
+    const starters = getStarters();
+    if(starters.length > 0) storyState.lines.push(pick(starters));
   }
   storyState.phase = 'pass';
   vib(20);
@@ -1346,7 +1692,55 @@ function storyWriteStart(){
   storyState.phase = 'write';
   renderStory();
 }
+function storyStartTimer(seconds){
+  storyStopTimer();
+  storyState.timerStart = Date.now();
+  let lastSec = -1;
+  storyState.timerId = setInterval(()=>{
+    if(storyState.phase !== 'write'){ storyStopTimer(); return; }
+    const elapsed = Math.floor((Date.now() - storyState.timerStart) / 1000);
+    const remaining = Math.max(0, seconds - elapsed);
+    const el = $('storyTimer');
+    if(el){
+      el.textContent = remaining + 'с';
+      el.classList.toggle('warn', remaining < 10);
+    }
+    if(remaining !== lastSec && remaining <= 5 && remaining > 0){
+      beepTick();
+      vib(15);
+    }
+    lastSec = remaining;
+    if(remaining <= 0){ storyTimeout(); }
+  }, 200);
+}
+function storyStopTimer(){
+  if(storyState.timerId){ clearInterval(storyState.timerId); storyState.timerId = null; }
+}
+function storyTimeout(){
+  storyStopTimer();
+  if(storyState.phase !== 'write') return;
+  beepEnd();
+  vib([100, 50, 100]);
+  const inp = $('storyInput');
+  const hasText = inp && inp.value.trim().length > 0;
+  if(!hasText){
+    toast('Время вышло — пустая фраза');
+    storyState.lines.push('(без ответа)');
+    storyState.current++;
+    const total = storyState.players * storyState.sentencesPerPlayer;
+    if(storyState.current >= total){
+      if(gamesState.story.twoRounds) storyState.phase = 'edit';
+      else storyState.phase = 'result';
+    } else {
+      storyState.phase = 'pass';
+    }
+    renderStory();
+  } else {
+    toast('Время вышло!');
+  }
+}
 function storySaveLine(){
+  storyStopTimer();
   const el = $('storyInput');
   const text = el.value.trim();
   if(!text){ toast('Напиши что-нибудь'); return; }
@@ -1375,7 +1769,13 @@ function storySaveEdit(){
   const idx = storyState.editingIdx;
   if(idx < 0) return;
   const val = $('storyEditText').value.trim();
-  if(val){ storyState.lines[idx] = val; }
+  if(!val){
+    toast('Пустая фраза не сохранена');
+    storyState.editingIdx = -1;
+    closeModal('storyEditModal');
+    return;
+  }
+  storyState.lines[idx] = val;
   storyState.editingIdx = -1;
   closeModal('storyEditModal');
   renderStory();
@@ -1386,7 +1786,10 @@ function storyEndEdit(){
   renderStory();
 }
 function storyCopy(){
-  const text = storyState.lines.map((l, i)=>(i+1)+'. '+l).join('\n');
+  const text = storyState.lines
+    .map((l, i)=> l === '(без ответа)' ? null : (i+1)+'. '+l)
+    .filter(Boolean)
+    .join('\n');
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(()=>toast('Скопировано')).catch(()=>toast('Не удалось'));
   } else {
@@ -1401,8 +1804,7 @@ function storyRestart(){
 /* =========================================================
    ЗАКРЫТИЕ МОДАЛОК ПО ФОНУ
 ========================================================= */
-// Все модалки закрываются по тапу на фон, кроме confirm (там явный выбор)
-['listEditorModal', 'storyEditModal', 'spyGuessModal'].forEach(id => {
+['listEditorModal', 'storyEditModal', 'spyGuessModal', 'bunkerCatPickerModal'].forEach(id => {
   const m = $(id);
   if(m) m.addEventListener('click', (e) => {
     if(e.target === m) closeModal(id);
@@ -1416,14 +1818,13 @@ history.pushState(null, '');
 window.addEventListener('popstate', ()=>{
   const active = document.querySelector('.screen.active');
   if(active && active.id !== 'menuScreen'){
-    // Гасим все таймеры и сбрасываем фазы, чтобы не тикали в фоне
     spyStopTimer();
     fasterStopTimer();
+    storyStopTimer();
     spyState.phase = 'setup';
     fasterState.phase = 'setup';
     bunkerState.phase = 'setup';
     storyState.phase = 'setup';
-    // Закрываем открытые модалки
     document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
     active.classList.remove('active');
     $('menuScreen').classList.add('active');
@@ -1431,15 +1832,21 @@ window.addEventListener('popstate', ()=>{
   }
 });
 
-// Дополнительная страховка: гасим таймеры при уходе со страницы
-window.addEventListener('pagehide', ()=>{ spyStopTimer(); fasterStopTimer(); });
+window.addEventListener('pagehide', ()=>{ spyStopTimer(); fasterStopTimer(); storyStopTimer(); });
 document.addEventListener('visibilitychange', ()=>{
   if(document.hidden){
     spyStopTimer();
     fasterStopTimer();
+    storyStopTimer();
   } else {
     if(spyState.phase === 'game')    spyStartTimer();
     if(fasterState.phase === 'task') fasterStartTimer();
+    if(storyState.phase === 'write' && (gamesState.story.timerSeconds||0) > 0){
+      const elapsed = Math.floor((Date.now() - storyState.timerStart) / 1000);
+      const remaining = Math.max(0, (gamesState.story.timerSeconds||0) - elapsed);
+      if(remaining > 0) storyStartTimer(remaining);
+      else storyTimeout();
+    }
   }
 });
 </script>
