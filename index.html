@@ -47,6 +47,8 @@ img{max-width:100%}
 .btn:disabled{opacity:.45;pointer-events:none}
 .btn-sec{background:var(--bg3);color:var(--text)}
 .btn-danger{background:var(--red);color:#fff}
+.btn-row{display:flex;gap:8px;margin-bottom:10px}
+.btn-row .btn{flex:1}
 .fab{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));right:20px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(124,92,255,.45);z-index:10;transition:transform .1s}
 .fab:active{transform:scale(.92)}
 .fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
@@ -84,6 +86,9 @@ img{max-width:100%}
 .answer-feedback{font-size:13px;text-align:center;padding:8px;border-radius:10px;flex-shrink:0;display:none}
 .answer-feedback.correct{background:rgba(34,197,94,.15);color:var(--green);display:block}
 .answer-feedback.wrong{background:rgba(239,68,68,.15);color:var(--red);display:block}
+.hint-btn{padding:10px 16px;background:var(--bg3);color:var(--text2);border-radius:10px;font-size:13px;font-weight:600;flex-shrink:0;align-self:center}
+.hint-text{background:rgba(124,92,255,.12);color:var(--accent);padding:10px 14px;border-radius:10px;font-size:13px;flex-shrink:0;text-align:center;border:1px solid rgba(124,92,255,.25)}
+.explain-text{background:rgba(59,130,246,.12);color:var(--blue);padding:10px 14px;border-radius:10px;font-size:13px;flex-shrink:0;border:1px solid rgba(59,130,246,.25);line-height:1.5}
 .done-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:14px}
 .done-screen .big-num{font-size:56px;font-weight:800;color:var(--accent);line-height:1}
 .done-screen h2{font-size:22px;font-weight:700}
@@ -126,6 +131,11 @@ img{max-width:100%}
 .heavy-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border-radius:10px;margin-bottom:6px;border:1px solid var(--border)}
 .heavy-q{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .heavy-count{font-size:12px;font-weight:700;color:var(--red);flex-shrink:0}
+.timeline-item{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start;cursor:pointer}
+.timeline-year{font-size:20px;font-weight:800;color:var(--accent);flex-shrink:0;min-width:60px;font-variant-numeric:tabular-nums}
+.timeline-body{flex:1;min-width:0}
+.timeline-q{font-weight:600;font-size:14px;margin-bottom:3px}
+.timeline-a{font-size:13px;color:var(--text2)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:none;align-items:flex-end}
 .modal.active{display:flex}
 .modal-inner{background:var(--bg2);border-radius:20px 20px 0 0;padding:18px;padding-bottom:max(18px,env(safe-area-inset-bottom));width:100%;max-height:88vh;overflow-y:auto;animation:slideUp .22s ease}
@@ -167,6 +177,12 @@ img{max-width:100%}
 .topic-card-fields input,.topic-card-fields textarea{background:var(--bg4);border-radius:8px;padding:8px 10px;font-size:13px;margin-bottom:6px;border:1px solid transparent}
 .topic-card-fields input:focus,.topic-card-fields textarea:focus{border-color:var(--accent)}
 .topic-card-fields textarea{min-height:60px;resize:vertical;line-height:1.4;font-family:inherit}
+.preview-progress{text-align:center;font-size:12px;color:var(--text2);flex-shrink:0;letter-spacing:.3px;text-transform:uppercase;font-weight:600}
+.preview-card{flex:1;background:var(--bg2);border-radius:18px;border:1px solid var(--border);padding:22px;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:16px}
+.preview-side{background:var(--bg3);border-radius:14px;padding:16px;line-height:1.5}
+.preview-side-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px}
+.preview-side-content{font-size:17px;word-break:break-word;-webkit-user-select:text;user-select:text}
+.preview-side-content img{max-width:100%;max-height:150px;border-radius:8px;margin:6px 0;display:block}
 @media (min-width:640px){
   .content{max-width:600px;margin:0 auto;width:100%}
   .study-wrap{max-width:600px;margin:0 auto;width:100%}
@@ -182,34 +198,30 @@ img{max-width:100%}
   <div class="header">
     <h1>Колоды</h1>
     <div class="streak-chip" id="streakChip" style="display:none"><span class="num" id="streakNum">0</span></div>
-    <button class="icon-btn" onclick="openTopicModal()" aria-label="Из темы">
-      <svg viewBox="0 0 24 24"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg>
-    </button>
-    <button class="icon-btn" onclick="openStats()" aria-label="Статистика">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
-    </button>
-    <button class="icon-btn" onclick="openSettings()" aria-label="Настройки">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </button>
+    <button class="icon-btn" onclick="openTopicModal()" aria-label="Из темы"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg></button>
+    <button class="icon-btn" onclick="openStats()" aria-label="Статистика"><svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></button>
+    <button class="icon-btn" onclick="openSettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content">
     <div id="goalWidget"></div>
     <div id="decksList"></div>
   </div>
-  <button class="fab" onclick="openDeckModal()" aria-label="Новая колода">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-  </button>
+  <button class="fab" onclick="openDeckModal()" aria-label="Новая колода"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
 </div>
 
 <div class="screen" id="deckScreen">
   <div class="header">
     <button class="icon-btn" onclick="backToDecks()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1 id="deckTitle">Колода</h1>
+    <button class="icon-btn" onclick="openTimeline()" aria-label="Таймлайн"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></button>
     <button class="icon-btn" onclick="openDeckMenu()"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
   </div>
   <div class="content">
     <div id="deckStats"></div>
-    <button class="btn" id="studyBtn" onclick="startStudy()">Учить</button>
+    <div class="btn-row">
+      <button class="btn" id="studyBtn" onclick="startStudy()">Учить</button>
+      <button class="btn btn-sec" id="previewBtn" onclick="startPreview()" style="flex:0 0 auto;width:auto;padding:15px 18px">Изучить</button>
+    </div>
     <div class="section-title">Карточки · <span id="cardCount">0</span></div>
     <div class="search-row"><input id="cardSearch" placeholder="Поиск по карточкам" oninput="renderCardsList()"></div>
     <div class="filter-row" id="filterRow"></div>
@@ -220,6 +232,29 @@ img{max-width:100%}
 
 <div class="screen" id="studyScreen">
   <div class="study-wrap" id="studyWrap"></div>
+</div>
+
+<div class="screen" id="previewScreen">
+  <div class="study-wrap">
+    <div class="study-top">
+      <button class="icon-btn" onclick="exitPreview()" style="margin-left:-8px"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="progress-bar"><div class="progress-fill" id="previewProgress" style="width:0%"></div></div>
+    </div>
+    <div class="preview-progress" id="previewCounter">0 / 0</div>
+    <div class="preview-card" id="previewCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-sec" id="previewPrevBtn" onclick="previewPrev()">Назад</button>
+      <button class="btn" id="previewNextBtn" onclick="previewNext()">Дальше</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="timelineScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="closeTimeline()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1 id="timelineTitle">Таймлайн</h1>
+  </div>
+  <div class="content" id="timelineContent"></div>
 </div>
 
 <div class="modal" id="deckModal" onclick="if(event.target===this)closeModal('deckModal')">
@@ -238,6 +273,8 @@ img{max-width:100%}
     <h2 id="cardModalTitle">Новая карточка</h2>
     <div class="field"><label>Вопрос</label><textarea id="cardQ" placeholder="Что нужно вспомнить?"></textarea><div class="field-hint">**жирный**, *курсив*, пропуск: {{Париж}}</div></div>
     <div class="field"><label>Ответ</label><textarea id="cardA" placeholder="Правильный ответ"></textarea></div>
+    <div class="field"><label>Подсказка (необязательно)</label><input id="cardHint" placeholder="Показывается кнопкой до ответа" autocomplete="off"><div class="field-hint">Например: «Это дата» или «Первая буква П»</div></div>
+    <div class="field"><label>Объяснение (необязательно)</label><textarea id="cardExplain" placeholder="Почему такой ответ? Показывается при ошибке"></textarea></div>
     <button class="btn" id="cardSaveBtn" onclick="saveCard()">Сохранить</button>
   </div>
 </div>
@@ -246,18 +283,14 @@ img{max-width:100%}
   <div class="modal-inner" id="deckMenuInner"></div>
 </div>
 
-<!-- TOPIC GENERATION MODAL -->
 <div class="modal" id="topicModal" onclick="if(event.target===this)closeTopicModal()">
   <div class="modal-inner">
     <div class="modal-handle"></div>
     <h2>Генерация по теме</h2>
     <div id="topicStep1">
-      <div class="field">
-        <label>Тема</label>
-        <input id="topicInput" placeholder="Первая мировая война" autocomplete="off" onkeydown="if(event.key==='Enter')generateTopic()">
-      </div>
+      <div class="field"><label>Тема</label><input id="topicInput" placeholder="Первая мировая война" autocomplete="off" onkeydown="if(event.key==='Enter')generateTopic()"></div>
       <button class="btn" onclick="generateTopic()">Найти материал</button>
-      <div class="field-hint" style="margin-top:10px;text-align:center">Ищет статью в Википедии и составляет карточки.<br>Может получиться криво — редактируй в превью.</div>
+      <div class="field-hint" style="margin-top:10px;text-align:center">ИИ составит карточки. Качество зависит от темы — редактируй в превью.</div>
     </div>
     <div id="topicLoading" style="display:none;text-align:center;padding:30px 0">
       <div class="spinner"></div>
@@ -270,10 +303,7 @@ img{max-width:100%}
         <button class="filter-chip" onclick="toggleAllTopic()">Все / Ничего</button>
       </div>
       <div id="topicPreview" style="max-height:45vh;overflow-y:auto;margin-bottom:12px"></div>
-      <div class="field">
-        <label>Название колоды</label>
-        <input id="topicDeckName">
-      </div>
+      <div class="field"><label>Название колоды</label><input id="topicDeckName"></div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-sec" onclick="backToTopicStep1()">Назад</button>
         <button class="btn" onclick="saveTopicCards()">Сохранить</button>
@@ -303,6 +333,10 @@ img{max-width:100%}
       <div><div class="toggle-row-title">Строгий режим</div><div class="toggle-row-sub">Ошибся — карточка вернётся в конец сессии</div></div>
       <div class="switch" id="switchStrict"></div>
     </div>
+    <div class="toggle-row" onclick="toggleSetting('studyFirst')">
+      <div><div class="toggle-row-title">Изучать сначала</div><div class="toggle-row-sub">Перед первой сессией — показать все карточки колоды</div></div>
+      <div class="switch" id="switchStudyFirst"></div>
+    </div>
     <div class="toggle-row" onclick="toggleSetting('vibrate')">
       <div><div class="toggle-row-title">Вибрация</div></div>
       <div class="switch" id="switchVibrate"></div>
@@ -311,11 +345,11 @@ img{max-width:100%}
       <div><div class="toggle-row-title">Уведомления</div><div class="toggle-row-sub" id="notifStatusLabel">Напоминание вечером</div></div>
     </div>
     <div class="section-title">ИИ для генерации</div>
-<div class="field">
-  <label>Groq API-ключ (необязательно)</label>
-  <input id="groqKeyInput" placeholder="gsk_..." autocomplete="off" onchange="saveGroqKey(this.value)">
-  <div class="field-hint">Бесплатный ключ: console.groq.com/keys. Без ключа — работает медленнее, качество ниже.</div>
-</div>
+    <div class="field">
+      <label>Groq API-ключ (необязательно)</label>
+      <input id="groqKeyInput" placeholder="gsk_..." autocomplete="off" onchange="saveGroqKey(this.value)">
+      <div class="field-hint">Работает только с VPN. Без ключа — Pollinations (из РФ).</div>
+    </div>
     <div class="section-title">Данные</div>
     <button class="btn btn-sec" onclick="exportData()" style="margin-bottom:8px">Экспорт в файл</button>
     <button class="btn btn-sec" onclick="importData()" style="margin-bottom:8px">Импорт из файла</button>
@@ -357,9 +391,10 @@ const DEFAULT_STATE = {
     streak: 0, lastDay: null,
     dailyGoal: 20, correctStreak: 0,
     theme: 'auto', inputMode: 'buttons',
-    vibrate: true, notifAsked: false, strictMode: false, groqKey: ''
+    vibrate: true, notifAsked: false, strictMode: false, groqKey: '',
+    studyFirst: false
   },
-  achievements: [], schema: 3
+  achievements: [], schema: 4
 };
 
 let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
@@ -368,7 +403,9 @@ let studyQueue = [], studyIndex = 0, isFlipped = false;
 let undoSnapshot = null, undoTimeout = null;
 let currentFilter = 'all';
 let topicCards = [];
+let previewQueue = [], previewIndex = 0;
 
+/* ===== UTILS ===== */
 function load() {
   try {
     const raw = localStorage.getItem('flashcards_v2');
@@ -468,119 +505,163 @@ function backToTopicStep1() {
   document.getElementById('topicStep2').style.display = 'none';
   document.getElementById('topicError').style.display = 'none';
 }
-
 function saveGroqKey(v) {
   state.stats.groqKey = (v || '').trim();
   save();
   toast(state.stats.groqKey ? 'Ключ сохранён' : 'Ключ удалён');
 }
-
 async function callLLM(prompt) {
   const key = (state.stats.groqKey || '').trim();
   if (key) {
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + key
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [
-          { role: 'system', content: 'Ты помощник для создания учебных флеш-карточек. Отвечай только валидным JSON.' },
+          { role: 'system', content: 'Отвечай только валидным JSON без пояснений.' },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.6,
-        max_tokens: 4000,
+        temperature: 0.5, max_tokens: 4000,
         response_format: { type: 'json_object' }
       })
     });
     if (!r.ok) {
-      const err = await r.text().catch(() => '');
       if (r.status === 401) throw new Error('Неверный Groq-ключ');
-      if (r.status === 429) throw new Error('Слишком много запросов, подожди минуту');
-      throw new Error('Groq: ' + (err.slice(0, 150) || r.status));
+      if (r.status === 429) throw new Error('Слишком много запросов, подожди');
+      throw new Error('Groq: ' + r.status);
     }
     const data = await r.json();
     return data.choices[0].message.content;
-  } else {
+  }
+
+  // Pollinations: POST
+  let lastErr = null;
+  try {
     const r = await fetch('https://text.pollinations.ai/openai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'openai',
-        stream: false,
         messages: [
-          { role: 'system', content: 'Ты помощник для создания учебных флеш-карточек. Отвечай только валидным JSON.' },
+          { role: 'system', content: 'Отвечай только валидным JSON без пояснений.' },
           { role: 'user', content: prompt }
-        ],
-        temperature: 0.6
+        ]
       })
     });
-    if (!r.ok) throw new Error('Сервис недоступен, попробуй позже или добавь Groq-ключ');
-    const data = await r.json();
-    return data.choices[0].message.content;
-  }
-}
+    if (r.ok) {
+      const data = await r.json();
+      const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if (content) return content;
+    }
+  } catch (e) { lastErr = e; }
 
+  // Fallback: GET с простым промптом
+  try {
+    const shortPrompt = prompt.length > 1500 ? prompt.slice(0, 1500) : prompt;
+    const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(shortPrompt) + '?model=openai&json=true');
+    if (r.ok) {
+      const text = await r.text();
+      if (text && text.length > 10) return text;
+    }
+  } catch (e) { lastErr = e; }
+
+  throw new Error('Сервис не отвечает. Попробуй ещё раз или добавь Groq-ключ через VPN.');
+}
 function parseJSONResponse(text) {
   if (!text) return null;
   text = String(text).trim();
   text = text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
-  const firstBracket = text.search(/[\{\[]/);
-  if (firstBracket > 0) text = text.slice(firstBracket);
+
+  // Пробуем прямой JSON
   try { return JSON.parse(text); } catch (e) {}
-  const arrMatch = text.match(/\[[\s\S]*\]/);
-  if (arrMatch) { try { return JSON.parse(arrMatch[0]); } catch (e) {} }
-  const objMatch = text.match(/\{[\s\S]*\}/);
-  if (objMatch) { try { return JSON.parse(objMatch[0]); } catch (e) {} }
+
+  // Ищем первый { или [ и парсим оттуда
+  const firstBrace = text.search(/[\{\[]/);
+  if (firstBrace >= 0) {
+    const candidate = text.slice(firstBrace);
+    try { return JSON.parse(candidate); } catch (e) {}
+    // Пробуем найти сбалансированные скобки
+    const firstChar = candidate[0];
+    const lastChar = firstChar === '{' ? '}' : ']';
+    const lastIdx = candidate.lastIndexOf(lastChar);
+    if (lastIdx > 0) {
+      try { return JSON.parse(candidate.slice(0, lastIdx + 1)); } catch (e) {}
+    }
+  }
+
+  // Пробуем вытащить массив объектов карточек регуляркой
+  const cards = [];
+  const re = /\{\s*"q"\s*:\s*"([^"]*(?:\\.[^"]*)*)"\s*,\s*"a"\s*:\s*"([^"]*(?:\\.[^"]*)*)"[^}]*\}/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    cards.push({ q: m[1], a: m[2] });
+  }
+  if (cards.length > 0) return { cards };
+
+  // Ищем строки вида "Вопрос: ... Ответ: ..."
+  const lines = text.split(/\n+/);
+  const pairs = [];
+  let curQ = null;
+  for (const line of lines) {
+    const qm = line.match(/^(?:Вопрос|Q|Q\d+|\d+\.)\s*[:.\-]?\s*(.+)/i);
+    const am = line.match(/^(?:Ответ|A|A\d+)\s*[:.\-]?\s*(.+)/i);
+    if (qm) { curQ = qm[1].trim(); continue; }
+    if (am && curQ) { pairs.push({ q: curQ, a: am[1].trim() }); curQ = null; }
+  }
+  if (pairs.length > 0) return { cards: pairs };
+
   return null;
 }
-
 async function generateTopic() {
   const topic = document.getElementById('topicInput').value.trim();
   if (!topic) { toast('Введи тему'); return; }
-
   document.getElementById('topicStep1').style.display = 'none';
   document.getElementById('topicError').style.display = 'none';
   document.getElementById('topicLoading').style.display = 'block';
   const hasKey = !!(state.stats.groqKey || '').trim();
-  document.getElementById('topicLoadingText').textContent = hasKey
-    ? 'Генерирую через Groq...'
-    : 'Генерирую (бесплатный сервис, ~15 сек)...';
+  document.getElementById('topicLoadingText').textContent = hasKey ? 'Генерирую через Groq...' : 'Генерирую (10-20 сек)...';
 
-  const prompt = `Составь учебные флеш-карточки по теме: "${topic}".
+  const prompt = `Ты — помощник для создания учебных флеш-карточек. По теме "${topic}" составь 20 карточек.
 
-Формат ответа — валидный JSON объект:
-{"cards": [{"q": "вопрос", "a": "ответ"}, ...]}
+Верни JSON объект строго такого вида:
+{"cards":[{"q":"вопрос","a":"ответ","hint":"","explain":""},...]}
 
-Правила:
-- 20-30 карточек
-- Вопросы конкретные: даты, события, личности, термины, причины, следствия, цифры
-- Ответы короткие и точные, 1-2 предложения максимум
-- Не задавай общий вопрос "что такое ${topic}" — только конкретика
-- Без markdown внутри ответов
-- Отвечай ТОЛЬКО валидным JSON, без пояснений`;
+Требования:
+- Вопросы конкретные: даты, имена, события, цифры, термины, причины
+- Ответы 1 предложение, максимум 2
+- hint — короткая подсказка или пустая строка
+- explain — 1 предложение "почему так", или пустая строка
+- Никаких общих вопросов типа "Что такое ${topic}?"
+- Ответ должен быть ТОЛЬКО JSON, без слов до и после`;
 
   try {
     const response = await callLLM(prompt);
+    console.log('LLM raw:', response);
     const parsed = parseJSONResponse(response);
-    if (!parsed) throw new Error('Не удалось разобрать ответ ИИ. Попробуй ещё раз');
-
+    if (!parsed) {
+      console.log('Не распарсилось. Первые 500:', String(response).slice(0, 500));
+      throw new Error('ИИ вернул не JSON. Попробуй ещё раз или смени тему');
+    }
     let cards = [];
     if (Array.isArray(parsed)) cards = parsed;
     else if (Array.isArray(parsed.cards)) cards = parsed.cards;
     else if (Array.isArray(parsed.questions)) cards = parsed.questions;
     else if (Array.isArray(parsed.items)) cards = parsed.items;
+    else if (Array.isArray(parsed.data)) cards = parsed.data;
 
-    cards = cards.map(c => ({
-      q: String(c.q || c.question || c.вопрос || '').trim(),
-      a: String(c.a || c.answer || c.ответ || '').trim()
-    })).filter(c => c.q && c.a);
+    cards = cards.map(c => {
+      if (typeof c === 'string') return { q: c, a: '', hint: '', explain: '' };
+      return {
+        q: String(c.q || c.question || c.вопрос || c.Q || '').trim(),
+        a: String(c.a || c.answer || c.ответ || c.A || '').trim(),
+        hint: String(c.hint || c.подсказка || '').trim(),
+        explain: String(c.explain || c.explanation || c.объяснение || '').trim()
+      };
+    }).filter(c => c.q && c.a);
 
-    if (cards.length === 0) throw new Error('ИИ не составил карточки. Попробуй переформулировать тему');
-
-    topicCards = cards.map(c => ({ q: c.q, a: c.a, selected: true }));
+    if (cards.length === 0) throw new Error('ИИ не дал карточек. Попробуй переформулировать тему');
+    topicCards = cards.map(c => ({ q: c.q, a: c.a, hint: c.hint, explain: c.explain, selected: true }));
     document.getElementById('topicDeckName').value = topic;
     document.getElementById('topicCount').textContent = cards.length;
     renderTopicPreview();
@@ -593,7 +674,6 @@ async function generateTopic() {
     document.getElementById('topicStep1').style.display = 'block';
   }
 }
-
 function renderTopicPreview() {
   const box = document.getElementById('topicPreview');
   box.innerHTML = topicCards.map((c, i) => `
@@ -603,24 +683,22 @@ function renderTopicPreview() {
         <input value="${esc(c.q)}" oninput="topicCards[${i}].q = this.value" placeholder="Вопрос">
         <textarea oninput="topicCards[${i}].a = this.value" placeholder="Ответ">${esc(c.a)}</textarea>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
 function toggleAllTopic() {
   const anySelected = topicCards.some(c => c.selected);
   topicCards.forEach(c => c.selected = !anySelected);
   renderTopicPreview();
 }
-
 function saveTopicCards() {
   const name = document.getElementById('topicDeckName').value.trim() || 'Импорт';
   const selected = topicCards.filter(c => c.selected && c.q.trim() && c.a.trim());
-  if (selected.length === 0) { toast('Выбери хотя бы одну карточку'); return; }
+  if (selected.length === 0) { toast('Выбери хотя бы одну'); return; }
   state.decks.push({
     id: uid(), name, icon: '',
     cards: selected.map(c => ({
       id: uid(), q: c.q.trim(), a: c.a.trim(),
+      hint: c.hint || '', explain: c.explain || '',
       interval: 0, ease: 2.5, due: today(),
       lapses: 0, reps: 0, created: today()
     })),
@@ -658,7 +736,6 @@ function renderDecks() {
     return `<div class="deck" onclick="openDeck('${d.id}')"><div class="deck-icon">${deckIconHTML(d)}</div><div class="deck-info"><div class="deck-name">${esc(d.name)}</div><div class="deck-meta"><span>${parts.join(' · ')}</span>${due > 0 ? `<span class="due">${due} к повторению</span>` : ''}</div></div><div class="deck-arrow">›</div></div>`;
   }).join('');
 }
-
 function openDeckModal(deckId) {
   editingDeckId = deckId || null;
   const d = deckId ? state.decks.find(x => x.id === deckId) : null;
@@ -709,9 +786,17 @@ function renderDeckDetail() {
   const learned = d.cards.filter(c => c.interval >= 21).length;
   document.getElementById('deckStats').innerHTML = `<div class="stats-grid"><div class="stat"><div class="stat-value">${d.cards.length}</div><div class="stat-label">Всего</div></div><div class="stat"><div class="stat-value">${due + newCards}</div><div class="stat-label">На сегодня</div></div><div class="stat"><div class="stat-value">${learned}</div><div class="stat-label">Выучено</div></div><div class="stat"><div class="stat-value">${forecast(d)}</div><div class="stat-label">Прогноз</div></div></div>`;
   const btn = document.getElementById('studyBtn');
-  if (d.cards.length === 0) { btn.disabled = true; btn.textContent = 'Нет карточек'; }
-  else if (due + newCards === 0) { btn.disabled = false; btn.textContent = 'Всё повторено · учить досрочно'; }
-  else { btn.disabled = false; btn.textContent = 'Учить · ' + (due + newCards); }
+  const prev = document.getElementById('previewBtn');
+  if (d.cards.length === 0) {
+    btn.disabled = true; btn.textContent = 'Нет карточек';
+    prev.disabled = true;
+  } else if (due + newCards === 0) {
+    btn.disabled = false; btn.textContent = 'Всё повторено';
+    prev.disabled = false;
+  } else {
+    btn.disabled = false; btn.textContent = 'Учить · ' + (due + newCards);
+    prev.disabled = false;
+  }
   document.getElementById('cardCount').textContent = d.cards.length;
   document.getElementById('filterRow').innerHTML = FILTERS.map(f => {
     let count = 0;
@@ -751,6 +836,8 @@ function openCardModal() {
   document.getElementById('cardModalTitle').textContent = 'Новая карточка';
   document.getElementById('cardQ').value = '';
   document.getElementById('cardA').value = '';
+  document.getElementById('cardHint').value = '';
+  document.getElementById('cardExplain').value = '';
   document.getElementById('cardSaveBtn').textContent = 'Сохранить';
   openModal('cardModal');
   setTimeout(() => { try { document.getElementById('cardQ').focus(); } catch(e){} }, 120);
@@ -764,22 +851,30 @@ function editCard(cardId) {
   document.getElementById('cardModalTitle').textContent = 'Редактирование';
   document.getElementById('cardQ').value = c.q || '';
   document.getElementById('cardA').value = c.a || '';
+  document.getElementById('cardHint').value = c.hint || '';
+  document.getElementById('cardExplain').value = c.explain || '';
   document.getElementById('cardSaveBtn').textContent = 'Сохранить изменения';
   openModal('cardModal');
 }
 function saveCard() {
   const q = document.getElementById('cardQ').value.trim();
   const a = document.getElementById('cardA').value.trim();
-  if (!q || !a) { toast('Заполни оба поля'); return; }
+  const hint = document.getElementById('cardHint').value.trim();
+  const explain = document.getElementById('cardExplain').value.trim();
+  if (!q || !a) { toast('Заполни вопрос и ответ'); return; }
   const d = state.decks.find(x => x.id === currentDeckId);
   if (!d) return;
   if (editingCardId) {
     const c = d.cards.find(x => x.id === editingCardId);
-    if (c) { c.q = q; c.a = a; }
+    if (c) { c.q = q; c.a = a; c.hint = hint; c.explain = explain; }
     editingCardId = null;
     toast('Сохранено');
   } else {
-    d.cards.push({ id: uid(), q, a, interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() });
+    d.cards.push({
+      id: uid(), q, a, hint, explain,
+      interval: 0, ease: 2.5, due: today(),
+      lapses: 0, reps: 0, created: today()
+    });
     toast('Добавлено');
   }
   save(); closeModal('cardModal'); renderDeckDetail();
@@ -793,17 +888,109 @@ function forecast(deck) {
   return Math.max(1, Math.ceil((remaining.length * Math.max(1, avgInterval)) / pace)) + ' дн.';
 }
 
+/* ===== PREVIEW (Изучить сначала) ===== */
+function startPreview() {
+  const d = state.decks.find(x => x.id === currentDeckId);
+  if (!d || d.cards.length === 0) return;
+  previewQueue = d.cards.slice();
+  previewIndex = 0;
+  show('previewScreen');
+  renderPreview();
+}
+function renderPreview() {
+  const card = previewQueue[previewIndex];
+  if (!card) return;
+  const d = state.decks.find(x => x.id === currentDeckId);
+  const reversed = d && d.reversed;
+  const front = reversed ? card.a : card.q;
+  const back = reversed ? card.q : card.a;
+  const box = document.getElementById('previewCard');
+  box.innerHTML = `
+    <div class="preview-side">
+      <div class="preview-side-label">${reversed ? 'Ответ' : 'Вопрос'}</div>
+      <div class="preview-side-content">${renderSide(front, 'q')}</div>
+    </div>
+    <div class="preview-side">
+      <div class="preview-side-label">${reversed ? 'Вопрос' : 'Ответ'}</div>
+      <div class="preview-side-content">${renderSide(back, 'a')}</div>
+    </div>
+    ${card.hint ? `<div class="hint-text">Подсказка: ${esc(card.hint)}</div>` : ''}
+    ${card.explain ? `<div class="explain-text">${esc(card.explain)}</div>` : ''}
+  `;
+  const total = previewQueue.length;
+  document.getElementById('previewCounter').textContent = (previewIndex + 1) + ' / ' + total;
+  document.getElementById('previewProgress').style.width = ((previewIndex + 1) / total * 100) + '%';
+  document.getElementById('previewPrevBtn').disabled = previewIndex === 0;
+  document.getElementById('previewNextBtn').textContent = previewIndex === total - 1 ? 'Готово' : 'Дальше';
+}
+function previewPrev() {
+  if (previewIndex > 0) { previewIndex--; renderPreview(); }
+}
+function previewNext() {
+  if (previewIndex < previewQueue.length - 1) { previewIndex++; renderPreview(); }
+  else exitPreview();
+}
+function exitPreview() {
+  show('deckScreen');
+  renderDeckDetail();
+}
+
+/* ===== TIMELINE ===== */
+function openTimeline() {
+  const d = state.decks.find(x => x.id === currentDeckId);
+  if (!d) return;
+  document.getElementById('timelineTitle').textContent = d.name;
+  const box = document.getElementById('timelineContent');
+  // Собираем карточки с годом
+  const withYears = [];
+  d.cards.forEach(c => {
+    const yearsQ = (c.q || '').match(/\b(1[0-9]{3}|20[0-2][0-9])\b/g) || [];
+    const yearsA = (c.a || '').match(/\b(1[0-9]{3}|20[0-2][0-9])\b/g) || [];
+    const allYears = [...new Set([...yearsQ, ...yearsA])].map(y => parseInt(y, 10));
+    if (allYears.length > 0) {
+      withYears.push({ card: c, years: allYears, minYear: Math.min(...allYears) });
+    }
+  });
+  withYears.sort((a, b) => a.minYear - b.minYear);
+  if (withYears.length === 0) {
+    box.innerHTML = '<div class="empty">В карточках этой колоды не найдено дат.<br>Добавь год в вопрос или ответ — появится здесь.</div>';
+    show('timelineScreen');
+    return;
+  }
+  box.innerHTML = '<div style="font-size:12px;color:var(--text2);margin-bottom:10px">Найдено событий: ' + withYears.length + '</div>' +
+    withYears.map(item => `<div class="timeline-item" onclick="timelineOpenCard('${item.card.id}')"><div class="timeline-year">${item.minYear}</div><div class="timeline-body"><div class="timeline-q">${esc(plainText(item.card.q).slice(0, 80))}</div><div class="timeline-a">${esc(plainText(item.card.a).slice(0, 100))}</div></div></div>`).join('');
+  show('timelineScreen');
+}
+function timelineOpenCard(cardId) {
+  closeTimeline();
+  setTimeout(() => editCard(cardId), 100);
+}
+function closeTimeline() {
+  show('deckScreen');
+  renderDeckDetail();
+}
+
 /* ===== STUDY ===== */
 function startStudy() {
   const d = state.decks.find(x => x.id === currentDeckId);
   if (!d || d.cards.length === 0) return;
+
+  // Если включён "Изучать сначала" и в колоде есть новые карточки — показать превью
+  const hasNew = d.cards.some(c => c.interval === 0 && !c._previewed);
+  if (state.stats.studyFirst && hasNew && !d._learnedOnce) {
+    startPreview();
+    d._learnedOnce = true;
+    save();
+    return;
+  }
+
   const t = today();
   const due = d.cards.filter(c => c.due <= t && c.interval > 0);
   const newCards = d.cards.filter(c => c.interval === 0);
   due.sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
   studyQueue = [...due, ...newCards];
   if (studyQueue.length === 0) studyQueue = d.cards.slice().sort(() => Math.random() - 0.5).slice(0, 30);
-  studyQueue = studyQueue.map(c => ({ ...c, _missed: false, _strictAttempts: 0 }));
+  studyQueue = studyQueue.map(c => ({ ...c, _missed: false, _strictAttempts: 0, _hintShown: false }));
   studyIndex = 0;
   undoSnapshot = null;
   show('studyScreen');
@@ -826,8 +1013,12 @@ function renderStudy() {
   const strictEl = document.getElementById('strictButtons');
   const textWrap = document.getElementById('textInputWrap');
   const feedback = document.getElementById('answerFeedback');
+  const hintBtn = document.getElementById('hintBtn');
+  const hintShow = document.getElementById('hintShow');
+  const explainShow = document.getElementById('explainShow');
 
   isFlipped = false;
+  card._hintShown = false;
   cardEl.classList.remove('flipped');
   contentEl.innerHTML = renderSide(reversed ? card.a : card.q, 'q');
   labelEl.textContent = reversed ? 'ОТВЕТ' : 'ВОПРОС';
@@ -836,6 +1027,15 @@ function renderStudy() {
   strictEl.style.visibility = 'hidden';
   feedback.className = 'answer-feedback';
   feedback.textContent = '';
+  hintShow.style.display = 'none';
+  hintShow.textContent = '';
+  explainShow.style.display = 'none';
+  explainShow.textContent = '';
+  if (card.hint) {
+    hintBtn.style.display = 'block';
+  } else {
+    hintBtn.style.display = 'none';
+  }
 
   const useText = strict || state.stats.inputMode === 'text';
   if (useText) {
@@ -849,6 +1049,15 @@ function renderStudy() {
   document.getElementById('studyCounter').textContent = (studyIndex + 1) + ' / ' + total;
   document.getElementById('studyProgress').style.width = ((studyIndex / total) * 100) + '%';
   updateIntervalLabels(card);
+}
+function showHint() {
+  const card = currentStudyCard();
+  if (!card || !card.hint) return;
+  card._hintShown = true;
+  const el = document.getElementById('hintShow');
+  el.textContent = 'Подсказка: ' + card.hint;
+  el.style.display = 'block';
+  document.getElementById('hintBtn').style.display = 'none';
 }
 function handleCardTap() {
   const strict = state.stats.strictMode === true;
@@ -871,6 +1080,12 @@ function flipCard() {
   document.getElementById('studyCard').classList.add('flipped');
   if (strict) document.getElementById('strictButtons').style.visibility = 'visible';
   else document.getElementById('ratingButtons').style.visibility = 'visible';
+}
+function showExplain(card) {
+  if (!card || !card.explain) return;
+  const el = document.getElementById('explainShow');
+  el.textContent = card.explain;
+  el.style.display = 'block';
 }
 function normalize(s) {
   return String(s || '').toLowerCase().replace(/[ё]/g, 'е').replace(/[^\wа-я\s]/gi, ' ').replace(/\s+/g, ' ').trim();
@@ -915,7 +1130,8 @@ function checkAnswer() {
   document.getElementById('studyCard').classList.add('flipped');
   isFlipped = true;
   vibrate(correct ? 15 : [20, 40, 20]);
-  if (strict) setTimeout(() => strictRate(correct), correct ? 900 : 2200);
+  if (!correct) showExplain(card);
+  if (strict) setTimeout(() => strictRate(correct), correct ? 900 : 2500);
   else document.getElementById('ratingButtons').style.visibility = 'visible';
 }
 function getIntervals(card) {
@@ -956,10 +1172,12 @@ function rate(r) {
     dbCard.ease = Math.max(1.3, (dbCard.ease || 2.5) - 0.2);
     dbCard.lapses = (dbCard.lapses || 0) + 1;
     dbCard.due = t; card._missed = true;
+    showExplain(card);
   } else if (r === 1) {
     dbCard.ease = Math.max(1.3, (dbCard.ease || 2.5) - 0.15);
     dbCard.interval = dbCard.interval === 0 ? 1 : Math.max(1, Math.round(dbCard.interval * 1.2));
     dbCard.due = addDays(t, dbCard.interval);
+    showExplain(card);
   } else if (r === 2) {
     if (dbCard.interval === 0) dbCard.interval = 1;
     else if (dbCard.interval === 1) dbCard.interval = 3;
@@ -1069,7 +1287,7 @@ function finishStudy() {
   wrap.innerHTML = `<div class="done-screen"><div class="big-num">${correct}/${total}</div><h2>Сессия завершена</h2><p>Правильных ответов</p><div style="display:flex;gap:8px;width:100%;max-width:320px;margin-top:16px;flex-direction:column">${missed.length > 0 ? '<button class="btn" onclick="retryMissed()">Повторить сложные · ' + missed.length + '</button>' : ''}<button class="btn btn-sec" onclick="exitStudy()">Вернуться к колоде</button></div></div>`;
 }
 function retryMissed() {
-  const missed = studyQueue.filter(c => c._missed).map(c => ({ ...c, _missed: false, _strictAttempts: 0 }));
+  const missed = studyQueue.filter(c => c._missed).map(c => ({ ...c, _missed: false, _strictAttempts: 0, _hintShown: false }));
   if (missed.length === 0) { exitStudy(); return; }
   studyQueue = missed; studyIndex = 0;
   restoreStudyLayout();
@@ -1077,7 +1295,7 @@ function retryMissed() {
 }
 function restoreStudyLayout() {
   const wrap = document.getElementById('studyWrap');
-  wrap.innerHTML = `<div class="study-top"><button class="icon-btn" onclick="exitStudy()" style="margin-left:-8px"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><div class="progress-bar"><div class="progress-fill" id="studyProgress" style="width:0%"></div></div></div><div class="card-counter" id="studyCounter">0 / 0</div><div class="card" id="studyCard" onclick="handleCardTap()"><div class="card-label" id="cardLabel">ВОПРОС</div><div class="card-content" id="cardContent"></div><div class="card-hint" id="cardHint"></div></div><div class="answer-feedback" id="answerFeedback"></div><div class="text-input-wrap" id="textInputWrap" style="display:none"><input id="textAnswerInput" placeholder="Введи ответ" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkAnswer()"><button onclick="checkAnswer()">Проверить</button></div><div class="rating-buttons" id="ratingButtons" style="visibility:hidden"><button class="rating-btn" data-r="0" onclick="rate(0)"><span class="rt-emo">😵</span><span class="rt-label">Забыл</span><span class="rt-int" id="i0"></span></button><button class="rating-btn" data-r="1" onclick="rate(1)"><span class="rt-emo">😐</span><span class="rt-label">Трудно</span><span class="rt-int" id="i1"></span></button><button class="rating-btn" data-r="2" onclick="rate(2)"><span class="rt-emo">🙂</span><span class="rt-label">Помню</span><span class="rt-int" id="i2"></span></button><button class="rating-btn" data-r="3" onclick="rate(3)"><span class="rt-emo">😎</span><span class="rt-label">Легко</span><span class="rt-int" id="i3"></span></button></div><div class="rating-buttons strict" id="strictButtons" style="visibility:hidden"><button class="rating-btn rt-no" onclick="strictRate(false)"><span class="rt-emo">😵</span><span class="rt-label">Не помню</span></button><button class="rating-btn rt-yes" onclick="strictRate(true)"><span class="rt-emo">👍</span><span class="rt-label">Помню</span></button></div>`;
+  wrap.innerHTML = `<div class="study-top"><button class="icon-btn" onclick="exitStudy()" style="margin-left:-8px"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><div class="progress-bar"><div class="progress-fill" id="studyProgress" style="width:0%"></div></div></div><div class="card-counter" id="studyCounter">0 / 0</div><div class="card" id="studyCard" onclick="handleCardTap()"><div class="card-label" id="cardLabel">ВОПРОС</div><div class="card-content" id="cardContent"></div><div class="card-hint" id="cardHint"></div></div><button class="hint-btn" id="hintBtn" onclick="showHint()" style="display:none">Показать подсказку</button><div class="hint-text" id="hintShow" style="display:none"></div><div class="answer-feedback" id="answerFeedback"></div><div class="explain-text" id="explainShow" style="display:none"></div><div class="text-input-wrap" id="textInputWrap" style="display:none"><input id="textAnswerInput" placeholder="Введи ответ" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkAnswer()"><button onclick="checkAnswer()">Проверить</button></div><div class="rating-buttons" id="ratingButtons" style="visibility:hidden"><button class="rating-btn" data-r="0" onclick="rate(0)"><span class="rt-emo">😵</span><span class="rt-label">Забыл</span><span class="rt-int" id="i0"></span></button><button class="rating-btn" data-r="1" onclick="rate(1)"><span class="rt-emo">😐</span><span class="rt-label">Трудно</span><span class="rt-int" id="i1"></span></button><button class="rating-btn" data-r="2" onclick="rate(2)"><span class="rt-emo">🙂</span><span class="rt-label">Помню</span><span class="rt-int" id="i2"></span></button><button class="rating-btn" data-r="3" onclick="rate(3)"><span class="rt-emo">😎</span><span class="rt-label">Легко</span><span class="rt-int" id="i3"></span></button></div><div class="rating-buttons strict" id="strictButtons" style="visibility:hidden"><button class="rating-btn rt-no" onclick="strictRate(false)"><span class="rt-emo">😵</span><span class="rt-label">Не помню</span></button><button class="rating-btn rt-yes" onclick="strictRate(true)"><span class="rt-emo">👍</span><span class="rt-label">Помню</span></button></div>`;
   attachStudySwipe();
 }
 function exitStudy() { hideUndoBar(); restoreStudyLayout(); show('deckScreen'); renderDeckDetail(); }
@@ -1134,6 +1352,7 @@ function openSettings() {
   document.querySelectorAll('#inputModeSeg button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
   document.getElementById('switchVibrate').classList.toggle('on', state.stats.vibrate !== false);
   document.getElementById('switchStrict').classList.toggle('on', state.stats.strictMode === true);
+  document.getElementById('switchStudyFirst').classList.toggle('on', state.stats.studyFirst === true);
   document.getElementById('groqKeyInput').value = state.stats.groqKey || '';
   updateNotifLabel();
   openModal('settingsModal');
@@ -1160,8 +1379,8 @@ function toggleSetting(key) {
   save();
   if (key === 'vibrate') document.getElementById('switchVibrate').classList.toggle('on', state.stats.vibrate !== false);
   if (key === 'strictMode') document.getElementById('switchStrict').classList.toggle('on', state.stats.strictMode === true);
+  if (key === 'studyFirst') document.getElementById('switchStudyFirst').classList.toggle('on', state.stats.studyFirst === true);
 }
-
 function applyTheme() {
   const pref = state.stats.theme || 'auto';
   let theme = pref;
@@ -1237,7 +1456,6 @@ function openStats() {
   document.getElementById('statsContent').innerHTML = `<div class="stats-grid"><div class="stat"><div class="stat-value">${total}</div><div class="stat-label">Карточек</div></div><div class="stat"><div class="stat-value">${learned}</div><div class="stat-label">Выучено</div></div><div class="stat"><div class="stat-value">${dueToday}</div><div class="stat-label">К повторению</div></div><div class="stat"><div class="stat-value">${accuracy}%</div><div class="stat-label">Точность</div></div></div><div class="stats-grid"><div class="stat"><div class="stat-value">${state.stats.streak || 0}</div><div class="stat-label">Дней подряд</div></div><div class="stat"><div class="stat-value">${state.stats.reviews || 0}</div><div class="stat-label">Всего ответов</div></div></div><div class="section-title">Активность</div><div class="heatmap-wrap"><div class="heatmap">${cells}</div></div>${heavy.length > 0 ? '<div class="section-title">Тяжёлые карточки</div>' + heavy.map(h => `<div class="heavy-item"><div class="heavy-q">${esc(h.q.slice(0, 60))}</div><div class="heavy-count">${h.lapses}</div></div>`).join('') : ''}<div class="section-title">Достижения · ${state.achievements.length} / ${ACHIEVEMENTS.length}</div><button class="btn btn-sec" onclick="openAchievements()">Открыть достижения</button>`;
   openModal('statsModal');
 }
-
 const ACHIEVEMENTS = [
   { id: 'first', name: 'Первый шаг', desc: 'Первое повторение', check: s => s.stats.reviews >= 1 },
   { id: 'week', name: 'Неделя подряд', desc: '7 дней занятий', check: s => s.stats.streak >= 7 },
@@ -1277,7 +1495,7 @@ function exportData() {
 function exportDeck() {
   const d = state.decks.find(x => x.id === currentDeckId);
   if (!d) return;
-  const out = { name: d.name, icon: d.icon, cards: d.cards.map(c => ({ q: c.q, a: c.a })) };
+  const out = { name: d.name, icon: d.icon, cards: d.cards.map(c => ({ q: c.q, a: c.a, hint: c.hint || '', explain: c.explain || '' })) };
   const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1303,7 +1521,7 @@ function importData() {
             save(); renderDecks(); applyTheme(); closeModal('settingsModal'); toast('Импортировано');
           });
         } else if (parsed.name && Array.isArray(parsed.cards)) {
-          state.decks.push({ id: uid(), name: parsed.name, icon: parsed.icon || '', cards: parsed.cards.map(c => ({ id: uid(), q: c.q, a: c.a, interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
+          state.decks.push({ id: uid(), name: parsed.name, icon: parsed.icon || '', cards: parsed.cards.map(c => ({ id: uid(), q: c.q, a: c.a, hint: c.hint || '', explain: c.explain || '', interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
           save(); renderDecks(); closeModal('settingsModal'); toast('Колода добавлена');
         } else throw new Error('bad');
       } catch (err) { toast('Неверный формат'); }
@@ -1324,10 +1542,10 @@ function importCSV() {
         const sep = text.indexOf('\t') !== -1 && text.indexOf(';') === -1 ? '\t' : (text.indexOf(';') !== -1 ? ';' : ',');
         const lines = text.split(/\r?\n/).filter(l => l.trim());
         const rows = lines.map(l => splitCSVLine(l, sep));
-        const cards = rows.map(r => ({ q: (r[0] || '').trim(), a: (r[1] || '').trim() })).filter(c => c.q && c.a);
+        const cards = rows.map(r => ({ q: (r[0] || '').trim(), a: (r[1] || '').trim(), hint: (r[2] || '').trim(), explain: (r[3] || '').trim() })).filter(c => c.q && c.a);
         if (cards.length === 0) throw new Error('no cards');
         confirmAction('Импорт CSV', `Найдено ${cards.length} карточек. Создать колоду?`, 'Создать', () => {
-          state.decks.push({ id: uid(), name: f.name.replace(/\.[^.]+$/, '') || 'Импорт', icon: '', cards: cards.map(c => ({ id: uid(), q: c.q, a: c.a, interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
+          state.decks.push({ id: uid(), name: f.name.replace(/\.[^.]+$/, '') || 'Импорт', icon: '', cards: cards.map(c => ({ id: uid(), q: c.q, a: c.a, hint: c.hint, explain: c.explain, interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
           save(); renderDecks(); closeModal('settingsModal'); toast('Импортировано ' + cards.length);
         });
       } catch (err) { toast('Не удалось прочитать CSV'); }
@@ -1348,7 +1566,7 @@ function splitCSVLine(line, sep) {
 function shareDeck() {
   const d = state.decks.find(x => x.id === currentDeckId);
   if (!d) return;
-  const payload = { n: d.name, i: d.icon || '', c: d.cards.map(c => [c.q, c.a]) };
+  const payload = { n: d.name, i: d.icon || '', c: d.cards.map(c => [c.q, c.a, c.hint || '', c.explain || '']) };
   try {
     const json = JSON.stringify(payload);
     const b64 = btoa(unescape(encodeURIComponent(json)));
@@ -1374,7 +1592,7 @@ function checkShareHash() {
     const data = JSON.parse(json);
     if (!data.c || !Array.isArray(data.c)) throw new Error('bad');
     confirmAction('Импорт колоды', `"${data.n || 'Без названия'}" — ${data.c.length} карточек. Добавить?`, 'Добавить', () => {
-      state.decks.push({ id: uid(), name: data.n || 'Импорт', icon: data.i || '', cards: data.c.map(([q, a]) => ({ id: uid(), q: q || '', a: a || '', interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
+      state.decks.push({ id: uid(), name: data.n || 'Импорт', icon: data.i || '', cards: data.c.map(arr => ({ id: uid(), q: arr[0] || '', a: arr[1] || '', hint: arr[2] || '', explain: arr[3] || '', interval: 0, ease: 2.5, due: today(), lapses: 0, reps: 0, created: today() })), created: today(), reversed: false });
       save(); renderDecks(); toast('Колода добавлена');
     });
   } catch (e) { toast('Ссылка повреждена'); }
@@ -1393,6 +1611,8 @@ window.addEventListener('popstate', () => {
   if (active) { active.classList.remove('active'); history.pushState(null, ''); return; }
   const screen = document.querySelector('.screen.active');
   if (screen && screen.id === 'studyScreen') { exitStudy(); history.pushState(null, ''); return; }
+  if (screen && screen.id === 'previewScreen') { exitPreview(); history.pushState(null, ''); return; }
+  if (screen && screen.id === 'timelineScreen') { closeTimeline(); history.pushState(null, ''); return; }
   if (screen && screen.id === 'deckScreen') { backToDecks(); history.pushState(null, ''); return; }
 });
 
