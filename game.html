@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0f0f12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Игры</title>
+<style>
+:root{--bg:#0f0f12;--bg2:#18181d;--bg3:#22222a;--bg4:#2c2c36;--text:#f0f0f5;--text2:#8a8a95;--text3:#5a5a65;--accent:#7c5cff;--green:#22c55e;--blue:#3b82f6;--orange:#f59e0b;--red:#ef4444;--border:#2a2a35;--shadow:0 8px 24px rgba(0,0,0,.4)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;background:none;color:inherit;width:100%}
+.screen{position:fixed;inset:0;display:none;flex-direction:column}
+.screen.active{display:flex}
+.header{display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;min-height:56px}
+.header h1{font-size:17px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 4px}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:background .15s}
+.icon-btn:active{background:var(--bg3)}
+.icon-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.content{flex:1;overflow-y:auto;padding:14px;padding-bottom:max(30px,calc(20px + env(safe-area-inset-bottom)));-webkit-overflow-scrolling:touch}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.btn{width:100%;padding:15px;background:var(--accent);color:#fff;border-radius:12px;font-weight:600;font-size:15px;transition:opacity .15s,transform .1s;margin-bottom:8px}
+.btn:active{transform:scale(.98);opacity:.9}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-sec{background:var(--bg3);color:var(--text)}
+.btn-green{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:10px 14px;font-size:13px;width:auto;margin-bottom:0}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
+.field input{background:var(--bg3);border-radius:10px;padding:12px 14px;font-size:15px;border:1.5px solid transparent}
+.field input:focus{border-color:var(--accent)}
+.empty{text-align:center;color:var(--text2);padding:40px 20px;font-size:14px;line-height:1.6}
+.center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:14px;overflow-y:auto}
+
+/* Меню */
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu-tile{background:var(--bg2);border-radius:16px;padding:20px 14px;border:1px solid var(--border);cursor:pointer;transition:transform .1s,background .15s;display:flex;flex-direction:column;gap:12px;min-height:140px}
+.menu-tile:active{transform:scale(.98);background:var(--bg3)}
+.menu-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.menu-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.menu-name{font-weight:700;font-size:15px}
+.menu-desc{font-size:12px;color:var(--text2);line-height:1.4}
+
+/* Общие карточки */
+.card-box{background:var(--bg2);border-radius:16px;padding:18px;border:1px solid var(--border);margin-bottom:12px}
+.card-box h3{font-size:13px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:10px}
+
+/* Игровое поле */
+.game-card{background:var(--bg2);border-radius:18px;padding:26px 20px;text-align:center;border:1px solid var(--border);margin-bottom:14px;min-height:140px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.game-card-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px}
+.game-card-value{font-size:24px;font-weight:700;line-height:1.3;word-break:break-word}
+.game-card-sub{font-size:14px;color:var(--text2);margin-top:8px;line-height:1.4}
+.timer-big{font-size:56px;font-weight:800;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.timer-big.warning{color:var(--red)}
+
+.row{display:flex;gap:8px;margin-bottom:10px}
+.row>*{flex:1}
+.stepper{display:flex;align-items:center;gap:14px;background:var(--bg3);border-radius:12px;padding:12px 16px;justify-content:space-between}
+.stepper-label{font-size:14px;font-weight:500}
+.stepper-controls{display:flex;align-items:center;gap:12px}
+.stepper-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;line-height:1;color:var(--text)}
+.stepper-btn:active{background:var(--accent);color:#fff}
+.stepper-value{font-size:18px;font-weight:700;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* Список игроков */
+.player-row{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);margin-bottom:6px}
+.player-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.player-name{flex:1;font-weight:500;font-size:14px}
+.player-score{font-size:16px;font-weight:700;color:var(--green)}
+
+/* Характеристики (бункер) */
+.stat-row{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.stat-row:last-child{border-bottom:none}
+.stat-icon{width:32px;height:32px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text2);flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:2px}
+.stat-value{font-size:15px;font-weight:500;line-height:1.4;word-break:break-word}
+
+/* Локации шпиона */
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.location-item{background:var(--bg3);border-radius:10px;padding:10px;font-size:13px;text-align:center;font-weight:500}
+
+/* История */
+.story-preview{background:var(--bg2);border-radius:14px;padding:16px;font-size:15px;line-height:1.6;border:1px solid var(--border);margin-bottom:10px}
+.story-line{padding:6px 0;border-bottom:1px dashed var(--border)}
+.story-line:last-child{border-bottom:none}
+.story-num{color:var(--text3);font-size:11px;font-weight:700;margin-right:6px}
+.story-input{background:var(--bg3);border-radius:12px;padding:14px;font-size:16px;border:1.5px solid transparent;width:100%;min-height:100px;resize:vertical;line-height:1.5;font-family:inherit;color:var(--text)}
+.story-input:focus{border-color:var(--accent)}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg4);color:var(--text);padding:11px 18px;border-radius:20px;font-size:13px;font-weight:500;z-index:200;opacity:0;pointer-events:none;transition:all .25s;border:1px solid var(--border);box-shadow:var(--shadow)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-inner{background:var(--bg2);border-radius:18px;padding:20px;max-width:400px;width:100%;border:1px solid var(--border);max-height:80vh;overflow-y:auto}
+.modal h3{font-size:16px;margin-bottom:12px;font-weight:700}
+
+@media (min-width:640px){
+  .content{max-width:600px;margin:0 auto;width:100%}
+  .center-wrap{max-width:600px;margin:0 auto;width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ МЕНЮ ============ -->
+<div class="screen active" id="menuScreen">
+  <div class="header">
+    <h1>Игры</h1>
+  </div>
+  <div class="content">
+    <div class="menu-grid">
+      <div class="menu-tile" onclick="spyOpen()">
+        <div class="menu-icon" style="background:#7c5cff"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div>
+          <div class="menu-name">Шпион</div>
+          <div class="menu-desc">Все знают место, один — нет. Найди шпиона до того, как он поймёт где он</div>
+        </div>
+      </div>
+      <div class="menu-tile" onclick="bunkerOpen()">
+        <div class="menu-icon" style="background:#ef4444"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-6 7 6v12M9 21v-6h6v6"/></svg></div>
+        <div>
+          <div class="menu-name">Бункер</div>
+          <div class="menu-desc">Катастрофа, мест мало. У каждого свой набор качеств. Решите кто выживет</div>
+        </div>
+      </div>
+      <div class="menu-tile" onclick="fasterOpen()">
+        <div class="menu-icon" style="background:#f59e0b"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div>
+          <div class="menu-name">Кто быстрее</div>
+          <div class="menu-desc">Задания на скорость. Успей за 30 секунд или теряй очко</div>
+        </div>
+      </div>
+      <div class="menu-tile" onclick="storyOpen()">
+        <div class="menu-icon" style="background:#22c55e"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div>
+          <div class="menu-name">Истории</div>
+          <div class="menu-desc">Каждый пишет по предложению, не видя других. В конце — читаем что получилось</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ШПИОН ============ -->
+<div class="screen" id="spyScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="spyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1>Шпион</h1>
+    <button class="icon-btn" id="spyMenuBtn" onclick="spyShowMenu()" style="display:none"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
+  </div>
+  <div class="content" id="spyContent"></div>
+</div>
+
+<!-- ============ БУНКЕР ============ -->
+<div class="screen" id="bunkerScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="bunkerBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1>Бункер</h1>
+  </div>
+  <div class="content" id="bunkerContent"></div>
+</div>
+
+<!-- ============ КТО БЫСТРЕЕ ============ -->
+<div class="screen" id="fasterScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="fasterBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1>Кто быстрее</h1>
+  </div>
+  <div class="content" id="fasterContent"></div>
+</div>
+
+<!-- ============ ИСТОРИИ ============ -->
+<div class="screen" id="storyScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="storyBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1>Истории по кругу</h1>
+  </div>
+  <div class="content" id="storyContent"></div>
+</div>
+
+<!-- Модалка подтверждения -->
+<div class="modal" id="confirmModal">
+  <div class="modal-inner">
+    <h3 id="confirmTitle">Подтверждение</h3>
+    <p id="confirmText" style="color:var(--text2);font-size:14px;line-height:1.5;margin-bottom:16px"></p>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sec" onclick="closeModal('confirmModal')">Отмена</button>
+      <button class="btn btn-red" id="confirmOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ===== УТИЛИТЫ ===== */
+function $(id){return document.getElementById(id)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1800)}
+function openModal(id){$(id).classList.add('active')}
+function closeModal(id){$(id).classList.remove('active')}
+function confirmAction(title,text,cb){$('confirmTitle').textContent=title;$('confirmText').textContent=text;$('confirmOk').onclick=()=>{closeModal('confirmModal');cb()};openModal('confirmModal')}
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+/* ===== ДАННЫЕ ===== */
+const LOCATIONS = [
+  'Пляж','Аэропорт','Больница','Школа','Ресторан','Кинотеатр','Стадион','Музей',
+  'Зоопарк','Цирк','Банк','Полицейский участок','Тюрьма','Казино','Отель','Метро',
+  'Космическая станция','Корабль','Подводная лодка','Полярная станция','Пиратский корабль',
+  'Военная база','Университет','Библиотека','Театр','Спа-салон','Вокзал','Рынок'
+];
+const SPY_QUESTIONS = [
+  'Что здесь делают люди?','Какой здесь запах?','Что тут за мебель?',
+  'Как сюда попадают?','Сколько здесь обычно людей?','Что делают вечером?',
+  'Кто здесь главный?','Что здесь можно купить?','Как одеты люди?',
+  'В какое время суток здесь людно?','Есть ли тут еда?','Что тут самое дорогое?'
+];
+
+const BUNKER_CATASTROPHES = [
+  'Ядерная война','Пандемия смертельного вируса','Падение метеорита','Всемирное наводнение',
+  'Нашествие зомби','Глобальное похолодание','Восстание машин','Извержение супервулкана',
+  'Химическое заражение','Солнечная вспышка (все электронные приборы сгорели)'
+];
+
+const BUNKER = {
+  profession: {
+    label:'Профессия', icon:'П',
+    items:['Врач','Инженер','Военный','Повар','Учитель','Программист','Электрик','Биолог',
+      'Психолог','Строитель','Пилот','Медсестра','Химик','Фермер','Полицейский','Охотник',
+      'Пожарный','Механик','Учёный','Дипломат','Журналист','Актёр','Спортсмен','Официант',
+      'Стоматолог','Ветеринар','Архитектор','Агроном']
+  },
+  health: {
+    label:'Здоровье', icon:'З',
+    items:['Абсолютно здоров','Астма','Диабет','Аллергия на пыль','Дальтонизм',
+      'Хроническая бессонница','Мигрени','Плохое зрение','Слабый иммунитет','Депрессия',
+      'Гипертония','Гастрит','Артрит','Сколиоз','Храп','Заикание','Клаустрофобия лёгкая',
+      'Постоянная усталость','Панические атаки','Плохая память']
+  },
+  hobby: {
+    label:'Хобби', icon:'Х',
+    items:['Рыбалка','Охота','Шахматы','Рисование','Садоводство','Чтение','Кроссворды',
+      'Медитация','Йога','Бег','Скалолазание','Музыка','Пение','Танцы','Готовка',
+      'Коллекционирование','Астрономия','Программирование','Изучение языков','Сплав по рекам',
+      'Резьба по дереву','Фотография']
+  },
+  phobia: {
+    label:'Фобия', icon:'Ф',
+    items:['Клаустрофобия (боязнь замкнутых пространств)','Агорафобия (боязнь толпы)',
+      'Гемофобия (боязнь крови)','Акрофобия (боязнь высоты)','Мизофобия (боязнь грязи)',
+      'Арахнофобия (боязнь пауков)','Социофобия (боязнь общения)','Никтофобия (боязнь темноты)',
+      'Аэрофобия (боязнь полётов)','Аквафобия (боязнь воды)','Пирофобия (боязнь огня)',
+      'Ксенофобия (боязнь незнакомцев)','Нет фобий','Боязнь насекомых','Боязнь громких звуков']
+  },
+  luggage: {
+    label:'Багаж', icon:'Б',
+    items:['Аптечка','Нож','Спички','Верёвка','Фонарик','Запас еды на неделю','Одеяло',
+      'Топор','Радио','Гитара','Книга выживания','Компас','Фляга','Семена растений',
+      'Набор инструментов','Фотоаппарат','Генератор','Противогаз','Удочка','Охотничья собака',
+      'Ноутбук с батареей','Швейцарский нож']
+  },
+  fact: {
+    label:'Особый факт', icon:'!',
+    items:['Был в тюрьме','Знает 5 языков','Служил в спецназе','Бывший врач-самоучка',
+      'Умеет готовить из ничего','Выиграл в лотерею','Умеет чинить часы','Бывший циркач',
+      'Может развести огонь трением','Не разговаривал 5 лет','Скрывается от мафии',
+      'Брат-близнец известного учёного','Носит с собой пистолет','Знает ядерную физику',
+      'Умеет управлять вертолётом','Скрывает страшную тайну','Бывший инопланетянин (шутка)',
+      'Прошёл курс выживания в тайге','Умеет шить одежду','Работал сапёром']
+  }
+};
+
+const FASTER_TASKS = [
+  'Назови 5 столиц','Найди в комнате 3 синих предмета','Назови 5 фильмов с ДиКаприо',
+  'Спой припев любой песни','Сделай 10 приседаний','Назови 5 животных на букву К',
+  'Назови 3 страны на букву А','Найди предмет круглой формы','Назови 5 брендов машин',
+  'Назови 5 имён девочек','Назови 5 городов России','Назови 3 цвета радуги',
+  'Найди что-то мягкое','Назови 5 актёров Голливуда','Скажи любую скороговорку',
+  'Назови 5 планет','Придумай рифму к слову «кот»','Назови 3 вида спорта',
+  'Найди что-то стеклянное','Назови 5 овощей','Покажи 3 эмоции','Назови 5 месяцев',
+  'Назови 3 марки телефонов','Сделай комплимент соседу','Назови 5 блюд',
+  'Назови 5 мультфильмов','Назови 5 имён мальчиков','Назови 3 цвета кроме базовых',
+  'Придумай 3 несуществующих слова','Назови 5 песен на английском'
+];
+
+/* ===== УПРАВЛЕНИЕ ПЕРЕДАЧЕЙ ТЕЛЕФОНА ===== */
+function passScreen(title, subtitle, buttonText, onReady) {
+  return `
+    <div class="center-wrap">
+      <div style="font-size:60px;opacity:.15">→</div>
+      <div style="font-size:20px;font-weight:700;margin-top:14px">${esc(title)}</div>
+      <div style="color:var(--text2);font-size:14px;max-width:300px;line-height:1.5">${esc(subtitle)}</div>
+      <button class="btn" onclick="(${onReady})()" style="margin-top:20px;max-width:300px">${esc(buttonText)}</button>
+    </div>
+  `;
+}
+
+/* =========================================================
+   ШПИОН
+========================================================= */
+const spyState = { players: 4, spyIndex: 0, location: '', roles: [], phase: 'setup', timerId: null, timerStart: 0, revealIndex: 0, timerSeconds: 480 };
+
+function spyOpen(){ show('spyScreen'); spyState.phase='setup'; renderSpy() }
+function spyBack(){
+  if(spyState.phase==='setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущий раунд будет потерян.',()=>{ spyStopTimer(); spyState.phase='setup'; show('menuScreen') });
+}
+function renderSpy(){
+  const c = $('spyContent');
+  const menuBtn = $('spyMenuBtn');
+  if(spyState.phase==='setup'){
+    menuBtn.style.display='none';
+    c.innerHTML = `
+      <div class="card-box">
+        <div class="stepper" style="background:transparent;padding:0">
+          <div class="stepper-label">Игроков</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="spyChangePlayers(-1)">−</button>
+            <div class="stepper-value">${spyState.players}</div>
+            <button class="stepper-btn" onclick="spyChangePlayers(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>Как играть</h3>
+        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
+          Все получают одну и ту же локацию, кроме одного — он шпион.<br><br>
+          По кругу задают друг другу вопросы об этом месте. Шпион должен понять, где он, а остальные — вычислить шпиона.<br><br>
+          В любой момент можно устроить голосование. Если угадали шпиона — победили. Если шпион назовёт локацию — победил он.
+        </div>
+      </div>
+      <button class="btn" onclick="spyStart()">Начать игру</button>
+    `;
+  }
+  else if(spyState.phase==='pass'){
+    menuBtn.style.display='flex';
+    const i = spyState.revealIndex;
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="width:70px;height:70px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff">${i+1}</div>
+        <div style="font-size:19px;font-weight:700;margin-top:16px">Игрок ${i+1} из ${spyState.players}</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Возьми телефон. Убедись, что другие не подглядывают. Нажми, чтобы увидеть свою роль.</div>
+        <button class="btn" onclick="spyReveal()" style="margin-top:24px;max-width:280px">Показать роль</button>
+      </div>
+    `;
+  }
+  else if(spyState.phase==='reveal'){
+    menuBtn.style.display='none';
+    const isSpy = spyState.roles[spyState.revealIndex] === 'spy';
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div class="game-card-label">${isSpy?'Твоя роль':'Локация'}</div>
+        ${isSpy
+          ? `<div class="game-card-value" style="color:var(--red)">ШПИОН</div>
+             <div class="game-card-sub">Ты не знаешь где находишься. Слушай вопросы, задавай свои, попробуй понять локацию. Не выдай себя.</div>`
+          : `<div class="game-card-value" style="color:var(--accent)">${esc(spyState.location)}</div>
+             <div class="game-card-sub">Задавай вопросы так, чтобы шпион не понял место. Но и не слишком явно, чтобы он не догадался сразу.</div>`
+        }
+        <button class="btn" onclick="spyNextReveal()" style="margin-top:24px;max-width:280px">${spyState.revealIndex === spyState.players-1 ? 'Начать раунд' : 'Понятно, следующий'}</button>
+      </div>
+    `;
+  }
+  else if(spyState.phase==='game'){
+    menuBtn.style.display='flex';
+    const elapsed = Math.floor((Date.now()-spyState.timerStart)/1000);
+    const remaining = Math.max(0, spyState.timerSeconds - elapsed);
+    const mm = Math.floor(remaining/60), ss = remaining%60;
+    const warn = remaining < 60;
+    c.innerHTML = `
+      <div class="game-card">
+        <div class="game-card-label">Время</div>
+        <div class="timer-big ${warn?'warning':''}" id="spyTimer">${mm}:${String(ss).padStart(2,'0')}</div>
+        <div class="game-card-sub">Задавайте вопросы по кругу</div>
+      </div>
+      <div class="card-box">
+        <h3>Вопросы-помощники</h3>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5;font-style:italic">${esc(pick(SPY_QUESTIONS))}</div>
+      </div>
+      <button class="btn btn-green" onclick="spyEndRound('town')">Угадали шпиона</button>
+      <button class="btn btn-red" onclick="spyEndRound('spy')">Шпион угадал локацию</button>
+      <button class="btn btn-sec" onclick="spyShowMenu()">Показать меню</button>
+    `;
+  }
+}
+function spyChangePlayers(d){
+  const n = spyState.players + d;
+  if(n < 3 || n > 12) return;
+  spyState.players = n;
+  renderSpy();
+}
+function spyStart(){
+  spyState.location = pick(LOCATIONS);
+  const spyIdx = Math.floor(Math.random()*spyState.players);
+  spyState.spyIndex = spyIdx;
+  spyState.roles = [];
+  for(let i=0;i<spyState.players;i++) spyState.roles.push(i===spyIdx?'spy':'town');
+  spyState.revealIndex = 0;
+  spyState.phase = 'pass';
+  renderSpy();
+}
+function spyReveal(){ spyState.phase='reveal'; renderSpy() }
+function spyNextReveal(){
+  spyState.revealIndex++;
+  if(spyState.revealIndex >= spyState.players){
+    spyState.phase = 'game';
+    spyState.timerStart = Date.now();
+    spyStartTimer();
+  } else {
+    spyState.phase = 'pass';
+  }
+  renderSpy();
+}
+function spyStartTimer(){
+  spyStopTimer();
+  spyState.timerId = setInterval(()=>{
+    if(spyState.phase !== 'game'){ spyStopTimer(); return; }
+    const elapsed = Math.floor((Date.now()-spyState.timerStart)/1000);
+    const remaining = Math.max(0, spyState.timerSeconds - elapsed);
+    const el = $('spyTimer');
+    if(el){
+      const mm = Math.floor(remaining/60), ss = remaining%60;
+      el.textContent = mm+':'+String(ss).padStart(2,'0');
+      el.classList.toggle('warning', remaining < 60);
+    }
+    if(remaining <= 0){ spyStopTimer(); toast('Время вышло'); }
+  }, 250);
+}
+function spyStopTimer(){
+  if(spyState.timerId){ clearInterval(spyState.timerId); spyState.timerId=null; }
+}
+function spyEndRound(winner){
+  spyStopTimer();
+  const spyWon = winner === 'spy';
+  let text = spyWon
+    ? `Шпион победил! Локация была: ${spyState.location}`
+    : `Город победил! Шпион был: игрок ${spyState.spyIndex+1}. Локация: ${spyState.location}`;
+  confirmAction(spyWon?'Шпион победил':'Город победил', text, ()=>{
+    spyState.phase='setup';
+    renderSpy();
+  });
+}
+function spyShowMenu(){
+  const s = shuffle(LOCATIONS).slice(0,12);
+  $('spyContent').innerHTML = `
+    <div class="center-wrap" style="justify-content:flex-start;padding-top:20px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px;align-self:flex-start">Возможные локации</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;align-self:flex-start">Одна из них — реальная, остальные — для отвода глаз</div>
+      <div class="location-grid" style="width:100%">
+        ${s.map(l=>`<div class="location-item">${esc(l)}</div>`).join('')}
+      </div>
+      <button class="btn" onclick="renderSpy()" style="margin-top:20px;max-width:300px">Вернуться к игре</button>
+    </div>
+  `;
+}
+
+/* =========================================================
+   БУНКЕР
+========================================================= */
+const bunkerState = { players: 5, catastrophe: '', hands: [], revealIndex: 0, phase: 'setup' };
+
+function bunkerOpen(){ show('bunkerScreen'); bunkerState.phase='setup'; renderBunker() }
+function bunkerBack(){
+  if(bunkerState.phase==='setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{ bunkerState.phase='setup'; show('menuScreen') });
+}
+function renderBunker(){
+  const c = $('bunkerContent');
+  if(bunkerState.phase==='setup'){
+    c.innerHTML = `
+      <div class="card-box">
+        <div class="stepper" style="background:transparent;padding:0">
+          <div class="stepper-label">Игроков</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="bunkerChangePlayers(-1)">−</button>
+            <div class="stepper-value">${bunkerState.players}</div>
+            <button class="stepper-btn" onclick="bunkerChangePlayers(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>Правила</h3>
+        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
+          Случилась катастрофа. Есть бункер, но мест в нём меньше, чем людей.<br><br>
+          У каждого — набор характеристик: профессия, здоровье, хобби, фобия, багаж и особый факт.<br><br>
+          По очереди раскрывайте свои характеристики и доказывайте, что именно вы нужны бункеру. В конце голосуйте — кто попадёт внутрь.
+        </div>
+      </div>
+      <button class="btn" onclick="bunkerStart()">Начать игру</button>
+    `;
+  }
+  else if(bunkerState.phase==='pass'){
+    const i = bunkerState.revealIndex;
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="width:70px;height:70px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff">${i+1}</div>
+        <div style="font-size:19px;font-weight:700;margin-top:16px">Игрок ${i+1} из ${bunkerState.players}</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Возьми телефон. Посмотри свои характеристики и запомни их (или запиши).</div>
+        <button class="btn" onclick="bunkerShowHand()" style="margin-top:24px;max-width:280px">Показать характеристики</button>
+      </div>
+    `;
+  }
+  else if(bunkerState.phase==='hand'){
+    const i = bunkerState.revealIndex;
+    const hand = bunkerState.hands[i];
+    const cat = bunkerState.catastrophe;
+    c.innerHTML = `
+      <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
+        <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
+        <div style="font-size:15px;font-weight:600">${esc(cat)}</div>
+      </div>
+      <div class="card-box">
+        <h3>Игрок ${i+1}</h3>
+        ${['profession','health','hobby','phobia','luggage','fact'].map(k=>{
+          const def = BUNKER[k];
+          return `<div class="stat-row">
+            <div class="stat-icon">${def.icon}</div>
+            <div class="stat-body">
+              <div class="stat-label">${def.label}</div>
+              <div class="stat-value">${esc(hand[k])}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <button class="btn" onclick="bunkerNextHand()">${bunkerState.revealIndex===bunkerState.players-1?'Начать обсуждение':'Запомнил, следующий'}</button>
+    `;
+  }
+  else if(bunkerState.phase==='discuss'){
+    c.innerHTML = `
+      <div class="card-box" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">
+        <div style="font-size:11px;color:var(--red);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px">Катастрофа</div>
+        <div style="font-size:15px;font-weight:600">${esc(bunkerState.catastrophe)}</div>
+      </div>
+      <div class="card-box">
+        <h3>Обсуждение</h3>
+        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
+          По очереди раскрывайте характеристики. Аргументируйте, почему именно вы нужны в бункере. Можно врать, умалчивать, хитрить.<br><br>
+          Когда закончите — голосуйте. Кто не попадёт — останется снаружи.
+        </div>
+      </div>
+      <button class="btn btn-sec" onclick="bunkerRestart()">Новая партия</button>
+    `;
+  }
+}
+function bunkerChangePlayers(d){
+  const n = bunkerState.players + d;
+  if(n < 3 || n > 12) return;
+  bunkerState.players = n;
+  renderBunker();
+}
+function bunkerStart(){
+  bunkerState.catastrophe = pick(BUNKER_CATASTROPHES);
+  bunkerState.hands = [];
+  for(let i=0;i<bunkerState.players;i++){
+    bunkerState.hands.push({
+      profession: pick(BUNKER.profession.items),
+      health: pick(BUNKER.health.items),
+      hobby: pick(BUNKER.hobby.items),
+      phobia: pick(BUNKER.phobia.items),
+      luggage: pick(BUNKER.luggage.items),
+      fact: pick(BUNKER.fact.items)
+    });
+  }
+  bunkerState.revealIndex = 0;
+  bunkerState.phase = 'pass';
+  renderBunker();
+}
+function bunkerShowHand(){ bunkerState.phase='hand'; renderBunker() }
+function bunkerNextHand(){
+  bunkerState.revealIndex++;
+  if(bunkerState.revealIndex >= bunkerState.players){
+    bunkerState.phase = 'discuss';
+  } else {
+    bunkerState.phase = 'pass';
+  }
+  renderBunker();
+}
+function bunkerRestart(){
+  bunkerState.phase = 'setup';
+  renderBunker();
+}
+
+/* =========================================================
+   КТО БЫСТРЕЕ
+========================================================= */
+const fasterState = { players: 3, names: [], scores: [], current: 0, taskIndex: 0, phase: 'setup', tasks: [], timerId: null, timerStart: 0, timerSeconds: 30, tasksPerPlayer: 3, completed: 0 };
+
+function fasterOpen(){ show('fasterScreen'); fasterState.phase='setup'; renderFaster() }
+function fasterBack(){
+  if(fasterState.phase==='setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','Текущая партия будет потеряна.',()=>{ fasterStopTimer(); fasterState.phase='setup'; show('menuScreen') });
+}
+function renderFaster(){
+  const c = $('fasterContent');
+  if(fasterState.phase==='setup'){
+    c.innerHTML = `
+      <div class="card-box">
+        <div class="stepper" style="background:transparent;padding:0;margin-bottom:8px">
+          <div class="stepper-label">Игроков</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="fasterChangePlayers(-1)">−</button>
+            <div class="stepper-value">${fasterState.players}</div>
+            <button class="stepper-btn" onclick="fasterChangePlayers(1)">+</button>
+          </div>
+        </div>
+        <div class="stepper" style="background:transparent;padding:0">
+          <div class="stepper-label">Заданий на игрока</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="fasterChangeTasks(-1)">−</button>
+            <div class="stepper-value">${fasterState.tasksPerPlayer}</div>
+            <button class="stepper-btn" onclick="fasterChangeTasks(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>Как играть</h3>
+        <div style="font-size:14px;line-height:1.6;color:var(--text2)">
+          Игроки ходят по кругу. Каждый получает задание и 30 секунд на его выполнение.<br><br>
+          Успел — очко. Не успел — минус очко. Побеждает тот, кто наберёт больше всех.
+        </div>
+      </div>
+      <button class="btn" onclick="fasterStart()">Начать игру</button>
+    `;
+  }
+  else if(fasterState.phase==='pass'){
+    const i = fasterState.current;
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="width:70px;height:70px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff">${i+1}</div>
+        <div style="font-size:19px;font-weight:700;margin-top:16px">Ход игрока ${i+1}</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Очки: ${fasterState.scores[i]}. Заданий осталось: ${fasterState.tasksPerPlayer - fasterState.completed}</div>
+        <button class="btn" onclick="fasterShowTask()" style="margin-top:24px;max-width:280px">Показать задание</button>
+      </div>
+    `;
+  }
+  else if(fasterState.phase==='task'){
+    const task = fasterState.tasks[fasterState.taskIndex];
+    const elapsed = Math.floor((Date.now()-fasterState.timerStart)/1000);
+    const remaining = Math.max(0, fasterState.timerSeconds - elapsed);
+    const warn = remaining < 10;
+    c.innerHTML = `
+      <div class="game-card">
+        <div class="game-card-label">Задание</div>
+        <div class="game-card-value" style="font-size:20px">${esc(task)}</div>
+      </div>
+      <div class="game-card" style="min-height:120px">
+        <div class="game-card-label">Осталось</div>
+        <div class="timer-big ${warn?'warning':''}" id="fasterTimer">${remaining}</div>
+      </div>
+      <div class="row">
+        <button class="btn btn-green" onclick="fasterFinish(true)" style="margin-bottom:0">Успел</button>
+        <button class="btn btn-red" onclick="fasterFinish(false)" style="margin-bottom:0">Не успел</button>
+      </div>
+    `;
+  }
+  else if(fasterState.phase==='between'){
+    const i = fasterState.current;
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="font-size:56px;font-weight:800;color:${fasterState.scores[i]>=0?'var(--green)':'var(--red)'}">${fasterState.scores[i] >= 0 ? '+' : ''}${fasterState.scores[i]}</div>
+        <div style="font-size:17px;font-weight:700;margin-top:8px">Игрок ${i+1}</div>
+        <div style="color:var(--text2);font-size:14px;margin-top:6px">Текущий счёт</div>
+        <button class="btn" onclick="fasterAdvance()" style="margin-top:20px;max-width:280px">Дальше</button>
+      </div>
+    `;
+  }
+  else if(fasterState.phase==='done'){
+    const sorted = fasterState.scores.map((s,i)=>({i, s})).sort((a,b)=>b.s-a.s);
+    const medal = ['1', '2', '3'];
+    c.innerHTML = `
+      <div style="font-size:17px;font-weight:700;margin-bottom:14px;text-align:center">Итоги</div>
+      ${sorted.map((x, idx)=>`
+        <div class="player-row">
+          <div class="player-num" style="background:${idx===0?'var(--green)':'var(--bg3)'}">${idx+1}</div>
+          <div class="player-name">Игрок ${x.i+1}${idx===0?' — победитель':''}</div>
+          <div class="player-score">${x.s}</div>
+        </div>
+      `).join('')}
+      <button class="btn" onclick="fasterRestart()" style="margin-top:14px">Новая игра</button>
+      <button class="btn btn-sec" onclick="show('menuScreen')">В меню</button>
+    `;
+  }
+}
+function fasterChangePlayers(d){
+  const n = fasterState.players + d;
+  if(n < 2 || n > 8) return;
+  fasterState.players = n;
+  renderFaster();
+}
+function fasterChangeTasks(d){
+  const n = fasterState.tasksPerPlayer + d;
+  if(n < 1 || n > 10) return;
+  fasterState.tasksPerPlayer = n;
+  renderFaster();
+}
+function fasterStart(){
+  fasterState.scores = new Array(fasterState.players).fill(0);
+  fasterState.current = 0;
+  fasterState.completed = 0;
+  fasterState.tasks = shuffle(FASTER_TASKS);
+  fasterState.taskIndex = 0;
+  fasterState.phase = 'pass';
+  renderFaster();
+}
+function fasterShowTask(){
+  if(fasterState.taskIndex >= fasterState.tasks.length) fasterState.tasks = shuffle(FASTER_TASKS);
+  fasterState.timerStart = Date.now();
+  fasterState.phase = 'task';
+  renderFaster();
+  fasterStartTimer();
+}
+function fasterStartTimer(){
+  fasterStopTimer();
+  fasterState.timerId = setInterval(()=>{
+    if(fasterState.phase !== 'task'){ fasterStopTimer(); return; }
+    const elapsed = Math.floor((Date.now()-fasterState.timerStart)/1000);
+    const remaining = Math.max(0, fasterState.timerSeconds - elapsed);
+    const el = $('fasterTimer');
+    if(el){
+      el.textContent = remaining;
+      el.classList.toggle('warning', remaining < 10);
+    }
+    if(remaining <= 0){
+      fasterStopTimer();
+      fasterFinish(false);
+    }
+  }, 200);
+}
+function fasterStopTimer(){
+  if(fasterState.timerId){ clearInterval(fasterState.timerId); fasterState.timerId=null; }
+}
+function fasterFinish(success){
+  fasterStopTimer();
+  const i = fasterState.current;
+  if(success) fasterState.scores[i]++; else fasterState.scores[i]--;
+  fasterState.completed++;
+  fasterState.taskIndex++;
+  fasterState.phase = 'between';
+  renderFaster();
+}
+function fasterAdvance(){
+  const i = fasterState.current;
+  if(fasterState.completed >= fasterState.tasksPerPlayer){
+    // Ход переходит следующему
+    fasterState.completed = 0;
+    fasterState.current++;
+    if(fasterState.current >= fasterState.players){
+      fasterState.phase = 'done';
+      renderFaster();
+      return;
+    }
+  }
+  fasterState.phase = 'pass';
+  renderFaster();
+}
+function fasterRestart(){
+  fasterState.phase = 'setup';
+  renderFaster();
+}
+
+/* =========================================================
+   ИСТОРИИ ПО КРУГУ
+========================================================= */
+const storyState = { players: 4, sentencesPerPlayer: 1, lines: [], current: 0, phase: 'setup', mode: 'random' };
+
+function storyOpen(){ show('storyScreen'); storyState.phase='setup'; renderStory() }
+function storyBack(){
+  if(storyState.phase==='setup'){ show('menuScreen'); return; }
+  confirmAction('Выйти из игры?','История будет потеряна.',()=>{ storyState.phase='setup'; show('menuScreen') });
+}
+function renderStory(){
+  const c = $('storyContent');
+  if(storyState.phase==='setup'){
+    c.innerHTML = `
+      <div class="card-box">
+        <div class="stepper" style="background:transparent;padding:0;margin-bottom:8px">
+          <div class="stepper-label">Игроков</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="storyChangePlayers(-1)">−</button>
+            <div class="stepper-value">${storyState.players}</div>
+            <button class="stepper-btn" onclick="storyChangePlayers(1)">+</button>
+          </div>
+        </div>
+        <div class="stepper" style="background:transparent;padding:0">
+          <div class="stepper-label">Фраз на игрока</div>
+          <div class="stepper-controls">
+            <button class="stepper-btn" onclick="storyChangeSentences(-1)">−</button>
+            <div class="stepper-value">${storyState.sentencesPerPlayer}</div>
+            <button class="stepper-btn" onclick="storyChangeSentences(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>Режим</h3>
+        <div style="display:flex;gap:8px">
+          <button class="btn ${storyState.mode==='random'?'':'btn-sec'}" style="margin-bottom:0" onclick="storySetMode('random')">Вслепую</button>
+          <button class="btn ${storyState.mode==='continue'?'':'btn-sec'}" style="margin-bottom:0" onclick="storySetMode('continue')">Продолжение</button>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-top:10px;line-height:1.5">
+          ${storyState.mode==='random'
+            ? 'Каждый пишет фразу, не видя предыдущих. В конце получится абсурдная история.'
+            : 'Каждый видит последнюю фразу и продолжает её. История будет связной, но неожиданной.'}
+        </div>
+      </div>
+      <button class="btn" onclick="storyStart()">Начать</button>
+    `;
+  }
+  else if(storyState.phase==='pass'){
+    const total = storyState.players * storyState.sentencesPerPlayer;
+    const done = storyState.current;
+    c.innerHTML = `
+      <div class="center-wrap">
+        <div style="width:70px;height:70px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff">${done+1}</div>
+        <div style="font-size:19px;font-weight:700;margin-top:16px">Ход ${done+1} из ${total}</div>
+        <div style="color:var(--text2);font-size:14px;max-width:280px;line-height:1.5;margin-top:8px">Передай телефон следующему. Он не должен видеть того, что было раньше.</div>
+        <button class="btn" onclick="storyWriteStart()" style="margin-top:24px;max-width:280px">Я готов</button>
+      </div>
+    `;
+  }
+  else if(storyState.phase==='write'){
+    const lastLine = storyState.lines.length > 0 ? storyState.lines[storyState.lines.length-1] : null;
+    const showLast = storyState.mode === 'continue' && lastLine;
+    c.innerHTML = `
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Ход ${storyState.current+1}</div>
+      ${showLast ? `<div class="card-box"><h3>Предыдущая фраза</h3><div style="font-size:15px;line-height:1.5">${esc(lastLine)}</div></div>` : ''}
+      <textarea class="story-input" id="storyInput" placeholder="${storyState.mode==='continue'?'Продолжи историю одним предложением...':'Напиши одно предложение...'}" autocomplete="off"></textarea>
+      <button class="btn" onclick="storySaveLine()" style="margin-top:14px">Готово</button>
+    `;
+    setTimeout(()=>{ const el = $('storyInput'); if(el) el.focus(); }, 100);
+  }
+  else if(storyState.phase==='result'){
+    c.innerHTML = `
+      <div style="font-size:17px;font-weight:700;margin-bottom:14px;text-align:center">История</div>
+      <div class="story-preview">
+        ${storyState.lines.map((l, i)=>`<div class="story-line"><span class="story-num">${i+1}.</span>${esc(l)}</div>`).join('')}
+      </div>
+      <button class="btn" onclick="storyRestart()">Новая история</button>
+      <button class="btn btn-sec" onclick="show('menuScreen')">В меню</button>
+    `;
+  }
+}
+function storyChangePlayers(d){
+  const n = storyState.players + d;
+  if(n < 3 || n > 10) return;
+  storyState.players = n;
+  renderStory();
+}
+function storyChangeSentences(d){
+  const n = storyState.sentencesPerPlayer + d;
+  if(n < 1 || n > 5) return;
+  storyState.sentencesPerPlayer = n;
+  renderStory();
+}
+function storySetMode(m){ storyState.mode = m; renderStory() }
+function storyStart(){
+  storyState.lines = [];
+  storyState.current = 0;
+  storyState.phase = 'pass';
+  renderStory();
+}
+function storyWriteStart(){
+  storyState.phase = 'write';
+  renderStory();
+}
+function storySaveLine(){
+  const el = $('storyInput');
+  const text = el.value.trim();
+  if(!text){ toast('Напиши что-нибудь'); return; }
+  storyState.lines.push(text);
+  storyState.current++;
+  const total = storyState.players * storyState.sentencesPerPlayer;
+  if(storyState.current >= total){
+    storyState.phase = 'result';
+  } else {
+    storyState.phase = 'pass';
+  }
+  renderStory();
+}
+function storyRestart(){
+  storyState.phase = 'setup';
+  renderStory();
+}
+
+/* =========================================================
+   ИНИЦИАЛИЗАЦИЯ
+========================================================= */
+history.pushState(null, '');
+window.addEventListener('popstate', ()=>{
+  const active = document.querySelector('.screen.active');
+  if(active && active.id !== 'menuScreen'){
+    active.classList.remove('active');
+    $('menuScreen').classList.add('active');
+    history.pushState(null, '');
+  }
+});
+</script>
+</body>
+</html>
