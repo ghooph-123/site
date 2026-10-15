@@ -666,6 +666,7 @@ const spyState = {
 function spyOpen(){
   spyState.timeSeconds = gamesState.spy.timeSeconds;
   spyState.twoSpies = gamesState.spy.twoSpies;
+  if(spyState.players < 4) spyState.twoSpies = false;
   show('spyScreen');
   spyState.phase = 'setup';
   renderSpy();
@@ -794,7 +795,11 @@ function spyChangePlayers(d){
   const n = spyState.players + d;
   if(n < 3 || n > 12) return;
   spyState.players = n;
-  if(n - 2 < 2) spyState.twoSpies = false;
+  if(n - 2 < 2 && spyState.twoSpies){
+    spyState.twoSpies = false;
+    gamesState.spy.twoSpies = false;
+    saveGamesState();
+  }
   renderSpy();
 }
 function spyChangeTime(d){
@@ -815,7 +820,7 @@ function spyToggleTwoSpies(){
 function spyStart(){
   const locs = getLocations();
   spyState.location = pick(locs);
-  const nSpies = spyState.twoSpies ? 2 : 1;
+  const nSpies = (spyState.twoSpies && spyState.players >= 4) ? 2 : 1;
   const allIdx = shuffle(Array.from({length: spyState.players}, (_,i)=>i));
   spyState.spyIndexes = allIdx.slice(0, nSpies);
   spyState.roles = [];
