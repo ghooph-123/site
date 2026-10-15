@@ -518,100 +518,127 @@ async function callLLM(prompt) {
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: 'Отвечай только валидным JSON без пояснений.' },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.5, max_tokens: 4000,
-        response_format: { type: 'json_object' }
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.5, max_tokens: 4000
       })
     });
     if (!r.ok) {
       if (r.status === 401) throw new Error('Неверный Groq-ключ');
-      if (r.status === 429) throw new Error('Слишком много запросов, подожди');
+      if (r.status === 429) throw new Error('Лимит Groq, подожди');
       throw new Error('Groq: ' + r.status);
     }
     const data = await r.json();
     return data.choices[0].message.content;
   }
 
-  // Pollinations: POST
-  let lastErr = null;
+  // Сервис 1: Hack Club AI
+  try {
+    const r = await fetch('https://ai.hackclub.com/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.5
+      })
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const c = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if (c && c.length > 50) return c;
+    }
+  } catch (e) {}
+
+  // Сервис 2: Pollinations POST
   try {
     const r = await fetch('https://text.pollinations.ai/openai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'openai',
-        messages: [
-          { role: 'system', content: 'Отвечай только валидным JSON без пояснений.' },
-          { role: 'user', content: prompt }
-        ]
+        messages: [{ role: 'user', content: prompt }]
       })
     });
     if (r.ok) {
       const data = await r.json();
-      const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-      if (content) return content;
+      const c = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if (c) return c;
     }
-  } catch (e) { lastErr = e; }
+  } catch (e) {}
 
-  // Fallback: GET с простым промптом
-  try {
-    const shortPrompt = prompt.length > 1500 ? prompt.slice(0, 1500) : prompt;
-    const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(shortPrompt) + '?model=openai&json=true');
-    if (r.ok) {
-      const text = await r.text();
-      if (text && text.length > 10) return text;
-    }
-  } catch (e) { lastErr = e; }
-
-  throw new Error('Сервис не отвечает. Попробуй ещё раз или добавь Groq-ключ через VPN.');
+  throw new Error('Все сервисы недоступны. Попробуй позже или добавь Groq-ключ.');
 }
-function parseJSONResponse(text) {
-  if (!text) return null;
-  text = String(text).trim();
-  text = text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+function parseCardsFromText(text) {
+  if (!text) return [];
+  const cards = [];
+  const seen = new Set();
 
-  // Пробуем прямой JSON
-  try { return JSON.parse(text); } catch (e) {}
+  const push = (q, a, hint, explain) => {
+    q = String(q || '').trim().replace(/^["'\-•\d.\s]+/, '').replace(/["']+$/, '').trim();
+    a = String(a || '').trim().replace(/^["'\-]+/, '').replace(/["']+$/, '').trim();
+    hint = String(hint || '').trim().replace(/^["']+/, '').replace(/["']+$/, '').trim();
+    explain = String(explain || '').trim().replace(/^["']+/, '').replace(/["']+$/, '').trim();
+    if (!q || !a) return;
+    if (q.length < 4 || a.length < 1) return;
+    if (q.length > 200 || a.length > 500) return;
+    const key = q.toLowerCase().slice(0, 60);
+    if (seen.has(key)) return;
+    seen.add(key);
+    cards.push({ q, a, hint, explain });
+  };
 
-  // Ищем первый { или [ и парсим оттуда
-  const firstBrace = text.search(/[\{\[]/);
+  // Формат 1: Вопрос ||| Ответ ||| Подсказка ||| Объяснение
+  const lines = text.split(/\r?\n/);
+  for (const line of lines) {
+    if (line.indexOf('|||') === -1) continue;
+    const parts = line.split('|||').map(s => s.trim());
+    if (parts.length >= 2) push(parts[0], parts[1], parts[2] || '', parts[3] || '');
+  }
+  if (cards.length >= 3) return cards;
+
+  // Формат 2: JSON где-то внутри
+  let jsonText = text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '');
+  const firstBrace = jsonText.search(/[\{\[]/);
   if (firstBrace >= 0) {
-    const candidate = text.slice(firstBrace);
-    try { return JSON.parse(candidate); } catch (e) {}
-    // Пробуем найти сбалансированные скобки
-    const firstChar = candidate[0];
-    const lastChar = firstChar === '{' ? '}' : ']';
-    const lastIdx = candidate.lastIndexOf(lastChar);
-    if (lastIdx > 0) {
-      try { return JSON.parse(candidate.slice(0, lastIdx + 1)); } catch (e) {}
+    jsonText = jsonText.slice(firstBrace);
+    const lastBrace = Math.max(jsonText.lastIndexOf('}'), jsonText.lastIndexOf(']'));
+    if (lastBrace > 0) {
+      try {
+        const parsed = JSON.parse(jsonText.slice(0, lastBrace + 1));
+        let arr = [];
+        if (Array.isArray(parsed)) arr = parsed;
+        else if (Array.isArray(parsed.cards)) arr = parsed.cards;
+        else if (Array.isArray(parsed.questions)) arr = parsed.questions;
+        else if (Array.isArray(parsed.items)) arr = parsed.items;
+        else if (Array.isArray(parsed.data)) arr = parsed.data;
+        arr.forEach(c => {
+          if (typeof c === 'string') return;
+          push(
+            c.q || c.question || c.вопрос || c.Q,
+            c.a || c.answer || c.ответ || c.A,
+            c.hint || c.подсказка,
+            c.explain || c.explanation || c.объяснение
+          );
+        });
+        if (cards.length >= 3) return cards;
+      } catch (e) {}
     }
   }
 
-  // Пробуем вытащить массив объектов карточек регуляркой
-  const cards = [];
-  const re = /\{\s*"q"\s*:\s*"([^"]*(?:\\.[^"]*)*)"\s*,\s*"a"\s*:\s*"([^"]*(?:\\.[^"]*)*)"[^}]*\}/g;
+  // Формат 3: "Q: ... A: ..." или "Вопрос: ... Ответ: ..." в свободном тексте
+  const re = /(?:^|\n)\s*(?:Q|Вопрос|\d+[\.\)])\s*[:.\-]?\s*["«]?([^"»\n]{4,200})["»]?\s*(?:A|Ответ|Answer)\s*[:.\-]?\s*["«]?([^"»\n]{1,500})["»]?/gim;
   let m;
-  while ((m = re.exec(text)) !== null) {
-    cards.push({ q: m[1], a: m[2] });
-  }
-  if (cards.length > 0) return { cards };
+  while ((m = re.exec(text)) !== null) push(m[1], m[2], '', '');
+  if (cards.length >= 3) return cards;
 
-  // Ищем строки вида "Вопрос: ... Ответ: ..."
-  const lines = text.split(/\n+/);
-  const pairs = [];
-  let curQ = null;
-  for (const line of lines) {
-    const qm = line.match(/^(?:Вопрос|Q|Q\d+|\d+\.)\s*[:.\-]?\s*(.+)/i);
-    const am = line.match(/^(?:Ответ|A|A\d+)\s*[:.\-]?\s*(.+)/i);
-    if (qm) { curQ = qm[1].trim(); continue; }
-    if (am && curQ) { pairs.push({ q: curQ, a: am[1].trim() }); curQ = null; }
+  // Формат 4: строки "вопрос - ответ"
+  if (cards.length === 0) {
+    for (const line of lines) {
+      const m2 = line.match(/^(.{10,150})\s*[—–\-]\s*(.{2,300})$/);
+      if (m2) push(m2[1], m2[2], '', '');
+    }
   }
-  if (pairs.length > 0) return { cards: pairs };
 
-  return null;
+  return cards;
 }
 async function generateTopic() {
   const topic = document.getElementById('topicInput').value.trim();
@@ -622,45 +649,97 @@ async function generateTopic() {
   const hasKey = !!(state.stats.groqKey || '').trim();
   document.getElementById('topicLoadingText').textContent = hasKey ? 'Генерирую через Groq...' : 'Генерирую (10-20 сек)...';
 
-  const prompt = `Ты — помощник для создания учебных флеш-карточек. По теме "${topic}" составь 20 карточек.
+  const prompt = `Составь 20 учебных карточек по теме "${topic}".
 
-Верни JSON объект строго такого вида:
-{"cards":[{"q":"вопрос","a":"ответ","hint":"","explain":""},...]}
+ФОРМАТ ОТВЕТА — строго одна карточка на строку, поля через разделитель ||| :
 
-Требования:
-- Вопросы конкретные: даты, имена, события, цифры, термины, причины
-- Ответы 1 предложение, максимум 2
-- hint — короткая подсказка или пустая строка
-- explain — 1 предложение "почему так", или пустая строка
-- Никаких общих вопросов типа "Что такое ${topic}?"
-- Ответ должен быть ТОЛЬКО JSON, без слов до и после`;
+Вопрос ||| Ответ ||| Подсказка ||| Объяснение
+Вопрос ||| Ответ ||| Подсказка ||| Объяснение
+
+Правила:
+- Ровно 20 строк, каждая через |||
+- Вопрос конкретный: дата, имя, событие, термин, цифра, причина
+- Ответ — 1 предложение, максимум 2
+- Подсказка — короткая, или оставь пустой кусок между |||
+- Объяснение — 1 предложение "почему так", или пусто
+- Никакого текста до, после или между строк
+- Никаких заголовков, пояснений, markdown, рассуждений
+
+ПРИМЕР:
+В каком году началась Вторая мировая война? ||| В 1939 году ||| Это дата ||| Германия напала на Польшу 1 сентября
+Кто был главой СССР в 1941? ||| Иосиф Сталин ||| Фамилия ||| Сталин руководил страной с 1924 по 1953
+
+Теперь составь 20 карточек по теме "${topic}". Только строки с |||, ничего больше.`;
 
   try {
     const response = await callLLM(prompt);
-    console.log('LLM raw:', response);
-    const parsed = parseJSONResponse(response);
-    if (!parsed) {
-      console.log('Не распарсилось. Первые 500:', String(response).slice(0, 500));
-      throw new Error('ИИ вернул не JSON. Попробуй ещё раз или смени тему');
+    console.log('RAW:', response);
+    const cards = parseCardsFromText(response);
+    console.log('PARSED:', cards.length, cards);
+
+    if (cards.length === 0) {
+      throw new Error('ИИ вернул непонятный формат. Попробуй ещё раз.');
     }
-    let cards = [];
-    if (Array.isArray(parsed)) cards = parsed;
-    else if (Array.isArray(parsed.cards)) cards = parsed.cards;
-    else if (Array.isArray(parsed.questions)) cards = parsed.questions;
-    else if (Array.isArray(parsed.items)) cards = parsed.items;
-    else if (Array.isArray(parsed.data)) cards = parsed.data;
+    if (cards.length < 3) {
+      throw new Error('Слишком мало карточек (' + cards.length + '). Попробуй другую тему.');
+    }
 
-    cards = cards.map(c => {
-      if (typeof c === 'string') return { q: c, a: '', hint: '', explain: '' };
-      return {
-        q: String(c.q || c.question || c.вопрос || c.Q || '').trim(),
-        a: String(c.a || c.answer || c.ответ || c.A || '').trim(),
-        hint: String(c.hint || c.подсказка || '').trim(),
-        explain: String(c.explain || c.explanation || c.объяснение || '').trim()
-      };
-    }).filter(c => c.q && c.a);
+    topicCards = cards.map(c => ({ q: c.q, a: c.a, hint: c.hint, explain: c.explain, selected: true }));
+    document.getElementById('topicDeckName').value = topic;
+    document.getElementById('topicCount').textContent = cards.length;
+    renderTopicPreview();
+    document.getElementById('topicLoading').style.display = 'none';
+    document.getElementById('topicStep2').style.display = 'block';
+  } catch (e) {
+    document.getElementById('topicLoading').style.display = 'none';
+    document.getElementById('topicError').style.display = 'block';
+    document.getElementById('topicError').textContent = e.message || 'Ошибка';
+    document.getElementById('topicStep1').style.display = 'block';
+  }
+}async function generateTopic() {
+  const topic = document.getElementById('topicInput').value.trim();
+  if (!topic) { toast('Введи тему'); return; }
+  document.getElementById('topicStep1').style.display = 'none';
+  document.getElementById('topicError').style.display = 'none';
+  document.getElementById('topicLoading').style.display = 'block';
+  const hasKey = !!(state.stats.groqKey || '').trim();
+  document.getElementById('topicLoadingText').textContent = hasKey ? 'Генерирую через Groq...' : 'Генерирую (10-20 сек)...';
 
-    if (cards.length === 0) throw new Error('ИИ не дал карточек. Попробуй переформулировать тему');
+  const prompt = `Составь 20 учебных карточек по теме "${topic}".
+
+ФОРМАТ ОТВЕТА — строго одна карточка на строку, поля через разделитель ||| :
+
+Вопрос ||| Ответ ||| Подсказка ||| Объяснение
+Вопрос ||| Ответ ||| Подсказка ||| Объяснение
+
+Правила:
+- Ровно 20 строк, каждая через |||
+- Вопрос конкретный: дата, имя, событие, термин, цифра, причина
+- Ответ — 1 предложение, максимум 2
+- Подсказка — короткая, или оставь пустой кусок между |||
+- Объяснение — 1 предложение "почему так", или пусто
+- Никакого текста до, после или между строк
+- Никаких заголовков, пояснений, markdown, рассуждений
+
+ПРИМЕР:
+В каком году началась Вторая мировая война? ||| В 1939 году ||| Это дата ||| Германия напала на Польшу 1 сентября
+Кто был главой СССР в 1941? ||| Иосиф Сталин ||| Фамилия ||| Сталин руководил страной с 1924 по 1953
+
+Теперь составь 20 карточек по теме "${topic}". Только строки с |||, ничего больше.`;
+
+  try {
+    const response = await callLLM(prompt);
+    console.log('RAW:', response);
+    const cards = parseCardsFromText(response);
+    console.log('PARSED:', cards.length, cards);
+
+    if (cards.length === 0) {
+      throw new Error('ИИ вернул непонятный формат. Попробуй ещё раз.');
+    }
+    if (cards.length < 3) {
+      throw new Error('Слишком мало карточек (' + cards.length + '). Попробуй другую тему.');
+    }
+
     topicCards = cards.map(c => ({ q: c.q, a: c.a, hint: c.hint, explain: c.explain, selected: true }));
     document.getElementById('topicDeckName').value = topic;
     document.getElementById('topicCount').textContent = cards.length;
