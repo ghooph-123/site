@@ -522,19 +522,30 @@ async function callLLM(prompt) {
         temperature: 0.5, max_tokens: 4000
       })
     });
-    if (!r.ok) throw new Error('Groq: ' + r.status);
+    if (!r.ok) {
+      if (r.status === 401) throw new Error('Неверный Groq-ключ');
+      if (r.status === 429) throw new Error('Лимит Groq, подожди');
+      throw new Error('Groq: ' + r.status);
+    }
     const data = await r.json();
     return data.choices[0].message.content;
   }
 
-  // Pollinations GET, mistral — не reasoning-модель, отдаёт чистый текст
-  const shortPrompt = prompt.length > 3000 ? prompt.slice(0, 3000) : prompt;
-  const url = 'https://text.pollinations.ai/' + encodeURIComponent(shortPrompt) + '?model=mistral&seed=' + Date.now();
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('Pollinations: ' + r.status);
-  const text = await r.text();
-  if (!text || text.length < 30) throw new Error('Пустой ответ');
-  return text;
+  // KeylessAI — прокси ко множеству бесплатных API, работает из браузера
+  const r = await fetch('https://keylessai.thryx.workers.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.5
+    })
+  });
+  if (!r.ok) throw new Error('Сервис недоступен (' + r.status + '), попробуй позже');
+  const data = await r.json();
+  const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+  if (!content) throw new Error('Пустой ответ');
+  return content;
 }
 function parseCardsFromText(text) {
   if (!text) return [];
