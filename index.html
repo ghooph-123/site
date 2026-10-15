@@ -134,6 +134,63 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   .content{max-width:600px;margin:0 auto;width:100%}
   .center-wrap{max-width:600px;margin:0 auto;width:100%}
 }
+
+/* ===== CLICKER ===== */
+.ach{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border-radius:12px;margin-bottom:6px;border:1px solid var(--border);opacity:.45}
+.ach.unlocked{opacity:1}
+.ach-icon{width:40px;height:40px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;font-weight:700;color:var(--text2)}
+.ach.unlocked .ach-icon{background:var(--accent);color:#fff}
+.ach-info{flex:1;overflow:hidden}
+.ach-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.ach-desc{font-size:12px;color:var(--text2)}
+.clicker-top{padding:20px 20px 0;text-align:center;flex-shrink:0}
+.clicker-count{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;transition:color .15s}
+.clicker-count.combo-hot{color:#fbbf24}
+.clicker-star-icon{color:#fbbf24;font-size:32px;vertical-align:middle;margin-left:4px}
+.clicker-rate{font-size:14px;color:var(--text2);margin-top:6px;font-weight:600}
+.clicker-tap-hint{font-size:12px;color:var(--text3);margin-top:2px}
+.clicker-combo{display:none;margin-top:8px;padding:4px 12px;background:linear-gradient(90deg,#fbbf24,#f59e0b);border-radius:20px;font-size:13px;font-weight:800;color:#1a1a1a;align-self:center;box-shadow:0 0 20px rgba(251,191,36,.5);animation:comboPulse .5s ease-in-out infinite alternate}
+.clicker-combo.show{display:inline-block}
+@keyframes comboPulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+.clicker-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:260px;overflow:hidden;touch-action:none}
+.clicker-orb{position:relative;width:170px;height:170px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .08s;touch-action:none}
+.clicker-orb.pressed{transform:scale(.94)}
+.clicker-orb-core{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:68px;color:#fbbf24;border-radius:50%;z-index:2;text-shadow:0 0 20px rgba(251,191,36,.8);transition:background .4s,box-shadow .4s}
+.orb-skin-star{background:radial-gradient(circle at 35% 30%,#a78bfa,#7c5cff 60%,#5b3fd1);box-shadow:0 0 60px rgba(124,92,255,.6),inset 0 -20px 40px rgba(0,0,0,.3),inset 0 20px 30px rgba(255,255,255,.15)}
+.orb-skin-planet{background:radial-gradient(circle at 35% 30%,#67e8f9,#06b6d4 55%,#0e7490);box-shadow:0 0 60px rgba(6,182,212,.6),inset 0 -20px 40px rgba(0,0,0,.35),inset 0 20px 30px rgba(255,255,255,.2);color:#fff}
+.orb-skin-crystal{background:radial-gradient(circle at 30% 25%,#f0abfc,#c026d3 55%,#86198f);box-shadow:0 0 60px rgba(192,38,211,.6),inset 0 -20px 40px rgba(0,0,0,.35),inset 0 20px 30px rgba(255,255,255,.25);color:#fff}
+.orb-skin-blackhole{background:radial-gradient(circle at 50% 50%,#000 30%,#1a1a2e 60%,#0f0f1a);box-shadow:0 0 80px rgba(88,28,135,.8),0 0 30px rgba(0,0,0,.9),inset 0 0 40px rgba(255,255,255,.1);color:#a78bfa}
+.orb-skin-goo{background:radial-gradient(circle at 40% 30%,#a3e635,#22c55e 55%,#15803d);box-shadow:0 0 60px rgba(34,197,94,.6),inset 0 -20px 40px rgba(0,0,0,.3),inset 0 20px 30px rgba(255,255,255,.2);color:#fff;animation:gooWobble 3s ease-in-out infinite}
+@keyframes gooWobble{0%,100%{border-radius:50% 50% 50% 50%}50%{border-radius:56% 44% 48% 52%}}
+.clicker-orb-ring{position:absolute;inset:-12px;border:2px solid rgba(124,92,255,.4);border-radius:50%;animation:orbPulse 2s ease-in-out infinite;pointer-events:none}
+@keyframes orbPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.1);opacity:.15}}
+.clicker-particle{position:absolute;pointer-events:none;font-size:18px;color:#fbbf24;font-weight:700;z-index:5;animation:floatUp 1s ease-out forwards;text-shadow:0 0 8px rgba(251,191,36,.9)}
+@keyframes floatUp{from{opacity:1;transform:translate(-50%,0) scale(1)}to{opacity:0;transform:translate(-50%,-80px) scale(.6)}}
+.clicker-spark{position:absolute;width:8px;height:8px;border-radius:50%;background:#fbbf24;pointer-events:none;z-index:4;box-shadow:0 0 8px #fbbf24;animation:sparkOut .7s ease-out forwards}
+@keyframes sparkOut{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2)}}
+.clicker-golden{position:absolute;font-size:32px;color:#fbbf24;cursor:pointer;z-index:8;text-shadow:0 0 20px #fbbf24,0 0 40px #f59e0b;animation:goldenGlow .5s ease-in-out infinite alternate;pointer-events:auto}
+@keyframes goldenGlow{from{filter:brightness(1)}to{filter:brightness(1.4)}}
+.clicker-section-title{padding:16px 20px 8px;font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:700;flex-shrink:0}
+.clicker-upgrades{padding:0 14px 30px}
+.clicker-upgrade{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.clicker-upgrade:active{transform:scale(.98)}
+.clicker-upgrade.locked{opacity:.35;pointer-events:none}
+.clicker-upgrade.can-buy{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 20px rgba(124,92,255,.2)}
+.clicker-upgrade-icon{width:44px;height:44px;border-radius:12px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.clicker-upgrade-info{flex:1;min-width:0}
+.clicker-upgrade-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.clicker-upgrade-desc{font-size:12px;color:var(--text2)}
+.clicker-upgrade-count{position:absolute;top:8px;right:12px;font-size:11px;font-weight:700;color:var(--accent);background:rgba(124,92,255,.15);padding:2px 8px;border-radius:8px}
+.clicker-upgrade-price{text-align:right;flex-shrink:0}
+.clicker-upgrade-price-val{font-weight:700;font-size:15px;color:#fbbf24;font-variant-numeric:tabular-nums}
+.clicker-upgrade-price-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-top:2px}
+.clicker-actions{display:flex;gap:8px;padding:0 14px 16px;flex-shrink:0}
+.clicker-actions .btn{flex:1;margin:0;padding:10px;font-size:13px}
+.clicker-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px 30px}
+.clicker-stat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.clicker-stat-val{font-size:18px;font-weight:800;color:var(--accent);line-height:1.1}
+.clicker-stat-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-top:4px}
+
 </style>
 </head>
 <body>
@@ -172,6 +229,13 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
           <div class="menu-desc">Каждый пишет по предложению, не видя других. В конце — читаем что получилось</div>
         </div>
       </div>
+      <div class="menu-tile" onclick="clickerOpen()">
+  <div class="menu-icon" style="background:#fbbf24"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9 16 14 18 22 12 17 6 22 8 14 2 9 9 9 12 2"/></svg></div>
+  <div>
+    <div class="menu-name">Звёздная пыль</div>
+    <div class="menu-desc">Тапай, покупай улучшения, лови золотые звёзды, перерождайся</div>
+  </div>
+</div>
     </div>
   </div>
 </div>
@@ -268,6 +332,65 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
       <button class="btn btn-sec" onclick="closeModal('storyEditModal')">Отмена</button>
       <button class="btn" onclick="storySaveEdit()">Сохранить</button>
     </div>
+  </div>
+</div>
+
+<div class="screen" id="clickerScreen">
+  <div class="header">
+    <button class="icon-btn" onclick="clickerBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h1>Звёздная пыль</h1>
+    <button class="icon-btn" onclick="clickerShowSkins()" aria-label="Скины"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></button>
+  </div>
+  <div class="content" style="display:flex;flex-direction:column;padding:0">
+    <div class="clicker-top">
+      <div class="clicker-count" id="clickerStars">0<span class="clicker-star-icon">★</span></div>
+      <div class="clicker-rate" id="clickerRate">+0 / сек</div>
+      <div class="clicker-tap-hint" id="clickerTapHint">+1 за тап</div>
+      <div class="clicker-combo" id="clickerCombo">×1</div>
+    </div>
+    <div class="clicker-stage" id="clickerStage">
+      <div class="clicker-orb" id="clickerOrb">
+        <div class="clicker-orb-core orb-skin-star" id="clickerOrbCore">★</div>
+        <div class="clicker-orb-ring"></div>
+      </div>
+    </div>
+    <div class="clicker-actions">
+      <button class="btn btn-sec" onclick="clickerShowStats()">📊 Статистика</button>
+      <button class="btn btn-sec" onclick="clickerShowPrestige()">💎 Престиж</button>
+    </div>
+    <div class="clicker-section-title">Улучшения</div>
+    <div class="clicker-upgrades" id="clickerUpgrades"></div>
+  </div>
+</div>
+
+<div class="modal" id="clickerStatsModal">
+  <div class="modal-inner">
+    <h3>Статистика</h3>
+    <div class="clicker-stats" id="clickerStatsContent"></div>
+    <div class="section-title" style="padding-left:0;padding-right:0">Достижения</div>
+    <div id="clickerAchievements" style="max-height:40vh;overflow-y:auto"></div>
+    <button class="btn btn-sec" onclick="closeModal('clickerStatsModal')" style="margin-top:12px">Закрыть</button>
+  </div>
+</div>
+
+<div class="modal" id="clickerPrestigeModal">
+  <div class="modal-inner">
+    <h3>Престиж</h3>
+    <div class="modal-sub" id="clickerPrestigeText">Обменяй всё на тёмную материю</div>
+    <div style="text-align:center;padding:20px 0" id="clickerPrestigeContent"></div>
+    <div class="confirm-btns">
+      <button class="btn btn-sec" onclick="closeModal('clickerPrestigeModal')">Отмена</button>
+      <button class="btn" id="clickerPrestigeBtn" onclick="clickerDoPrestige()">Престиж</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="clickerSkinsModal">
+  <div class="modal-inner">
+    <h3>Скины</h3>
+    <div class="modal-sub">Открываются за общий доход</div>
+    <div id="clickerSkinsContent"></div>
+    <button class="btn btn-sec" onclick="closeModal('clickerSkinsModal')" style="margin-top:12px">Закрыть</button>
   </div>
 </div>
 
@@ -662,6 +785,561 @@ const spyState = {
   phase: 'setup', timerId: null, timerStart: 0, revealIndex: 0,
   timeSeconds: 480, twoSpies: false, _guessList: []
 };
+
+/* =========================================================
+   КЛИКЕР — ЗВЁЗДНАЯ ПЫЛЬ
+========================================================= */
+const CLICKER_UPGRADES = [
+  { id:'finger',   name:'Ловкий палец',        icon:'👆', desc:'+1 к тапу',        baseCost:15,     type:'click', value:1,   scale:1.15 },
+  { id:'glove',    name:'Перчатка астронавта', icon:'🧤', desc:'+5 к тапу',        baseCost:200,    type:'click', value:5,   scale:1.18 },
+  { id:'chip',     name:'Имплант',             icon:'⚡', desc:'+25 к тапу',       baseCost:3000,   type:'click', value:25,  scale:1.2  },
+  { id:'drone',    name:'Дрон-сборщик',        icon:'🛸', desc:'+1 звезда/сек',    baseCost:50,     type:'auto',  value:1,   scale:1.15 },
+  { id:'sat',      name:'Спутник',             icon:'🛰️', desc:'+5 звёзд/сек',     baseCost:600,    type:'auto',  value:5,   scale:1.17 },
+  { id:'station',  name:'Космостанция',        icon:'🚀', desc:'+30 звёзд/сек',    baseCost:5000,   type:'auto',  value:30,  scale:1.2  },
+  { id:'reactor',  name:'Реактор',             icon:'⚛️', desc:'+200 звёзд/сек',   baseCost:40000,  type:'auto',  value:200, scale:1.22 },
+  { id:'blackhole',name:'Чёрная дыра',         icon:'🕳️', desc:'+2000 звёзд/сек',  baseCost:400000, type:'auto',  value:2000,scale:1.25 },
+  { id:'galaxy',   name:'Галактика',           icon:'🌌', desc:'+20000 звёзд/сек', baseCost:5000000,type:'auto',  value:20000,scale:1.28 }
+];
+
+const CLICKER_ACHIEVEMENTS = [
+  { id:'first',      name:'Первый тап',       desc:'Тапни 1 раз',                check: s => s.totalTaps >= 1 },
+  { id:'taps100',    name:'Сто тапов',        desc:'Тапни 100 раз',              check: s => s.totalTaps >= 100 },
+  { id:'taps10k',    name:'Десять тысяч',     desc:'Тапни 10 000 раз',           check: s => s.totalTaps >= 10000 },
+  { id:'taps100k',   name:'Сто тысяч',        desc:'Тапни 100 000 раз',          check: s => s.totalTaps >= 100000 },
+  { id:'up1',        name:'Первое улучшение', desc:'Купи что-нибудь',            check: s => Object.keys(s.upgrades).length >= 1 },
+  { id:'up10',       name:'Инженер',          desc:'10 апгрейдов',               check: s => Object.values(s.upgrades).reduce((a,b)=>a+b,0) >= 10 },
+  { id:'up50',       name:'Магнат',           desc:'50 апгрейдов',               check: s => Object.values(s.upgrades).reduce((a,b)=>a+b,0) >= 50 },
+  { id:'million',    name:'Миллионер',        desc:'Заработай 1М звёзд',         check: s => (s.lifetimeTotal||0) >= 1e6 },
+  { id:'billion',    name:'Миллиардер',       desc:'Заработай 1В звёзд',         check: s => (s.lifetimeTotal||0) >= 1e9 },
+  { id:'trillion',   name:'Триллионер',       desc:'Заработай 1Т звёзд',         check: s => (s.lifetimeTotal||0) >= 1e12 },
+  { id:'combo50',    name:'В ударе',          desc:'Комбо 50',                   check: s => s.bestCombo >= 50 },
+  { id:'combo100',   name:'Бешеная скорость', desc:'Комбо 100',                  check: s => s.bestCombo >= 100 },
+  { id:'golden',     name:'Охотник',          desc:'Поймай золотую звезду',      check: s => s.goldenCaught >= 1 },
+  { id:'golden10',   name:'Ловец удачи',      desc:'Поймай 10 золотых',          check: s => s.goldenCaught >= 10 },
+  { id:'prestige',   name:'Перерождение',     desc:'Первый престиж',             check: s => s.prestigeCount >= 1 }
+];
+
+const CLICKER_SKINS = [
+  { id:'star',      name:'Звезда',      unlock: 0,        emoji:'★' },
+  { id:'planet',    name:'Планета',     unlock: 1e5,      emoji:'🪐' },
+  { id:'crystal',   name:'Кристалл',    unlock: 1e7,      emoji:'💎' },
+  { id:'blackhole', name:'Чёрная дыра', unlock: 1e10,     emoji:'🕳️' },
+  { id:'goo',       name:'Жижа',        unlock: 1e13,     emoji:'🟢' }
+];
+
+const clickerState = {
+  stars: 0,
+  total: 0,
+  lifetimeTotal: 0,
+  upgrades: {},
+  totalTaps: 0,
+  bestCombo: 0,
+  combo: 0,
+  comboExpiresAt: 0,
+  achievements: [],
+  darkMatter: 0,
+  prestigeCount: 0,
+  skin: 'star',
+  goldenCaught: 0,
+  startedAt: Date.now(),
+  lastTick: Date.now(),
+  lastSave: 0
+};
+
+let clickerTickId = null;
+let clickerGoldenTimer = null;
+
+/* ---- ФОРМАТ ЧИСЕЛ ---- */
+function clickerFormat(n){
+  n = Math.floor(n);
+  if(n < 1000) return String(n);
+  if(n < 1e6) return (n/1000).toFixed(n<10000?1:0) + 'К';
+  if(n < 1e9) return (n/1e6).toFixed(n<1e7?1:0) + 'М';
+  if(n < 1e12) return (n/1e9).toFixed(1) + 'В';
+  if(n < 1e15) return (n/1e12).toFixed(1) + 'Т';
+  if(n < 1e18) return (n/1e15).toFixed(1) + 'Кв';
+  return (n/1e18).toFixed(1) + 'Кт';
+}
+
+/* ---- МНОЖИТЕЛИ ---- */
+function clickerPrestigeMult(){ return 1 + 0.1 * clickerState.darkMatter; }
+function clickerAchievementsMult(){ return 1 + 0.05 * clickerState.achievements.length; }
+function clickerComboMult(){
+  if(clickerState.combo < 5) return 1;
+  return 1 + Math.min(4, Math.floor(clickerState.combo / 15));
+}
+
+function clickerGetPerTap(){
+  let base = 1;
+  CLICKER_UPGRADES.forEach(u => {
+    if(u.type === 'click') base += (clickerState.upgrades[u.id] || 0) * u.value;
+  });
+  return base * clickerPrestigeMult() * clickerAchievementsMult() * clickerComboMult();
+}
+function clickerGetRate(){
+  let base = 0;
+  CLICKER_UPGRADES.forEach(u => {
+    if(u.type === 'auto') base += (clickerState.upgrades[u.id] || 0) * u.value;
+  });
+  return base * clickerPrestigeMult() * clickerAchievementsMult();
+}
+function clickerUpgradeCost(u){
+  const n = clickerState.upgrades[u.id] || 0;
+  return Math.floor(u.baseCost * Math.pow(u.scale, n));
+}
+
+/* ---- СОХРАНЕНИЕ ---- */
+function clickerLoad(){
+  try{
+    const raw = localStorage.getItem('clicker_v2');
+    if(raw){
+      const p = JSON.parse(raw);
+      Object.keys(clickerState).forEach(k => {
+        if(p[k] !== undefined) clickerState[k] = p[k];
+      });
+      // Оффлайн-доход
+      const away = (Date.now() - (p.lastTick || Date.now())) / 1000;
+      if(away > 30 && clickerState.total >= 100){
+        const earned = Math.floor(clickerGetRate() * Math.min(away, 60 * 60 * 8));
+        if(earned > 0){
+          clickerState.stars += earned;
+          clickerState.total += earned;
+          clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + earned;
+          setTimeout(() => toast('Пока тебя не было: +' + clickerFormat(earned) + ' ★'), 700);
+        }
+      }
+      clickerState.combo = 0;
+      clickerState.comboExpiresAt = 0;
+    }
+  }catch(e){}
+}
+function clickerSave(){
+  try{
+    clickerState.lastTick = Date.now();
+    localStorage.setItem('clicker_v2', JSON.stringify(clickerState));
+  }catch(e){}
+}
+
+/* ---- ОТКРЫТИЕ / ЗАКРЫТИЕ ---- */
+function clickerOpen(){
+  show('clickerScreen');
+  clickerLoad();
+  clickerRender();
+  clickerStartTick();
+  clickerStartGolden();
+  // Приветственный бонус на первый запуск
+  if(!localStorage.getItem('clicker_welcomed')){
+    clickerState.stars += 10;
+    clickerState.total += 10;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + 10;
+    clickerSave();
+    setTimeout(() => toast('Добро пожаловать! +10 ★ на старт'), 400);
+    localStorage.setItem('clicker_welcomed', '1');
+  }
+}
+function clickerBack(){
+  clickerSave();
+  clickerStopTick();
+  clickerStopGolden();
+  show('menuScreen');
+}
+function clickerStartTick(){
+  clickerStopTick();
+  clickerState.lastTick = Date.now();
+  let saveCounter = 0;
+  let achCounter = 0;
+  clickerTickId = setInterval(() => {
+    const screen = $('clickerScreen');
+    if(!screen || !screen.classList.contains('active')){ clickerStopTick(); return; }
+    const now = Date.now();
+    // Автодоход
+    const rate = clickerGetRate();
+    if(rate > 0){
+      const dt = (now - clickerState.lastTick) / 1000;
+      clickerState.lastTick = now;
+      if(dt < 0) return;
+      const add = rate * dt;
+      clickerState.stars += add;
+      clickerState.total += add;
+      clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + add;
+    } else {
+      clickerState.lastTick = now;
+    }
+    // Проверка истечения комбо
+    if(clickerState.combo > 0 && now > clickerState.comboExpiresAt){
+      clickerState.combo = 0;
+      clickerRenderCombo();
+    }
+    clickerRenderCounters();
+    saveCounter++;
+    if(saveCounter >= 15){ saveCounter = 0; clickerSave(); }
+    achCounter++;
+    if(achCounter >= 10){ achCounter = 0; clickerCheckAchievements(); }
+  }, 100);
+}
+function clickerStopTick(){
+  if(clickerTickId){ clearInterval(clickerTickId); clickerTickId = null; }
+}
+function clickerStartGolden(){
+  clickerStopGolden();
+  const scheduleNext = () => {
+    const delay = 30000 + Math.random() * 45000; // 30-75 сек
+    clickerGoldenTimer = setTimeout(() => {
+      const screen = $('clickerScreen');
+      if(screen && screen.classList.contains('active')){
+        clickerSpawnGolden();
+      }
+      scheduleNext();
+    }, delay);
+  };
+  scheduleNext();
+}
+function clickerStopGolden(){
+  if(clickerGoldenTimer){ clearTimeout(clickerGoldenTimer); clickerGoldenTimer = null; }
+}
+
+/* ---- РЕНДЕР ---- */
+function clickerRender(){
+  clickerRenderCounters();
+  clickerRenderUpgrades();
+  clickerRenderCombo();
+  clickerBindOrb();
+  clickerApplySkin();
+}
+function clickerRenderCounters(){
+  const starsEl = $('clickerStars');
+  if(starsEl) starsEl.innerHTML = clickerFormat(clickerState.stars) + '<span class="clicker-star-icon">★</span>';
+  const rateEl = $('clickerRate');
+  if(rateEl) rateEl.textContent = '+' + clickerFormat(clickerGetRate()) + ' / сек';
+  const hintEl = $('clickerTapHint');
+  if(hintEl) hintEl.textContent = '+' + clickerFormat(clickerGetPerTap()) + ' за тап';
+}
+function clickerRenderCombo(){
+  const el = $('clickerCombo');
+  if(!el) return;
+  if(clickerState.combo >= 5){
+    const m = clickerComboMult();
+    el.textContent = '🔥 ×' + m.toFixed(1) + ' · комбо ' + clickerState.combo;
+    el.classList.add('show');
+    const count = $('clickerStars');
+    if(count) count.classList.add('combo-hot');
+  } else {
+    el.classList.remove('show');
+    const count = $('clickerStars');
+    if(count) count.classList.remove('combo-hot');
+  }
+}
+function clickerRenderUpgrades(){
+  const box = $('clickerUpgrades');
+  if(!box) return;
+  const html = CLICKER_UPGRADES.map(u => {
+    const n = clickerState.upgrades[u.id] || 0;
+    const cost = clickerUpgradeCost(u);
+    const can = clickerState.stars >= cost;
+    const reveal = n > 0 || clickerState.stars >= u.baseCost * 0.4;
+    if(!reveal) return '';
+    return `<div class="clicker-upgrade ${can?'can-buy':''}" onclick="clickerBuy('${u.id}')">
+      ${n > 0 ? `<div class="clicker-upgrade-count">${n}</div>` : ''}
+      <div class="clicker-upgrade-icon">${u.icon}</div>
+      <div class="clicker-upgrade-info">
+        <div class="clicker-upgrade-name">${u.name}</div>
+        <div class="clicker-upgrade-desc">${u.desc}</div>
+      </div>
+      <div class="clicker-upgrade-price">
+        <div class="clicker-upgrade-price-val">${clickerFormat(cost)}</div>
+        <div class="clicker-upgrade-price-lbl">★</div>
+      </div>
+    </div>`;
+  }).filter(Boolean).join('');
+  box.innerHTML = html || '<div class="empty" style="padding:20px">Копи звёзды, чтобы открыть улучшения</div>';
+}
+function clickerApplySkin(){
+  const core = $('clickerOrbCore');
+  if(!core) return;
+  CLICKER_SKINS.forEach(s => core.classList.remove('orb-skin-' + s.id));
+  core.classList.add('orb-skin-' + clickerState.skin);
+  const skin = CLICKER_SKINS.find(s => s.id === clickerState.skin);
+  if(skin) core.textContent = skin.emoji;
+}
+
+/* ---- ТАПЫ (мультитач) ---- */
+function clickerBindOrb(){
+  const orb = $('clickerOrb');
+  if(!orb || orb._bound) return;
+  orb._bound = true;
+  orb.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    orb.classList.add('pressed');
+    clickerHandleTap(e.clientX, e.clientY);
+    setTimeout(() => orb.classList.remove('pressed'), 100);
+  });
+  orb.addEventListener('pointerup', () => orb.classList.remove('pressed'));
+  orb.addEventListener('contextmenu', e => e.preventDefault());
+}
+
+function clickerHandleTap(x, y){
+  const now = Date.now();
+  // Комбо
+  if(now <= clickerState.comboExpiresAt){
+    clickerState.combo++;
+  } else {
+    clickerState.combo = 1;
+  }
+  clickerState.comboExpiresAt = now + 1500;
+  if(clickerState.combo > clickerState.bestCombo) clickerState.bestCombo = clickerState.combo;
+
+  const gain = clickerGetPerTap();
+  clickerState.stars += gain;
+  clickerState.total += gain;
+  clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + gain;
+  clickerState.totalTaps++;
+
+  if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(_){} }
+
+  clickerCheckAchievements();
+  clickerRenderCounters();
+  clickerRenderCombo();
+  clickerRenderUpgrades();
+  clickerSpawnParticles(x, y, gain);
+}
+
+function clickerSpawnParticles(x, y, amount){
+  const stage = $('clickerStage');
+  if(!stage) return;
+  const rect = stage.getBoundingClientRect();
+  const lx = x - rect.left;
+  const ly = y - rect.top;
+
+  const p = document.createElement('div');
+  p.className = 'clicker-particle';
+  p.textContent = '+' + clickerFormat(amount);
+  p.style.left = lx + 'px';
+  p.style.top = ly + 'px';
+  stage.appendChild(p);
+  setTimeout(() => p.remove(), 1000);
+
+  for(let i = 0; i < 4; i++){
+    const s = document.createElement('div');
+    s.className = 'clicker-spark';
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 30 + Math.random() * 50;
+    s.style.left = lx + 'px';
+    s.style.top = ly + 'px';
+    s.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+    s.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
+    stage.appendChild(s);
+    setTimeout(() => s.remove(), 800);
+  }
+}
+
+/* ---- ЗОЛОТАЯ ЗВЕЗДА ---- */
+function clickerSpawnGolden(){
+  const stage = $('clickerStage');
+  if(!stage) return;
+  const rect = stage.getBoundingClientRect();
+  const fromLeft = Math.random() < 0.5;
+  const el = document.createElement('div');
+  el.className = 'clicker-golden';
+  el.textContent = '⭐';
+  const startY = 20 + Math.random() * (rect.height - 80);
+  const endY = 20 + Math.random() * (rect.height - 80);
+  el.style.top = startY + 'px';
+  el.style.left = (fromLeft ? -50 : rect.width + 10) + 'px';
+  el.style.transition = 'all 6s linear';
+  stage.appendChild(el);
+
+  requestAnimationFrame(() => {
+    el.style.left = (fromLeft ? rect.width + 10 : -50) + 'px';
+    el.style.top = endY + 'px';
+  });
+
+  const removeEl = () => { if(el.parentNode) el.remove(); };
+  el.addEventListener('pointerdown', e => {
+    e.stopPropagation();
+    e.preventDefault();
+    clickerCatchGolden();
+    removeEl();
+  });
+  setTimeout(removeEl, 6200);
+}
+function clickerCatchGolden(){
+  clickerState.goldenCaught++;
+  const roll = Math.random();
+  let msg = '';
+  if(roll < 0.6){
+    const bonus = clickerGetPerTap() * 200;
+    clickerState.stars += bonus;
+    clickerState.total += bonus;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + bonus;
+    msg = '⭐ Бонус: +' + clickerFormat(bonus) + ' ★';
+    beep(1200, 0.15, 0.2);
+    setTimeout(() => beep(1600, 0.2, 0.2), 100);
+  } else if(roll < 0.9){
+    const bonus = Math.max(100, clickerState.stars * 0.25);
+    clickerState.stars += bonus;
+    clickerState.total += bonus;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + bonus;
+    msg = '💰 +25% от накопленного!';
+    beep(1000, 0.15, 0.2);
+    setTimeout(() => beep(1400, 0.15, 0.2), 100);
+    setTimeout(() => beep(1800, 0.25, 0.2), 200);
+  } else {
+    // Бесплатный апгрейд
+    const candidates = CLICKER_UPGRADES.filter(u => (clickerState.upgrades[u.id] || 0) === 0);
+    if(candidates.length > 0){
+      const u = pick(candidates);
+      clickerState.upgrades[u.id] = 1;
+      msg = '🎁 Бесплатно: ' + u.name;
+    } else {
+      const bonus = clickerGetPerTap() * 500;
+      clickerState.stars += bonus;
+      clickerState.total += bonus;
+      clickerState.lifetimeTotal = (clickerState.lifetimeTotal || 0) + bonus;
+      msg = '⭐ +' + clickerFormat(bonus) + ' ★';
+    }
+    beep(1500, 0.3, 0.25);
+  }
+  if(navigator.vibrate){ try{ navigator.vibrate([50,30,50,30,100]); }catch(_){} }
+  clickerCheckAchievements();
+  clickerRenderCounters();
+  clickerRenderUpgrades();
+  clickerSave();
+  toast(msg);
+}
+
+/* ---- ПОКУПКА ---- */
+function clickerBuy(id){
+  const u = CLICKER_UPGRADES.find(x => x.id === id);
+  if(!u) return;
+  const cost = clickerUpgradeCost(u);
+  if(clickerState.stars < cost){ toast('Не хватает звёзд'); return; }
+  clickerState.stars -= cost;
+  clickerState.upgrades[id] = (clickerState.upgrades[id] || 0) + 1;
+  if(navigator.vibrate){ try{ navigator.vibrate(15); }catch(_){} }
+  beepTick();
+  clickerCheckAchievements();
+  clickerRenderCounters();
+  clickerRenderUpgrades();
+  clickerSave();
+}
+
+/* ---- ДОСТИЖЕНИЯ ---- */
+function clickerCheckAchievements(){
+  CLICKER_ACHIEVEMENTS.forEach(a => {
+    if(clickerState.achievements.includes(a.id)) return;
+    try{
+      if(a.check(clickerState)){
+        clickerState.achievements.push(a.id);
+        setTimeout(() => toast('🏆 ' + a.name + ' (+5% к доходу)'), 250);
+        beep(900, 0.1, 0.15);
+        setTimeout(() => beep(1300, 0.15, 0.15), 100);
+      }
+    }catch(e){}
+  });
+}
+
+/* ---- СТАТИСТИКА ---- */
+function clickerShowStats(){
+  const stats = [
+    { v: clickerFormat(clickerState.total), l: 'Всего звёзд' },
+    { v: clickerFormat(clickerState.stars), l: 'Сейчас' },
+    { v: clickerFormat(clickerState.totalTaps), l: 'Тапов' },
+    { v: String(clickerState.bestCombo), l: 'Лучшее комбо' },
+    { v: String(clickerState.goldenCaught), l: 'Золотых поймано' },
+    { v: String(clickerState.darkMatter), l: 'Тёмной материи' },
+    { v: '+' + (clickerAchievementsMult() * 100 - 100).toFixed(0) + '%', l: 'Бонус достижений' },
+    { v: '+' + (clickerPrestigeMult() * 100 - 100).toFixed(0) + '%', l: 'Бонус престижа' }
+  ];
+  $('clickerStatsContent').innerHTML = stats.map(s =>
+    `<div class="clicker-stat"><div class="clicker-stat-val">${s.v}</div><div class="clicker-stat-lbl">${s.l}</div></div>`
+  ).join('');
+
+  $('clickerAchievements').innerHTML = CLICKER_ACHIEVEMENTS.map(a => {
+    const u = clickerState.achievements.includes(a.id);
+    return `<div class="ach ${u?'unlocked':''}">
+      <div class="ach-icon">${u?'✓':'?'}</div>
+      <div class="ach-info">
+        <div class="ach-name">${esc(a.name)}</div>
+        <div class="ach-desc">${esc(a.desc)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  openModal('clickerStatsModal');
+}
+
+/* ---- ПРЕСТИЖ ---- */
+function clickerPrestigeGain(){
+  return Math.floor(Math.sqrt(clickerState.total / 1e6));
+}
+function clickerShowPrestige(){
+  const gain = clickerPrestigeGain();
+  const cur = clickerState.darkMatter;
+  const nextMult = 1 + 0.1 * (cur + gain);
+  $('clickerPrestigeText').textContent = gain > 0
+    ? 'Обменяешь весь прогресс на ' + gain + ' тёмной материи'
+    : 'Нужно минимум 1М всего звёзд для престижа';
+  $('clickerPrestigeContent').innerHTML = `
+    <div style="font-size:56px;font-weight:800;color:#a78bfa">💎</div>
+    <div style="font-size:22px;font-weight:700;margin-top:8px">${gain}</div>
+    <div style="font-size:13px;color:var(--text2);margin-top:4px">Тёмной материи получишь</div>
+    <div style="font-size:14px;color:var(--text2);margin-top:14px">Текущий множитель: <b style="color:var(--accent)">×${clickerPrestigeMult().toFixed(2)}</b></div>
+    <div style="font-size:14px;color:var(--text2);margin-top:4px">После престижа: <b style="color:var(--green)">×${nextMult.toFixed(2)}</b></div>
+  `;
+  $('clickerPrestigeBtn').disabled = gain <= 0;
+  $('clickerPrestigeBtn').textContent = gain > 0 ? 'Престиж' : 'Мало звёзд';
+  openModal('clickerPrestigeModal');
+}
+function clickerDoPrestige(){
+  const gain = clickerPrestigeGain();
+  if(gain <= 0){ closeModal('clickerPrestigeModal'); return; }
+  confirmAction('Престиж', 'Весь прогресс сбросится, получишь ' + gain + ' тёмной материи. Продолжить?', () => {
+    clickerState.darkMatter += gain;
+    clickerState.prestigeCount++;
+    clickerState.stars = 0;
+    clickerState.total = 0;
+    clickerState.upgrades = {};
+    clickerState.combo = 0;
+    clickerState.bestCombo = 0;
+    clickerState.totalTaps = 0;
+    clickerCheckAchievements();
+    clickerSave();
+    clickerRender();
+    closeModal('clickerPrestigeModal');
+    beep(800, 0.2, 0.2);
+    setTimeout(() => beep(1200, 0.2, 0.2), 150);
+    setTimeout(() => beep(1600, 0.3, 0.2), 300);
+    toast('💎 Престиж! Теперь ×' + clickerPrestigeMult().toFixed(2) + ' к доходу');
+  });
+}
+
+/* ---- СКИНЫ ---- */
+function clickerShowSkins(){
+  $('clickerSkinsContent').innerHTML = CLICKER_SKINS.map(s => {
+    const unlocked = (clickerState.lifetimeTotal || 0) >= s.unlock;
+    const active = clickerState.skin === s.id;
+    const lockText = s.unlock === 0 ? 'Доступен' : (unlocked ? 'Открыт' : 'Нужно ' + clickerFormat(s.unlock) + ' ★');
+    return `<div class="attr-editor-btn" style="${unlocked?'':'opacity:.4;pointer-events:none'}${active?';border:2px solid var(--accent)':''}" onclick="clickerSelectSkin('${s.id}')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:28px">${s.emoji}</div>
+        <div>
+          <div class="attr-editor-name">${esc(s.name)}${active?' ✓':''}</div>
+          <div class="attr-editor-count">${lockText}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  openModal('clickerSkinsModal');
+}
+function clickerSelectSkin(id){
+  const s = CLICKER_SKINS.find(x => x.id === id);
+  if(!s || (clickerState.lifetimeTotal || 0) < s.unlock){ toast('Закрыто'); return; }
+  clickerState.skin = id;
+  clickerSave();
+  clickerApplySkin();
+  closeModal('clickerSkinsModal');
+  toast('Скин установлен');
+}
 
 function spyOpen(){
   spyState.timeSeconds = gamesState.spy.timeSeconds;
@@ -1511,10 +2189,10 @@ function storySelectGenre(g){
   renderStory();
 }
 function storyChangeTimer(d){
-  const n = (gamesState.story.timerSeconds || 0) + d;
-  if(n < 0) return;
-  if(n > 180) return;
-  if(n > 0 && n < 30) return;
+  let n = (gamesState.story.timerSeconds || 0) + d;
+  if(n < 0) n = 0;
+  if(n > 180) n = 180;
+  if(n > 0 && n < 30) n = 30;
   gamesState.story.timerSeconds = n;
   saveGamesState();
   renderStory();
@@ -1823,9 +2501,14 @@ history.pushState(null, '');
 window.addEventListener('popstate', ()=>{
   const active = document.querySelector('.screen.active');
   if(active && active.id !== 'menuScreen'){
+    clickerStopTick();
+    clickerStopGolden();
     spyStopTimer();
     fasterStopTimer();
     storyStopTimer();
+    clickerStopTick();
+    clickerStopGolden();
+    clickerSave();
     spyState.phase = 'setup';
     fasterState.phase = 'setup';
     bunkerState.phase = 'setup';
