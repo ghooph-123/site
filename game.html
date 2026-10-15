@@ -269,7 +269,7 @@ function closeModal(id){$(id).classList.remove('active')}
 function confirmAction(title,text,cb){$('confirmTitle').textContent=title;$('confirmText').textContent=text;$('confirmOk').onclick=()=>{closeModal('confirmModal');cb()};openModal('confirmModal')}
 function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
-function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function esc(s){ return s == null ? '' : String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) }
 
 /* ===== ВИБРАЦИЯ + ЗВУК ===== */
 function vib(ms){ if(navigator.vibrate){try{navigator.vibrate(ms||15)}catch(e){}} }
@@ -299,7 +299,7 @@ const gamesState = {
   spy:    { timeSeconds: 480, twoSpies: false, customLocations: [] },
   bunker: { spots: 3, customCatastrophes: [] },
   faster: { timeSeconds: 30, customTasks: [] },
-  story:  { twoRounds: false, useStarter: false, customStarters: [] }
+  story:  { twoRounds: false, useStarter: false, customStarters: [], mode: 'random' }
 };
 function loadGamesState(){
   try{
@@ -565,7 +565,7 @@ function renderSpy(){
         <h3>Вопросы-помощники</h3>
         <div style="font-size:13px;color:var(--text2);line-height:1.5;font-style:italic">${esc(pick(SPY_QUESTIONS))}</div>
       </div>
-      <button class="btn btn-green" onclick="spyEndRound('town')">Угадали всех шпионов</button>
+      <button class="btn btn-green" onclick="spyEndRound()">Угадали всех шпионов</button>
       <button class="btn btn-red" onclick="spySpyGuess()">Шпион называет локацию</button>
     `;
   }
@@ -677,7 +677,7 @@ function spyCheckGuessIndex(i){
     toast('Не угадал. Продолжайте.');
   }
 }
-function spyEndRound(winner){
+function spyEndRound(){
   spyStopTimer();
   beepEnd();
   vib([100, 50, 100]);
@@ -1173,6 +1173,7 @@ const storyState = {
 };
 
 function storyOpen(){
+  storyState.mode = gamesState.story.mode || 'random';
   show('storyScreen');
   storyState.phase = 'setup';
   renderStory();
@@ -1312,7 +1313,12 @@ function storyChangeSentences(d){
   storyState.sentencesPerPlayer = n;
   renderStory();
 }
-function storySetMode(m){ storyState.mode = m; renderStory(); }
+function storySetMode(m){ 
+  storyState.mode = m; 
+  gamesState.story.mode = m;
+  saveGamesState();
+  renderStory(); 
+}
 function storyToggleUseStarter(){
   gamesState.story.useStarter = !gamesState.story.useStarter;
   saveGamesState();
@@ -1424,7 +1430,15 @@ window.addEventListener('popstate', ()=>{
 
 // Дополнительная страховка: гасим таймеры при уходе со страницы
 window.addEventListener('pagehide', ()=>{ spyStopTimer(); fasterStopTimer(); });
-document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ spyStopTimer(); fasterStopTimer(); } });
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){
+    spyStopTimer();
+    fasterStopTimer();
+  } else {
+    if(spyState.phase === 'game')    spyStartTimer();
+    if(fasterState.phase === 'task') fasterStartTimer();
+  }
+});
 </script>
 </body>
 </html>
