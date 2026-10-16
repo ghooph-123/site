@@ -12,15 +12,20 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Игры">
 <title>Игры</title>
+<script>
+try{var t=localStorage.getItem('ui_settings_v1');if(t&&JSON.parse(t).theme==='light')document.documentElement.dataset.theme='light'}catch(e){}
+</script>
 <style>
 :root{--bg:#0f0f12;--bg2:#18181d;--bg3:#22222a;--bg4:#2c2c36;--text:#f0f0f5;--text2:#8a8a95;--text3:#5a5a65;--accent:#7c5cff;--green:#22c55e;--blue:#3b82f6;--orange:#f59e0b;--red:#ef4444;--border:#2a2a35;--shadow:0 8px 24px rgba(0,0,0,.4)}
+[data-theme="light"]{--bg:#f2f2f6;--bg2:#ffffff;--bg3:#ebebf0;--bg4:#e0e0e8;--text:#111118;--text2:#666673;--text3:#a8a8b2;--border:#e2e2e8;--shadow:0 8px 24px rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
 input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;background:none;color:inherit;width:100%}
 .screen{position:fixed;inset:0;display:none;flex-direction:column}
-.screen.active{display:flex}
+.screen.active{display:flex;animation:screenIn .22s ease}
+@keyframes screenIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .header{display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;min-height:56px}
 .header h1{font-size:17px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 4px}
 .icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:background .15s}
@@ -141,6 +146,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 }
 
 /* ===== CLICKER ===== */
+.section-title{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin:16px 0 8px}
 .ach{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border-radius:12px;margin-bottom:6px;border:1px solid var(--border);opacity:.45}
 .ach.unlocked{opacity:1}
 .ach-icon{width:40px;height:40px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;font-weight:700;color:var(--text2)}
@@ -203,6 +209,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
 <div class="screen active" id="menuScreen">
   <div class="header">
     <h1>Игры</h1>
+    <button class="icon-btn" onclick="openUISettings()" aria-label="Настройки"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
   <div class="content">
     <div class="menu-grid">
@@ -214,7 +221,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
         </div>
       </div>
       <div class="menu-tile" onclick="bunkerOpen()">
-        <div class="menu-icon" style="background:#ef4444"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-6 7 6v12M9 21v-6h6v6"/></svg></div>
+        <div class="menu-icon" style="background:#ef4444"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
         <div>
           <div class="menu-name">Бункер</div>
           <div class="menu-desc">Катастрофа, мест мало. У каждого свой набор качеств. Решите кто выживет</div>
@@ -235,7 +242,7 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
         </div>
       </div>
       <div class="menu-tile" onclick="clickerOpen()">
-  <div class="menu-icon" style="background:#fbbf24"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9 16 14 18 22 12 17 6 22 8 14 2 9 9 9 12 2"/></svg></div>
+  <div class="menu-icon" style="background:#fbbf24"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
   <div>
     <div class="menu-name">Звёздная пыль</div>
     <div class="menu-desc">Тапай, покупай улучшения, лови золотые звёзды, перерождайся</div>
@@ -399,6 +406,34 @@ input,textarea{font-family:inherit;font-size:16px;outline:none;border:none;backg
   </div>
 </div>
 
+<div class="modal" id="uiSettingsModal">
+  <div class="modal-inner">
+    <h3>Настройки</h3>
+    <div class="toggle-row" onclick="toggleUISetting('theme')">
+      <div>
+        <div class="toggle-row-title">Тема</div>
+        <div class="toggle-row-sub" id="uiThemeLabel">Тёмная</div>
+      </div>
+      <div class="switch" id="uiThemeSwitch"></div>
+    </div>
+    <div class="toggle-row" onclick="toggleUISetting('vibrate')">
+      <div>
+        <div class="toggle-row-title">Вибрация</div>
+        <div class="toggle-row-sub">Отклик при нажатиях</div>
+      </div>
+      <div class="switch" id="uiVibrateSwitch"></div>
+    </div>
+    <div class="toggle-row" onclick="toggleUISetting('sound')">
+      <div>
+        <div class="toggle-row-title">Звук</div>
+        <div class="toggle-row-sub">Сигналы в играх</div>
+      </div>
+      <div class="switch" id="uiSoundSwitch"></div>
+    </div>
+    <button class="btn btn-sec" onclick="closeModal('uiSettingsModal')" style="margin-top:12px">Закрыть</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 <script>
 'use strict';
@@ -413,9 +448,51 @@ function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 function esc(s){ return s == null ? '' : String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) }
 
-function vib(ms){ if(navigator.vibrate){try{navigator.vibrate(ms||15)}catch(e){}} }
+const uiSettings = { theme: 'dark', vibrate: true, sound: true };
+function loadUISettings(){
+  try{
+    const raw = localStorage.getItem('ui_settings_v1');
+    if(raw) Object.assign(uiSettings, JSON.parse(raw));
+  }catch(e){}
+  applyUITheme();
+}
+function saveUISettings(){
+  try{ localStorage.setItem('ui_settings_v1', JSON.stringify(uiSettings)); }catch(e){}
+}
+function applyUITheme(){
+  document.documentElement.dataset.theme = uiSettings.theme;
+  const meta = document.querySelector('meta[name=theme-color]');
+  if(meta) meta.content = uiSettings.theme === 'light' ? '#f2f2f6' : '#0f0f12';
+}
+function openUISettings(){
+  const modal = $('uiSettingsModal');
+  if(!modal) return;
+  $('uiThemeSwitch').classList.toggle('on', uiSettings.theme === 'light');
+  $('uiVibrateSwitch').classList.toggle('on', uiSettings.vibrate);
+  $('uiSoundSwitch').classList.toggle('on', uiSettings.sound);
+  $('uiThemeLabel').textContent = uiSettings.theme === 'light' ? 'Светлая' : 'Тёмная';
+  openModal('uiSettingsModal');
+}
+function toggleUISetting(key){
+  if(key === 'theme'){
+    uiSettings.theme = uiSettings.theme === 'dark' ? 'light' : 'dark';
+    applyUITheme();
+    $('uiThemeSwitch').classList.toggle('on', uiSettings.theme === 'light');
+    $('uiThemeLabel').textContent = uiSettings.theme === 'light' ? 'Светлая' : 'Тёмная';
+  } else {
+    uiSettings[key] = !uiSettings[key];
+    const sw = key === 'vibrate' ? $('uiVibrateSwitch') : $('uiSoundSwitch');
+    if(sw) sw.classList.toggle('on', uiSettings[key]);
+  }
+  saveUISettings();
+}
+function vib(ms){
+  if(!uiSettings.vibrate) return;
+  if(navigator.vibrate){try{navigator.vibrate(ms||15)}catch(e){}}
+}
 let _audioCtx = null;
 function beep(freq, dur, vol){
+  if(!uiSettings.sound) return;
   try{
     if(!_audioCtx) _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     const now = _audioCtx.currentTime;
@@ -458,6 +535,7 @@ function saveGamesState(){
   try{localStorage.setItem('games_v3', JSON.stringify(gamesState))}catch(e){}
 }
 loadGamesState();
+loadUISettings();
 
 /* ===== РЕДАКТОР СПИСКА ===== */
 let _listEditorOnSave = null;
@@ -2506,8 +2584,6 @@ history.pushState(null, '');
 window.addEventListener('popstate', ()=>{
   const active = document.querySelector('.screen.active');
   if(active && active.id !== 'menuScreen'){
-    clickerStopTick();
-    clickerStopGolden();
     spyStopTimer();
     fasterStopTimer();
     storyStopTimer();
@@ -3504,14 +3580,14 @@ document.addEventListener('visibilitychange', ()=>{
           <div class="dr-timer" id="drTimer">${S.timeLimit}</div>
         </div>
         <div class="dr-tools" id="drTools">
-          <div class="dr-color" style="background:#000" onclick="drSetColor('#000',this)"></div>
+          <div class="dr-color active" style="background:#000" onclick="drSetColor('#000',this)"></div>
           <div class="dr-color" style="background:#ef4444" onclick="drSetColor('#ef4444',this)"></div>
           <div class="dr-color" style="background:#3b82f6" onclick="drSetColor('#3b82f6',this)"></div>
           <div class="dr-color" style="background:#22c55e" onclick="drSetColor('#22c55e',this)"></div>
           <div class="dr-color" style="background:#f59e0b" onclick="drSetColor('#f59e0b',this)"></div>
-          <div class="dr-size" onclick="drSetSize(3)"><div class="dot" style="width:4px;height:4px"></div></div>
-          <div class="dr-size active" onclick="drSetSize(6)"><div class="dot" style="width:8px;height:8px"></div></div>
-          <div class="dr-size" onclick="drSetSize(12)"><div class="dot" style="width:14px;height:14px"></div></div>
+          <div class="dr-size" onclick="drSetSize(3,this)">...
+          <div class="dr-size active" onclick="drSetSize(6,this)">...
+          <div class="dr-size" onclick="drSetSize(12,this)">...
           <button class="dr-clear" onclick="drClear()">Стереть</button>
         </div>
         <div class="dr-actions">
@@ -3614,11 +3690,11 @@ document.addEventListener('visibilitychange', ()=>{
     document.querySelectorAll('#drTools .dr-color').forEach(c => c.classList.remove('active'));
     if(el) el.classList.add('active');
   };
-  window.drSetSize = function(size){
+  window.drSetSize = function(size, el){
     S.size = size;
     if(ctx) ctx.lineWidth = size;
     document.querySelectorAll('#drTools .dr-size').forEach(c => c.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    if(el) el.classList.add('active');
   };
   window.drClear = function(){
     if(!ctx || !canvas) return;
@@ -3731,7 +3807,7 @@ document.addEventListener('visibilitychange', ()=>{
     tile.className = 'menu-tile';
     tile.dataset.dr = '1';
     tile.onclick = open;
-    tile.innerHTML = '<div class="menu-icon" style="background:#ec4899"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div><div><div class="menu-name">Рисуй и угадывай</div><div class="menu-desc">Один рисует пальцем, второй угадывает вслух. Раунды и счёт</div></div>';
+    tile.innerHTML = '<div class="menu-icon" style="background:#ec4899"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><div><div class="menu-name">Рисуй и угадывай</div><div class="menu-desc">Один рисует пальцем, второй угадывает вслух. Раунды и счёт</div></div>';
     menu.appendChild(tile);
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addTile);
