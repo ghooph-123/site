@@ -1619,7 +1619,7 @@ function renderSpy(){
         <h3>Вопросы-помощники</h3>
         <div style="font-size:13px;color:var(--text2);line-height:1.5;font-style:italic">${esc(pick(SPY_QUESTIONS))}</div>
       </div>
-      <button class="btn" id="spyVoteBtn" onclick="spyStartVote()" ${canVote?'':'disabled style="opacity:.4"'}>🗳 Голосовать${canVote?'':' (после 2 мин)'}</button>
+      <button class="btn" id="spyVoteBtn" onclick="spyStartVote()" ${canVote?'':'disabled style="opacity:.4"'}>Голосовать${canVote?'':' (после 2 мин)'}</button>
       <button class="btn btn-green" onclick="spyEndRound()">Угадали всех шпионов</button>
       <button class="btn btn-red" onclick="spySpyGuess()">Шпион называет локацию</button>
     `;
