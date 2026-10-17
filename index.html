@@ -4322,6 +4322,247 @@ document.addEventListener('visibilitychange', ()=>{
   else setTimeout(addTile, 100);
 })();
 </script>
+
+<script>
+(function(){
+  // ===== STATE =====
+  Object.assign(clickerState, {
+    lastDailyClaim: 0,
+    dailyStreak: 0,
+    questDate: '',
+    quests: [],
+    eventUntil: 0,
+    eventMult: 1,
+    todayEarned: 0,
+    todayDate: ''
+  });
+
+  // ===== CRIT VISUAL =====
+  function clickerSpawnCrit(x, y){
+    const stage = $('clickerStage');
+    if(!stage) return;
+    const rect = stage.getBoundingClientRect();
+    const p = document.createElement('div');
+    p.className = 'clicker-particle';
+    p.textContent = 'КРИТ!';
+    p.style.cssText = 'color:#ef4444;font-size:28px;font-weight:900;text-shadow:0 0 12px #ef4444;left:'+(x-rect.left)+'px;top:'+(y-rect.top)+'px';
+    stage.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+
+  // ===== REPLACE TAP HANDLER =====
+  window.clickerHandleTap = function(x, y){
+    const now = Date.now();
+    const today = new Date().toDateString();
+    if(clickerState.todayDate !== today){
+      clickerState.todayDate = today;
+      clickerState.todayEarned = 0;
+    }
+
+    if(now <= clickerState.comboExpiresAt) clickerState.combo++;
+    else clickerState.combo = 1;
+    clickerState.comboExpiresAt = now + 1500;
+    if(clickerState.combo > clickerState.bestCombo) clickerState.bestCombo = clickerState.combo;
+
+    const eventMult = now < (clickerState.eventUntil||0) ? (clickerState.eventMult||1) : 1;
+    const isCrit = Math.random() < 0.05;
+    const gain = clickerGetPerTap() * eventMult * (isCrit ? 10 : 1);
+
+    clickerState.stars += gain;
+    clickerState.total += gain;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal||0) + gain;
+    clickerState.todayEarned += gain;
+    clickerState.totalTaps++;
+
+    if(isCrit){ beep(1500, 0.12, 0.2); }
+    else { beep(600 + Math.min(clickerState.combo,30)*20, 0.03, 0.05); }
+    if(navigator.vibrate){ try{ navigator.vibrate(isCrit?25:8); }catch(_){} }
+
+    clickerCheckAchievements();
+    clickerRenderCounters();
+    clickerRenderCombo();
+    clickerRenderUpgrades();
+    if(isCrit) clickerSpawnCrit(x, y);
+    else clickerSpawnParticles(x, y, gain);
+
+    clickerCheckQuests();
+  };
+
+  // ===== DAILY BONUS =====
+  window.clickerClaimDaily = function(){
+    const now = Date.now(), day = 24*3600*1000;
+    if(now - clickerState.lastDailyClaim < day){ toast('Приходи завтра'); return; }
+    const lastDate = new Date(clickerState.lastDailyClaim).toDateString();
+    const yesterday = new Date(now - day).toDateString();
+    clickerState.dailyStreak = (lastDate === yesterday) ? clickerState.dailyStreak + 1 : 1;
+    clickerState.lastDailyClaim = now;
+    const reward = Math.floor(Math.max(100, clickerState.stars*0.1) * clickerState.dailyStreak);
+    clickerState.stars += reward;
+    clickerState.total += reward;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal||0) + reward;
+    clickerState.todayEarned += reward;
+    beep(900,0.15,0.2);
+    setTimeout(()=>beep(1300,0.15,0.2),100);
+    setTimeout(()=>beep(1700,0.3,0.2),200);
+    vib([50,30,50,30,100]);
+    toast('🎁 +'+clickerFormat(reward)+' ★ (серия '+clickerState.dailyStreak+'д)');
+    clickerSave(); clickerRenderCounters(); clickerRenderDaily();
+  };
+
+  function clickerRenderDaily(){
+    const stage = $('clickerStage');
+    if(!stage) return;
+    let box = $('clickerDailyBox');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'clickerDailyBox';
+      box.style.cssText = 'display:flex;gap:8px;padding:0 14px 10px';
+      const actions = document.querySelector('.clicker-actions');
+      if(actions) actions.parentNode.insertBefore(box, actions.nextSibling);
+    }
+    const canClaim = Date.now() - clickerState.lastDailyClaim >= 24*3600*1000;
+    box.innerHTML =
+      '<button class="btn '+(canClaim?'btn-green':'btn-sec')+'" onclick="clickerClaimDaily()" style="flex:1;margin:0;padding:8px;font-size:12px">'+
+        (canClaim ? '🎁 Бонус дня' : '✓ Серия: '+clickerState.dailyStreak+'д')+
+      '</button>'+
+      '<button class="btn btn-sec" onclick="clickerShowQuests()" style="flex:1;margin:0;padding:8px;font-size:12px">📋 Задания</button>';
+  }
+
+  // ===== DAILY QUESTS =====
+  function clickerInitQuests(){
+    const today = new Date().toDateString();
+    if(clickerState.questDate === today && clickerState.quests.length === 3) return;
+    clickerState.questDate = today;
+    const pool = [
+      { id:'taps500',  name:'Сделай 500 тапов',       target:500,   type:'taps' },
+      { id:'taps2000', name:'Сделай 2000 тапов',      target:2000,  type:'taps' },
+      { id:'buy5',     name:'Купи 5 апгрейдов',       target:5,     type:'buys' },
+      { id:'golden3',  name:'Поймай 3 золотые',       target:3,     type:'golden' },
+      { id:'combo30',  name:'Достигни комбо 30',      target:30,    type:'combo' },
+      { id:'earn10k',  name:'Заработай сегодня 10К ★',target:10000, type:'earn' }
+    ].sort(()=>Math.random()-0.5).slice(0,3);
+    pool.forEach(q => {
+      q.progress = 0; q.claimed = false;
+      if(q.type==='taps')   q.startValue = clickerState.totalTaps;
+      if(q.type==='buys')   q.startValue = Object.values(clickerState.upgrades).reduce((a,b)=>a+b,0);
+      if(q.type==='golden') q.startValue = clickerState.goldenCaught;
+      if(q.type==='combo')  q.startValue = 0;
+      if(q.type==='earn')   q.startValue = clickerState.todayEarned;
+    });
+    clickerState.quests = pool;
+    clickerSave();
+  }
+
+  function clickerCheckQuests(){
+    if(!clickerState.quests || clickerState.quests.length !== 3){ clickerInitQuests(); return; }
+    clickerState.quests.forEach(q => {
+      if(q.claimed) return;
+      let cur = 0;
+      if(q.type==='taps')   cur = clickerState.totalTaps - q.startValue;
+      if(q.type==='buys')   cur = Object.values(clickerState.upgrades).reduce((a,b)=>a+b,0) - q.startValue;
+      if(q.type==='golden') cur = clickerState.goldenCaught - q.startValue;
+      if(q.type==='combo')  cur = clickerState.bestCombo;
+      if(q.type==='earn')   cur = clickerState.todayEarned - q.startValue;
+      q.progress = Math.min(cur, q.target);
+    });
+  }
+
+  window.clickerClaimQuest = function(idx){
+    const q = clickerState.quests[idx];
+    if(!q || q.claimed || q.progress < q.target){ return; }
+    q.claimed = true;
+    const reward = 1000*(1+clickerState.prestigeCount) + q.target*10;
+    clickerState.stars += reward;
+    clickerState.total += reward;
+    clickerState.lifetimeTotal = (clickerState.lifetimeTotal||0) + reward;
+    beep(1200,0.15,0.2);
+    toast('+'+clickerFormat(reward)+' ★');
+    clickerSave(); clickerRenderCounters(); clickerShowQuests();
+  };
+
+  window.clickerShowQuests = function(){
+    let modal = $('clickerQuestsModal');
+    if(!modal){
+      modal = document.createElement('div');
+      modal.id = 'clickerQuestsModal';
+      modal.className = 'modal';
+      modal.innerHTML = '<div class="modal-inner"><h3>Задания дня</h3><div id="clickerQuestsList"></div><button class="btn btn-sec" onclick="closeModal(\'clickerQuestsModal\')" style="margin-top:12px">Закрыть</button></div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e => { if(e.target === modal) closeModal('clickerQuestsModal'); });
+    }
+    clickerCheckQuests();
+    $('clickerQuestsList').innerHTML = clickerState.quests.map((q,i)=>{
+      const pct = Math.min(100, Math.floor(q.progress/q.target*100));
+      const ready = q.progress>=q.target && !q.claimed;
+      return '<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:8px">'+
+        '<div style="font-weight:600;font-size:14px;margin-bottom:8px">'+esc(q.name)+' '+(q.claimed?'<span style="color:var(--green)">✓</span>':'')+'</div>'+
+        '<div style="height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:8px"><div style="height:100%;width:'+pct+'%;background:'+(ready?'var(--green)':'var(--accent)')+';transition:width .3s"></div></div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;color:var(--text2)">'+Math.min(q.progress,q.target)+' / '+q.target+'</div>'+
+        (ready?'<button class="btn btn-green" onclick="clickerClaimQuest('+i+')" style="padding:6px 12px;font-size:12px;margin:0;width:auto">Забрать</button>':'')+
+        '</div></div>';
+    }).join('');
+    openModal('clickerQuestsModal');
+  };
+
+  // ===== EVENTS =====
+  setInterval(() => {
+    const screen = $('clickerScreen');
+    if(!screen || !screen.classList.contains('active')) return;
+    if(Date.now() < clickerState.eventUntil) return;
+    if(Math.random() > 0.35) return;
+    const types = [
+      { name:'☄️ Метеоритный дождь', mult:3, dur:15000 },
+      { name:'🌑 Затмение', mult:5, dur:15000 },
+      { name:'🌟 Комета', mult:4, dur:12000 }
+    ];
+    const ev = types[Math.floor(Math.random()*types.length)];
+    clickerState.eventUntil = Date.now() + ev.dur;
+    clickerState.eventMult = ev.mult;
+    beep(1000,0.2,0.2);
+    setTimeout(()=>beep(1400,0.2,0.2),150);
+    toast(ev.name+' · ×'+ev.mult+' на 15 сек!');
+    let banner = $('clickerEventBanner');
+    if(!banner){
+      banner = document.createElement('div');
+      banner.id = 'clickerEventBanner';
+      banner.style.cssText = 'text-align:center;padding:8px;font-weight:700;font-size:14px;background:linear-gradient(90deg,#f59e0b,#ef4444);color:#fff;border-radius:10px;margin:0 14px 10px;display:none';
+      const top = document.querySelector('.clicker-top');
+      if(top) top.parentNode.insertBefore(banner, top.nextSibling);
+    }
+    banner.textContent = ev.name + ' ×' + ev.mult;
+    banner.style.display = 'block';
+    setTimeout(()=>{ banner.style.display = 'none'; }, ev.dur);
+  }, 25000);
+
+  // ===== HOOKS =====
+  const origBuy = window.clickerBuy;
+  window.clickerBuy = function(id){ origBuy(id); clickerCheckQuests(); };
+
+  const origCatch = window.clickerCatchGolden;
+  window.clickerCatchGolden = function(){ origCatch(); clickerCheckQuests(); };
+
+  const origOpen = window.clickerOpen;
+  window.clickerOpen = function(){
+    origOpen();
+    if(clickerState.todayDate !== new Date().toDateString()){
+      clickerState.todayDate = new Date().toDateString();
+      clickerState.todayEarned = 0;
+    }
+    clickerInitQuests();
+    clickerRenderDaily();
+  };
+
+  const origRender = window.clickerRender;
+  window.clickerRender = function(){
+    origRender();
+    clickerRenderDaily();
+    clickerCheckQuests();
+  };
+
+  console.log('[Retention] loaded');
+})();
+</script>
+
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
