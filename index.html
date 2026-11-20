@@ -1,35 +1,74 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Рассказ</title>
 <style>
+  :root, [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --text: #c9c9c9;
+    --h1: #f0f0f0;
+    --h2: #e0e0e0;
+    --subtitle: #555;
+    --border: #1e1e1e;
+    --hr: #2a2a2a;
+    --toc-bg: #101010;
+    --toc-border: #1c1c1c;
+    --toc-link: #888;
+    --toc-link-active: #f0f0f0;
+    --toc-link-active-bg: #1a1a1a;
+    --toc-link-hover: #ccc;
+    --btn-bg: #171717;
+    --btn-color: #aaa;
+    --btn-border: #262626;
+    --accent: #7a1f1f;
+  }
+  [data-theme="light"] {
+    --bg: #f7f4ee;
+    --text: #2a2a2a;
+    --h1: #111;
+    --h2: #333;
+    --subtitle: #999;
+    --border: #ddd8d0;
+    --hr: #ddd8d0;
+    --toc-bg: #efeae0;
+    --toc-border: #ddd8d0;
+    --toc-link: #777;
+    --toc-link-active: #111;
+    --toc-link-active-bg: #e3ddd2;
+    --toc-link-hover: #333;
+    --btn-bg: #efeae0;
+    --btn-color: #555;
+    --btn-border: #ddd8d0;
+    --accent: #7a1f1f;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+
   body {
-    background: #0a0a0a;
-    color: #c9c9c9;
+    background: var(--bg);
+    color: var(--text);
     font-family: Georgia, "Times New Roman", serif;
     font-size: 18px;
     line-height: 1.75;
     padding: 0 16px 100px;
     min-height: 100vh;
+    transition: background 0.25s, color 0.25s;
   }
 
-  .wrap {
-    max-width: 680px;
-    margin: 0 auto;
-  }
+  .wrap { max-width: 680px; margin: 0 auto; }
 
   header {
     padding: 50px 0 30px;
-    border-bottom: 1px solid #1e1e1e;
-    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
   }
 
   h1 {
-    color: #f0f0f0;
+    color: var(--h1);
     font-size: 32px;
     line-height: 1.25;
     letter-spacing: 0.5px;
@@ -37,7 +76,7 @@
   }
 
   .subtitle {
-    color: #555;
+    color: var(--subtitle);
     font-size: 14px;
     font-family: Arial, sans-serif;
     letter-spacing: 2px;
@@ -45,15 +84,53 @@
     margin-top: 12px;
   }
 
+  .toc {
+    background: var(--toc-bg);
+    border: 1px solid var(--toc-border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    font-family: Arial, sans-serif;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    color: var(--subtitle);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .toc a {
+    display: block;
+    color: var(--toc-link);
+    text-decoration: none;
+    font-size: 15px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .toc a:hover { color: var(--toc-link-hover); }
+
+  .toc a.active {
+    color: var(--toc-link-active);
+    background: var(--toc-link-active-bg);
+    border-left-color: var(--accent);
+  }
+
   h2 {
-    color: #e0e0e0;
+    color: var(--h2);
     font-size: 21px;
     font-weight: normal;
     margin: 55px 0 22px;
     padding-left: 16px;
-    border-left: 3px solid #7a1f1f;
+    border-left: 3px solid var(--accent);
     line-height: 1.4;
     letter-spacing: 0.3px;
+    scroll-margin-top: 20px;
   }
 
   h2:first-of-type { margin-top: 20px; }
@@ -64,40 +141,79 @@
     hyphens: auto;
   }
 
-  p:first-letter {
-    /* без буквицы, просто ровный текст */
-  }
-
   hr {
     border: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #2a2a2a, transparent);
+    background: linear-gradient(90deg, transparent, var(--hr), transparent);
     margin: 45px 0;
   }
 
-  ::selection {
-    background: #7a1f1f;
-    color: #fff;
+  ::selection { background: var(--accent); color: #fff; }
+
+  .theme-toggle, .back-top {
+    position: fixed;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    border: 1px solid var(--btn-border);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, transform 0.2s, background 0.2s;
+    z-index: 100;
+    padding: 0;
+    line-height: 1;
+    font-family: Arial, sans-serif;
   }
+
+  .theme-toggle { top: 16px; right: 16px; }
+  .theme-toggle:hover, .back-top:hover { transform: scale(1.08); }
+
+  .back-top {
+    bottom: 20px;
+    right: 16px;
+    opacity: 0;
+    pointer-events: none;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
 
   @media (max-width: 600px) {
     body { font-size: 17px; line-height: 1.7; padding: 0 14px 70px; }
-    header { padding: 35px 0 22px; margin-bottom: 28px; }
-    h1 { font-size: 24px; }
+    header { padding: 55px 0 22px; margin-bottom: 22px; }
+    h1 { font-size: 24px; padding-right: 50px; }
     .subtitle { font-size: 12px; letter-spacing: 1.5px; }
     h2 { font-size: 18px; margin: 40px 0 18px; padding-left: 12px; }
     p { text-align: left; }
     hr { margin: 32px 0; }
+    .toc { padding: 12px 14px; margin-bottom: 28px; }
+    .toc a { font-size: 14px; padding: 6px 8px; }
+    .theme-toggle, .back-top { width: 38px; height: 38px; font-size: 16px; }
+    .theme-toggle { top: 12px; right: 12px; }
+    .back-top { bottom: 16px; right: 12px; }
   }
 </style>
 </head>
 <body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">☀</button>
+<button class="back-top" id="backTop" aria-label="Наверх">↑</button>
+
 <div class="wrap">
 
 <header>
   <h1>Название рассказа</h1>
   <div class="subtitle">Название</div>
 </header>
+
+<nav class="toc" id="toc">
+  <div class="toc-title">Содержание</div>
+</nav>
 
 <div id="text">ПРОЛОГ
 
@@ -186,9 +302,11 @@
 </div>
 
 <script>
+// Рендер текста
 const box = document.getElementById('text');
 const raw = box.textContent.trim();
 box.innerHTML = '';
+const headings = [];
 raw.split(/\n\s*\n/).forEach(block => {
   const t = block.trim();
   if (!t) return;
@@ -196,11 +314,61 @@ raw.split(/\n\s*\n/).forEach(block => {
     const h = document.createElement('h2');
     h.textContent = t;
     box.appendChild(h);
+    headings.push(h);
   } else {
     const p = document.createElement('p');
     p.textContent = t;
     box.appendChild(p);
   }
+});
+
+// Оглавление
+const toc = document.getElementById('toc');
+headings.forEach((h, i) => {
+  const id = 'ch-' + i;
+  h.id = id;
+  const a = document.createElement('a');
+  a.href = '#' + id;
+  a.textContent = h.textContent;
+  a.dataset.target = id;
+  toc.appendChild(a);
+});
+
+// Подсветка текущей главы
+const tocLinks = toc.querySelectorAll('a');
+function updateActive() {
+  let current = null;
+  for (const h of headings) {
+    if (h.getBoundingClientRect().top < 140) current = h.id;
+  }
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.dataset.target === current);
+  });
+}
+window.addEventListener('scroll', updateActive, { passive: true });
+updateActive();
+
+// Кнопка наверх
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 500);
+}, { passive: true });
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Тема
+const themeBtn = document.getElementById('themeToggle');
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  themeBtn.textContent = t === 'light' ? '☾' : '☀';
+  localStorage.setItem('storyTheme', t);
+}
+const savedTheme = localStorage.getItem('storyTheme');
+if (savedTheme === 'light') setTheme('light');
+themeBtn.addEventListener('click', () => {
+  const isLight = document.documentElement.dataset.theme === 'light';
+  setTheme(isLight ? 'dark' : 'light');
 });
 </script>
 
