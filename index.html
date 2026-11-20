@@ -7,6 +7,7 @@
 <!-- Иконка в виде книги с красной закладкой -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8d8d8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3Cpolygon points='13 2 13 9 16 7 19 9 19 2' fill='%237a1f1f' stroke='%237a1f1f'/%3E%3C/svg%3E">
 <style>
+  html { scroll-behavior: smooth; scroll-padding-top: 20px; }
   :root, [data-theme="dark"] {
     --bg: #0a0a0a;
     --text: #c9c9c9;
@@ -107,7 +108,37 @@
     color: var(--subtitle);
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .toc-title .caret {
+    transition: transform 0.3s ease;
+    font-size: 10px;
+  }
+  .toc.closed .caret {
+    transform: rotate(-90deg);
+  }
+
+  .toc-list {
+    max-height: 500px;
+    opacity: 1;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .toc.closed .toc-list {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .toc a {
@@ -244,7 +275,8 @@
 </header>
 
 <nav class="toc" id="toc">
-  <div class="toc-title">Содержание</div>
+  <button class="toc-title" id="tocToggle">Содержание <span class="caret">▼</span></button>
+  <div class="toc-list" id="tocList"></div>
 </nav>
 
 <div id="text">ПРОЛОГ
@@ -355,7 +387,7 @@ raw.split(/\n\s*\n/).forEach(block => {
 });
 
 // Оглавление
-const toc = document.getElementById('toc');
+const toc = document.getElementById('tocList'); // теперь ссылки кидаем сюда
 headings.forEach((h, i) => {
   const id = 'ch-' + i;
   h.id = id;
@@ -364,6 +396,23 @@ headings.forEach((h, i) => {
   a.textContent = h.textContent;
   a.dataset.target = id;
   toc.appendChild(a);
+});
+
+// Логика сворачивания и автозакрытия
+const tocEl = document.getElementById('toc');
+const tocToggle = document.getElementById('tocToggle');
+const tocLinks = toc.querySelectorAll('a');
+
+// Кнопка свернуть/развернуть
+tocToggle.addEventListener('click', () => {
+  tocEl.classList.toggle('closed');
+});
+
+// Автоматически сворачиваем оглавление при клике на главу
+tocLinks.forEach(a => {
+  a.addEventListener('click', () => {
+    tocEl.classList.add('closed');
+  });
 });
 
 // Подсветка текущей главы
