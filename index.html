@@ -377,18 +377,36 @@ const box = document.getElementById('text');
 const raw = box.textContent.trim();
 box.innerHTML = '';
 const headings = [];
-raw.split(/\n\s*\n/).forEach(block => {
-  const t = block.trim();
-  if (!t) return;
-  if (/^(ГЛАВА|ПРОЛОГ|ЭПИЛОГ)/i.test(t)) {
-    const h = document.createElement('h2');
-    h.textContent = t;
-    box.appendChild(h);
-    headings.push(h);
+
+// Разбиваем текст по 2 и более переносам строк, сохраняя сами переносы в массиве
+const parts = raw.split(/(\n{2,})/);
+
+parts.forEach(part => {
+  if (part.match(/^\n{2,}$/)) {
+    // Если это блок с переносами строк
+    const count = part.length;
+    // Если переносов больше 2 (т.е. ты нажал Enter 3 и более раз для отступа)
+    if (count > 2) {
+      const gap = document.createElement('div');
+      // Высота отступа зависит от того, сколько лишних Enter'ов ты поставил
+      gap.style.height = ((count - 2) * 1.2) + 'em'; 
+      box.appendChild(gap);
+    }
   } else {
-    const p = document.createElement('p');
-    p.textContent = t;
-    box.appendChild(p);
+    // Если это текст
+    const t = part.trim();
+    if (!t) return;
+    
+    if (/^(ГЛАВА|ПРОЛОГ|ЭПИЛОГ)/i.test(t)) {
+      const h = document.createElement('h2');
+      h.textContent = t;
+      box.appendChild(h);
+      headings.push(h);
+    } else {
+      const p = document.createElement('p');
+      p.textContent = t;
+      box.appendChild(p);
+    }
   }
 });
 
